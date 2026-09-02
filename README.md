@@ -28,6 +28,10 @@ npx http-server -p 8080 -c-1
 **Publicera på GitHub Pages:** Settings → Pages → Deploy from a branch → välj
 branch och `/ (root)`. Inget mer behövs.
 
+**En enda fil att mejla runt:** `dist/less-vardcentralen.html` innehåller hela
+spelet – all kod, all grafik, allt innehåll. Den fungerar offline och utan
+server. Bygg om den efter ändringar med `node tools/build-single.js`.
+
 ## Kontroller
 
 | Tangent | Funktion |
