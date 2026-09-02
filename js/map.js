@@ -5,6 +5,7 @@
 
   /* Teckenlegend:
      ^ takkant   # vägg    W fönster  G innerfönster  P affisch
+     L logotypskylt (Forsåker)
      H hylla     B tavla   D dörr     E utgång
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
@@ -12,7 +13,7 @@
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
-    /* 1 */ '#W##P##B##W##P#H#W##P##B##W#P#H#',
+    /* 1 */ '#W##L##B##W##P#H#W##P##B##W#P#H#',
     /* 2 */ '#  cd     #  cd     #  cd     #  cd  #',
     /* 3 */ '#    h    #     h   #     h   #    h #',
     /* 4 */ '#         #         #         #      #',
@@ -24,7 +25,7 @@
     /*10 */ '#p............................p#',
     /*11 */ '#..............................#',
     /*12 */ '#..............................#',
-    /*13 */ '##P##D#########D#########D###H##',
+    /*13 */ '##L##D#########D#########D###H##',
     /*14 */ '#xxx     p#  cd    p#  cd     p#',
     /*15 */ '#         #    h    #     h    #',
     /*16 */ '# bbb  bbb#         #  dd      #',
@@ -59,7 +60,7 @@
 
   var TILE_OF = {
     '^': 'wallTop', '#': 'wall', 'W': 'window', 'G': 'wallGlass', 'P': 'poster',
-    'H': 'shelf', 'B': 'board', 'D': 'door', 'E': 'doorSign',
+    'H': 'shelf', 'B': 'board', 'D': 'door', 'E': 'doorSign', 'L': 'logga',
     '.': 'floor2', ' ': 'floor', 'r': 'carpet', 'u': 'rug',
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
     'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet'

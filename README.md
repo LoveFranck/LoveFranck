@@ -131,6 +131,27 @@ och exempel finns i [`docs/INNEHALL.md`](docs/INNEHALL.md).
 
 ---
 
+## Grafisk profil
+
+Spelet använder Forsåker vårdcentrals profil: logotypmärket (mintgrön platta med
+mörkgrönt F) på fasaden, i mottagningsrummen, i chattklienten och i
+granskningsvyn, samt mintgröna arbetskläder på all vårdpersonal. Färgerna är
+hämtade direkt ur logotypfilen:
+
+| | Hex | Används till |
+|---|---|---|
+| Mörkgrön | `#00443c` | Logotypens F, tak, rubrikrader, konturer |
+| Mint | `#75d8c7` | Logotypens platta, arbetskläder, listverk |
+
+Märket ritas i kod (`LESS.drawLogga` i `js/art.js`) på ett 16-enheters rutnät och
+skalas med heltal, så det förblir pixelperfekt i alla storlekar. Profilfärgerna
+ligger som `markDark` / `markMint` i paletten i samma fil och som CSS-variablerna
+`--mark` / `--mark-mint`. Vill du byta vårdcentral räcker det att ändra på de
+ställena plus `PROFIL` i `content/people.js`.
+
+Logotypen tillhör Forsåker vårdcentral. Om spelet återanvänds av någon annan
+verksamhet ska märket bytas ut.
+
 ## Ansvar och granskning
 
 Texterna är skrivna för spelet utifrån allmänt kända försäkringsmedicinska

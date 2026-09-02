@@ -3,43 +3,48 @@
   'use strict';
   var LESS = global.LESS, SK = LESS.SKIN, HR = LESS.HAIR;
 
+  /* Forsåker vårdcentrals profilfärger. All vårdpersonal bär samma
+     mintgröna arbetsdräkt; rollen märks på rummet och på HUD:en, inte
+     på plagget. */
+  var PROFIL = LESS.PAL.markMint, PROFIL_D = LESS.PAL.markMintD;
+
   /* ---------------- roller ---------------- */
   LESS.roller = {
     ssk: {
       id: 'ssk', namn: 'SJUKSKÖTERSKA', kort: 'SSK', rum: 'TRIAGE',
-      farg: '#4870b0',
+      farg: '#00443c',
       uppdrag: 'Triagera inkommande ärenden i chatten. Salutogen kommunikation och tydliga förväntningar (BEDDA). Boka rätt profession, hänvisa vidare eller avsluta ärendet.',
-      sprite: { skin: SK.ljus, hair: HR.brun, hairStyle: 'knut', uni: '#e8f0f8', uni2: '#c0cfe0', acc: '#4870b0' }
+      sprite: { skin: SK.ljus, hair: HR.brun, hairStyle: 'knut', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     },
     psykolog: {
       id: 'psykolog', namn: 'PSYKOLOG', kort: 'PSY', rum: 'PSYKOLOG',
-      farg: '#7858a8',
+      farg: '#00443c',
       uppdrag: 'Ta emot sjukskrivningsärenden med F-diagnos i botten. Göra den försäkringsmedicinska utredningen som läkaren tar ställning till. Psykoedukation och korta insatser som ökar agens och arbetsförmåga.',
-      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: '#f0eef8', uni2: '#cfc8e0', acc: '#7858a8', glasogon: true }
+      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
     },
     fysioterapeut: {
       id: 'fysioterapeut', namn: 'FYSIOTERAPEUT', kort: 'FYS', rum: 'FYSIO',
-      farg: '#38803f',
+      farg: '#00443c',
       uppdrag: 'Ta emot sjukskrivningsärenden med M-diagnos i botten. Göra den försäkringsmedicinska utredningen. Fysioterapeutiska insatser, belastningsanpassning och åtgärder som ökar agens och arbetsförmåga.',
-      sprite: { skin: SK.ljus, hair: HR.blond, hairStyle: 'kort', uni: '#e8f4e8', uni2: '#c0d8c0', acc: '#38803f' }
+      sprite: { skin: SK.ljus, hair: HR.blond, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     },
     lakare: {
       id: 'lakare', namn: 'LÄKARE', kort: 'LÄK', rum: 'LÄKARE',
-      farg: '#c04838',
+      farg: '#00443c',
       uppdrag: 'Granska och ta ställning till försäkringsmedicinska utredningar från psykolog, fysioterapeut och arbetsterapeut. Signera, komplettera eller returnera. Ditt namn står på beslutet.',
-      sprite: { skin: SK.mork, hair: HR.mork, hairStyle: 'kort', uni: '#f8f8f8', uni2: '#d8d8d0', acc: '#c04838', glasogon: true }
+      sprite: { skin: SK.mork, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
     },
     rehabkoordinator: {
       id: 'rehabkoordinator', namn: 'REHABKOORDINATOR', kort: 'RKO', rum: 'REHABKOORD.',
-      farg: '#c08820',
+      farg: '#00443c',
       uppdrag: 'Spindeln i nätet. Stötta patienten i kontakten med arbetsgivaren utan att ta över ansvaret. Skapa och följa upp rehabplaner. Följa upp långtidssjukskrivna.',
-      sprite: { skin: SK.ljus, hair: HR.rod, hairStyle: 'langt', uni: '#f4ecf0', uni2: '#d8ccd4', acc: '#c08820' }
+      sprite: { skin: SK.ljus, hair: HR.rod, hairStyle: 'langt', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     },
     arbetsterapeut: {
       id: 'arbetsterapeut', namn: 'ARBETSTERAPEUT', kort: 'ARB', rum: 'ARBETSTER.',
-      farg: '#c86828',
+      farg: '#00443c',
       uppdrag: 'Aktivitetsbegreppet kopplat till arbetsförmåga. Vardagsrevidering, aktivitetsbalans, handfunktion och hjälpmedel. Salutogen kommunikation.',
-      sprite: { skin: SK.mellan, hair: HR.gra, hairStyle: 'kort', uni: '#f0f4e8', uni2: '#d4d8c4', acc: '#c86828' }
+      sprite: { skin: SK.mellan, hair: HR.gra, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     }
   };
 
@@ -113,7 +118,7 @@
   /* ---------------- personal i overworld ---------------- */
   LESS.npcs = [
     { x: 2, y: 15, dir: 'down', namn: 'MEDARBETARE ROSA',
-      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'knut', uni: '#f0e8d8', uni2: '#d0c8b0', acc: '#c04838' },
+      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'knut', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' },
       repliker: [
         'Hej! Receptionen är också vårdcentralens ansikte utåt.',
         'Tryck A mot disken om du vill byta spelläge, spara eller börja om.'
@@ -129,13 +134,13 @@
         'Sjuksköterskan skrev i chatten att vi bokar en tid ihop. Kändes tydligt.'
       ] },
     { x: 16, y: 11, dir: 'down', namn: 'VERKSAMHETSCHEF PIA',
-      sprite: { skin: SK.ljus, hair: HR.gra, hairStyle: 'kort', uni: '#d8d0e0', uni2: '#b8b0c0', acc: '#7858a8' },
+      sprite: { skin: SK.ljus, hair: HR.gra, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' },
       repliker: [
         'Poängen med LESS är inte att spara läkartid. Den är att patienten möter rätt kompetens först.',
         'Läkaren skriver fortfarande under. Ansvaret flyttar inte – kön gör det.'
       ] },
     { x: 24, y: 11, dir: 'down', namn: 'AT-LÄKARE OMAR',
-      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: '#f8f8f8', uni2: '#d8d8d0', acc: '#c04838' },
+      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' },
       repliker: [
         'Jag signerar inget jag inte kan försvara. Saknas aktivitetsbegränsning går underlaget tillbaka.',
         'Läs anslagstavlan i korridoren om du vill se hur det går för ärendena.'

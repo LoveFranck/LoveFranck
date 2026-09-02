@@ -16,6 +16,8 @@
   --good:     #38803f;   /* grön                          */
   --warn:     #b83820;   /* röd                           */
   --info:     #3858a0;   /* blå                           */
+  --mark:     #00443c;   /* Forsåker vårdcentral, mörkgrön */
+  --mark-mint:#75d8c7;   /* Forsåker vårdcentral, mint     */
   --shell:    #2a2a34;   /* konsolens plastram            */
   --shell-2:  #1a1a22;
   --screen-bg:#8ab060;
@@ -300,23 +302,40 @@ body{
 
 /* ---------- Titelskärm ---------- */
 
+/* Logotypen läggs över fasaden så att Forsåkers skylt ovanför taket syns fritt. */
 #title{ position:absolute; inset:0; display:flex; flex-direction:column;
-        align-items:center; justify-content:flex-start; padding-top:16px; gap:6px; }
+        align-items:center; justify-content:flex-start; padding-top:80px; gap:4px; }
 #title-logo{ text-align:center; }
 .t-less{
   display:block; font-size:44px; letter-spacing:6px; color:#f8e070;
   text-shadow:2px 2px 0 #a06010, 4px 4px 0 var(--ink);
 }
 .t-sub{
-  display:block; font-size:11px; letter-spacing:4px; color:var(--paper);
-  text-shadow:2px 2px 0 var(--ink); margin-top:2px;
+  display:block; font-size:11px; letter-spacing:4px; color:var(--mark);
+  text-shadow:1px 1px 0 var(--paper), -1px 0 0 var(--paper), 0 -1px 0 var(--paper);
+  margin-top:2px;
 }
 #title-press{
-  margin-top:150px; font-size:10px; letter-spacing:2px; color:var(--paper);
+  margin-top:40px; font-size:10px; letter-spacing:2px; color:var(--paper);
   text-shadow:1px 1px 0 var(--ink); animation:blink 1s steps(1) infinite;
 }
+#title-brand{
+  position:absolute; bottom:22px;
+  display:flex; align-items:center; gap:5px;
+  background:var(--paper);
+  border:2px solid var(--mark);
+  border-radius:3px;
+  padding:2px 7px 2px 4px;
+  font-size:8px; letter-spacing:2px;
+  color:var(--mark);
+}
+#title-brand .mark{
+  width:10px; height:10px; border-radius:50%;
+  background:var(--mark-mint);
+  box-shadow:inset 0 0 0 2px var(--mark);
+}
 #title-foot{
-  position:absolute; bottom:8px; font-size:8px; letter-spacing:1px;
+  position:absolute; bottom:6px; font-size:8px; letter-spacing:1px;
   color:var(--paper); text-shadow:1px 1px 0 var(--ink); opacity:.85;
 }
 

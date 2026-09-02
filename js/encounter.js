@@ -124,7 +124,7 @@
         var roll = LESS.roller[E.roll];
         if (roll) {
           var spr = LESS.charSprite('spelare-' + E.roll, roll.sprite, 'up', 0);
-          c.drawImage(spr, 0, 0, 16, 16, 20, 22, 32, 32);
+          c.drawImage(spr, 0, 0, 16, 16, 8, 26, 32, 32);
         }
       }
     }

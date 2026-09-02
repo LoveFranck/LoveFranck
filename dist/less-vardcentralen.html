@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Ett litet läromedelsspel om sjukskrivningsprocessen enligt LESS i primärvården.">
 <title>LESS – Vårdcentralen</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23f8f8e8'/%3E%3Crect x='6' y='2' width='4' height='12' fill='%23c04838'/%3E%3Crect x='2' y='6' width='12' height='4' fill='%23c04838'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2016%2016%27%3E%3Ccircle%20cx%3D%278%27%20cy%3D%278%27%20r%3D%278%27%20fill%3D%27%2375d8c7%27%2F%3E%3Cg%20fill%3D%27%2300443c%27%3E%3Crect%20x%3D%275%27%20y%3D%273%27%20width%3D%272%27%20height%3D%271%27%2F%3E%3Crect%20x%3D%277%27%20y%3D%272%27%20width%3D%272%27%20height%3D%271%27%2F%3E%3Crect%20x%3D%279%27%20y%3D%273%27%20width%3D%272%27%20height%3D%271%27%2F%3E%3Crect%20x%3D%276%27%20y%3D%275%27%20width%3D%275%27%20height%3D%272%27%2F%3E%3Crect%20x%3D%276%27%20y%3D%275%27%20width%3D%272%27%20height%3D%278%27%2F%3E%3Crect%20x%3D%274%27%20y%3D%278%27%20width%3D%276%27%20height%3D%272%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
 <style>
 /* =========================================================
    LESS – Vårdcentralen
@@ -25,6 +25,8 @@
   --good:     #38803f;   /* grön                          */
   --warn:     #b83820;   /* röd                           */
   --info:     #3858a0;   /* blå                           */
+  --mark:     #00443c;   /* Forsåker vårdcentral, mörkgrön */
+  --mark-mint:#75d8c7;   /* Forsåker vårdcentral, mint     */
   --shell:    #2a2a34;   /* konsolens plastram            */
   --shell-2:  #1a1a22;
   --screen-bg:#8ab060;
@@ -309,23 +311,40 @@ body{
 
 /* ---------- Titelskärm ---------- */
 
+/* Logotypen läggs över fasaden så att Forsåkers skylt ovanför taket syns fritt. */
 #title{ position:absolute; inset:0; display:flex; flex-direction:column;
-        align-items:center; justify-content:flex-start; padding-top:16px; gap:6px; }
+        align-items:center; justify-content:flex-start; padding-top:80px; gap:4px; }
 #title-logo{ text-align:center; }
 .t-less{
   display:block; font-size:44px; letter-spacing:6px; color:#f8e070;
   text-shadow:2px 2px 0 #a06010, 4px 4px 0 var(--ink);
 }
 .t-sub{
-  display:block; font-size:11px; letter-spacing:4px; color:var(--paper);
-  text-shadow:2px 2px 0 var(--ink); margin-top:2px;
+  display:block; font-size:11px; letter-spacing:4px; color:var(--mark);
+  text-shadow:1px 1px 0 var(--paper), -1px 0 0 var(--paper), 0 -1px 0 var(--paper);
+  margin-top:2px;
 }
 #title-press{
-  margin-top:150px; font-size:10px; letter-spacing:2px; color:var(--paper);
+  margin-top:40px; font-size:10px; letter-spacing:2px; color:var(--paper);
   text-shadow:1px 1px 0 var(--ink); animation:blink 1s steps(1) infinite;
 }
+#title-brand{
+  position:absolute; bottom:22px;
+  display:flex; align-items:center; gap:5px;
+  background:var(--paper);
+  border:2px solid var(--mark);
+  border-radius:3px;
+  padding:2px 7px 2px 4px;
+  font-size:8px; letter-spacing:2px;
+  color:var(--mark);
+}
+#title-brand .mark{
+  width:10px; height:10px; border-radius:50%;
+  background:var(--mark-mint);
+  box-shadow:inset 0 0 0 2px var(--mark);
+}
 #title-foot{
-  position:absolute; bottom:8px; font-size:8px; letter-spacing:1px;
+  position:absolute; bottom:6px; font-size:8px; letter-spacing:1px;
   color:var(--paper); text-shadow:1px 1px 0 var(--ink); opacity:.85;
 }
 
@@ -435,6 +454,7 @@ body.touch #pad{
           <span class="t-sub">VÅRDCENTRALEN</span>
         </div>
         <div id="title-press">TRYCK PÅ START</div>
+        <div id="title-brand"><span class="mark" aria-hidden="true"></span>FORSÅKER VÅRDCENTRAL</div>
         <div id="title-foot">ETT LÄROMEDEL OM SJUKSKRIVNING</div>
       </div>
 
@@ -654,7 +674,10 @@ body.touch #pad{
     white:    '#f8f8f0',
     red:      '#c04838', blue: '#4870b0', sky: '#88c0e8',
     grass:    '#78b058', grassD: '#5c9040',
-    shadow:   'rgba(24,20,16,.20)'
+    shadow:   'rgba(24,20,16,.20)',
+    /* Forsåker vårdcentrals profilfärger, hämtade ur logotypfilen */
+    markDark: '#00443c', markMint: '#75d8c7',
+    markMintD:'#4fae9e', markMintL:'#a6e8dd'
   };
   LESS.PAL = P;
 
@@ -844,10 +867,54 @@ body.touch #pad{
       R(c, x, y + 14, 16, 2, P.wallD);
     },
 
+    logga: function (c, x, y) {              /* logotypmärket som skylt på vägg */
+      R(c, x, y, 16, 16, P.wall);
+      R(c, x, y, 16, 3, P.wallSh);
+      R(c, x, y + 12, 16, 4, P.wallD);
+      LESS.drawLogga(c, x, y, 1, false);
+      /* tunn mörk kant så att skylten lossnar från väggen */
+      R(c, x + 5, y, 6, 1, P.markDark);
+      R(c, x + 5, y + 15, 6, 1, P.markDark);
+      R(c, x, y + 5, 1, 6, P.markDark);
+      R(c, x + 15, y + 5, 1, 6, P.markDark);
+    },
+
     rug: function (c, x, y) {
       R(c, x, y, 16, 16, '#d8c8a0');
       R(c, x + 1, y + 1, 14, 14, '#c8b890');
     }
+  };
+
+
+  /* ---------------- Forsåker-märket ---------------- */
+  /* Rund platta i mint med ett mörkgrönt F under ett tildetecken.
+     Ritas på ett 16-enheters rutnät och skalas med heltal (k=1 → 16 px,
+     k=2 → 32 px) så att pixlarna förblir kvadratiska.                */
+  LESS.drawLogga = function (c, ox, oy, k, utanRing, glyfFarg) {
+    k = k || 1;
+    var mork = glyfFarg || P.markDark;
+    var r = 8, cx = 8, cy = 8, y, dx, x0, w;
+
+    function u(x, y, w, h, col) { R(c, ox + x * k, oy + y * k, w * k, h * k, col); }
+
+    if (!utanRing) {
+      for (y = 0; y < 16; y++) {
+        dx = Math.floor(Math.sqrt(Math.max(0, r * r - (y - cy + 0.5) * (y - cy + 0.5))));
+        x0 = cx - dx; w = dx * 2;
+        if (w > 0) u(x0, y, w, 1, P.markMint);
+      }
+      /* liten dager uppe till vänster */
+      u(4, 2, 3, 1, P.markMintL); u(3, 3, 2, 1, P.markMintL);
+    }
+
+    /* tilde */
+    u(5, 3, 2, 1, mork);
+    u(7, 2, 2, 1, mork);
+    u(9, 3, 2, 1, mork);
+    /* F: stam, övre arm och genomgående tvärslå */
+    u(6, 5, 5, 2, mork);
+    u(6, 5, 2, 8, mork);
+    u(4, 8, 6, 2, mork);
   };
 
   /* ---------------- rut-atlas ---------------- */
@@ -1129,29 +1196,41 @@ body.touch #pad{
 
   /* ---------------- mötesbakgrunder ---------------- */
 
-  /* Mottagningsrum bakom porträttet */
+  /* Mottagningsrum bakom porträttet.
+     Ytan ovanför y=58 är den som syns när valmenyn är uppe, så allt som ska
+     läsas ligger där: vårdgivarens rygg till vänster (x 8–40), logotypskylten
+     i mitten (x 52–94) och patientens porträtt till höger (x 100–144). */
   LESS.drawRoomBg = function (c, tint) {
     R(c, 0, 0, 160, 144, P.wall);
     R(c, 0, 0, 160, 4, P.wallSh);
-    /* vägg / golv */
     R(c, 0, 92, 160, 52, P.floor);
     R(c, 0, 90, 160, 2, P.wallD);
-    /* fönster */
-    R(c, 8, 20, 34, 26, P.line);
-    R(c, 10, 22, 30, 22, P.sky);
-    R(c, 10, 22, 30, 7, '#a8d8f0');
-    R(c, 10, 36, 30, 8, P.grass);
-    R(c, 24, 22, 2, 22, P.line);
-    R(c, 10, 32, 30, 2, P.line);
-    /* affisch */
-    R(c, 118, 14, 26, 22, P.ink);
-    R(c, 120, 16, 22, 18, '#f0e0a0');
-    R(c, 122, 19, 14, 2, P.line); R(c, 122, 23, 18, 2, P.line);
-    R(c, 122, 27, 10, 2, P.red);
-    /* växt */
-    R(c, 48, 74, 10, 16, P.woodD); R(c, 50, 76, 6, 12, P.wood);
-    R(c, 51, 62, 4, 14, P.greenD);
-    R(c, 44, 58, 8, 8, P.green); R(c, 54, 58, 8, 8, P.green); R(c, 49, 52, 8, 8, P.green);
+
+    /* fönster mot gatan */
+    R(c, 4, 4, 36, 21, P.line);
+    R(c, 6, 6, 32, 17, P.sky);
+    R(c, 6, 6, 32, 6, '#a8d8f0');
+    R(c, 6, 17, 32, 6, P.grass);
+    R(c, 21, 6, 2, 17, P.line);
+    R(c, 6, 13, 32, 2, P.line);
+
+    /* Forsåkers skylt på väggen */
+    R(c, 52, 8, 42, 26, P.markDark);
+    R(c, 54, 10, 38, 22, '#f4f8f6');
+    LESS.drawLogga(c, 56, 13, 1, false);
+    R(c, 74, 15, 15, 2, P.markDark);
+    R(c, 74, 19, 12, 2, P.markDark);
+    R(c, 74, 23, 15, 2, '#3f7a70');
+
+    /* mintgrön list längs väggen */
+    R(c, 0, 84, 160, 2, P.markMint);
+
+    /* växt i hörnet, till stor del dold av textrutan */
+    R(c, 138, 74, 12, 18, P.woodD); R(c, 140, 76, 8, 14, P.wood);
+    R(c, 142, 62, 4, 14, P.greenD);
+    R(c, 134, 58, 9, 9, P.green); R(c, 145, 58, 9, 9, P.green);
+    R(c, 139, 52, 9, 9, P.green);
+
     if (tint) { c.fillStyle = tint; c.fillRect(0, 0, 160, 144); }
   };
 
@@ -1161,11 +1240,12 @@ body.touch #pad{
     /* skärmram */
     R(c, 6, 8, 148, 96, '#0c1014');
     R(c, 8, 10, 144, 92, '#d8e4e8');
-    /* rubrikrad */
-    R(c, 8, 10, 144, 12, '#3c6c8c');
-    R(c, 12, 14, 4, 4, '#f0f0e0');
-    R(c, 20, 14, 40, 4, '#a8c8d8');
-    R(c, 140, 13, 6, 6, '#c85848');
+    /* rubrikrad i vårdcentralens profilfärg */
+    R(c, 8, 10, 144, 14, P.markDark);
+    LESS.drawLogga(c, 10, 9, 1, true, P.markMint);
+    R(c, 28, 14, 46, 3, P.markMint);
+    R(c, 28, 19, 30, 2, '#3f7a70');
+    R(c, 140, 14, 6, 6, P.markMint);
     /* bubblor */
     R(c, 14, 28, 62, 14, '#f4f4ec'); R(c, 14, 28, 62, 1, '#b8c4c8'); R(c, 14, 41, 62, 1, '#b8c4c8');
     R(c, 18, 32, 44, 2, '#8a98a0'); R(c, 18, 36, 34, 2, '#8a98a0');
@@ -1193,13 +1273,14 @@ body.touch #pad{
     /* skärm */
     R(c, 14, 20, 100, 74, '#0c1014');
     R(c, 16, 22, 96, 70, '#f4f4e8');
-    R(c, 16, 22, 96, 9, '#c04838');
-    R(c, 20, 25, 30, 3, '#f8f8f0');
+    R(c, 16, 22, 96, 14, P.markDark);
+    LESS.drawLogga(c, 17, 21, 1, true, P.markMint);
+    R(c, 34, 27, 30, 3, P.markMint);
     var i;
     for (i = 0; i < 9; i++) {
-      R(c, 21, 36 + i * 6, (i % 3 === 2 ? 52 : 84), 2, '#8a8a80');
+      R(c, 21, 38 + i * 6, (i % 3 === 2 ? 52 : 84), 2, '#8a8a80');
     }
-    R(c, 21, 36, 40, 2, '#3858a0');
+    R(c, 21, 38, 40, 2, P.markDark);
     R(c, 21, 84, 30, 3, '#38803f');
     /* markör */
     if (((t / 500) | 0) % 2 === 0) R(c, 88, 84, 1, 5, '#20201c');
@@ -1236,8 +1317,8 @@ body.touch #pad{
     R(c, 24, 44, 112, 54, P.ink);
     R(c, 26, 46, 108, 50, P.white);
     R(c, 26, 46, 108, 8, '#e8e4d8');
-    R(c, 20, 38, 120, 8, '#c85848');       /* tak */
-    R(c, 20, 38, 120, 2, '#e07868');
+    R(c, 20, 38, 120, 8, P.markDark);      /* tak */
+    R(c, 20, 38, 120, 2, '#1d695e');
     /* fönster */
     for (i = 0; i < 4; i++) {
       R(c, 34 + i * 24, 58, 16, 14, P.ink);
@@ -1248,9 +1329,15 @@ body.touch #pad{
     R(c, 70, 74, 20, 24, P.ink);
     R(c, 72, 76, 16, 22, P.glass);
     R(c, 79, 76, 2, 22, P.ink);
-    /* skylt */
-    R(c, 58, 26, 44, 12, P.ink);
-    R(c, 60, 28, 40, 8, '#f0f0e0');
+    /* skylt med Forsåkers märke */
+    R(c, 50, 18, 60, 20, P.markDark);
+    R(c, 52, 20, 56, 16, '#f4f8f6');
+    LESS.drawLogga(c, 54, 20, 1, false);
+    R(c, 72, 23, 32, 3, P.markDark);
+    R(c, 72, 28, 24, 2, '#3f7a70');
+    R(c, 72, 32, 30, 2, '#3f7a70');
+    /* mintgrön list ovanför entrén */
+    R(c, 26, 54, 108, 2, P.markMint);
     /* buskar */
     R(c, 10, 88, 14, 10, P.greenD); R(c, 12, 86, 10, 6, P.green);
     R(c, 136, 88, 14, 10, P.greenD); R(c, 138, 86, 10, 6, P.green);
@@ -1266,6 +1353,7 @@ body.touch #pad{
 
   /* Teckenlegend:
      ^ takkant   # vägg    W fönster  G innerfönster  P affisch
+     L logotypskylt (Forsåker)
      H hylla     B tavla   D dörr     E utgång
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
@@ -1273,7 +1361,7 @@ body.touch #pad{
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
-    /* 1 */ '#W##P##B##W##P#H#W##P##B##W#P#H#',
+    /* 1 */ '#W##L##B##W##P#H#W##P##B##W#P#H#',
     /* 2 */ '#  cd     #  cd     #  cd     #  cd  #',
     /* 3 */ '#    h    #     h   #     h   #    h #',
     /* 4 */ '#         #         #         #      #',
@@ -1285,7 +1373,7 @@ body.touch #pad{
     /*10 */ '#p............................p#',
     /*11 */ '#..............................#',
     /*12 */ '#..............................#',
-    /*13 */ '##P##D#########D#########D###H##',
+    /*13 */ '##L##D#########D#########D###H##',
     /*14 */ '#xxx     p#  cd    p#  cd     p#',
     /*15 */ '#         #    h    #     h    #',
     /*16 */ '# bbb  bbb#         #  dd      #',
@@ -1320,7 +1408,7 @@ body.touch #pad{
 
   var TILE_OF = {
     '^': 'wallTop', '#': 'wall', 'W': 'window', 'G': 'wallGlass', 'P': 'poster',
-    'H': 'shelf', 'B': 'board', 'D': 'door', 'E': 'doorSign',
+    'H': 'shelf', 'B': 'board', 'D': 'door', 'E': 'doorSign', 'L': 'logga',
     '.': 'floor2', ' ': 'floor', 'r': 'carpet', 'u': 'rug',
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
     'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet'
@@ -2113,43 +2201,48 @@ body.touch #pad{
   'use strict';
   var LESS = global.LESS, SK = LESS.SKIN, HR = LESS.HAIR;
 
+  /* Forsåker vårdcentrals profilfärger. All vårdpersonal bär samma
+     mintgröna arbetsdräkt; rollen märks på rummet och på HUD:en, inte
+     på plagget. */
+  var PROFIL = LESS.PAL.markMint, PROFIL_D = LESS.PAL.markMintD;
+
   /* ---------------- roller ---------------- */
   LESS.roller = {
     ssk: {
       id: 'ssk', namn: 'SJUKSKÖTERSKA', kort: 'SSK', rum: 'TRIAGE',
-      farg: '#4870b0',
+      farg: '#00443c',
       uppdrag: 'Triagera inkommande ärenden i chatten. Salutogen kommunikation och tydliga förväntningar (BEDDA). Boka rätt profession, hänvisa vidare eller avsluta ärendet.',
-      sprite: { skin: SK.ljus, hair: HR.brun, hairStyle: 'knut', uni: '#e8f0f8', uni2: '#c0cfe0', acc: '#4870b0' }
+      sprite: { skin: SK.ljus, hair: HR.brun, hairStyle: 'knut', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     },
     psykolog: {
       id: 'psykolog', namn: 'PSYKOLOG', kort: 'PSY', rum: 'PSYKOLOG',
-      farg: '#7858a8',
+      farg: '#00443c',
       uppdrag: 'Ta emot sjukskrivningsärenden med F-diagnos i botten. Göra den försäkringsmedicinska utredningen som läkaren tar ställning till. Psykoedukation och korta insatser som ökar agens och arbetsförmåga.',
-      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: '#f0eef8', uni2: '#cfc8e0', acc: '#7858a8', glasogon: true }
+      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
     },
     fysioterapeut: {
       id: 'fysioterapeut', namn: 'FYSIOTERAPEUT', kort: 'FYS', rum: 'FYSIO',
-      farg: '#38803f',
+      farg: '#00443c',
       uppdrag: 'Ta emot sjukskrivningsärenden med M-diagnos i botten. Göra den försäkringsmedicinska utredningen. Fysioterapeutiska insatser, belastningsanpassning och åtgärder som ökar agens och arbetsförmåga.',
-      sprite: { skin: SK.ljus, hair: HR.blond, hairStyle: 'kort', uni: '#e8f4e8', uni2: '#c0d8c0', acc: '#38803f' }
+      sprite: { skin: SK.ljus, hair: HR.blond, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     },
     lakare: {
       id: 'lakare', namn: 'LÄKARE', kort: 'LÄK', rum: 'LÄKARE',
-      farg: '#c04838',
+      farg: '#00443c',
       uppdrag: 'Granska och ta ställning till försäkringsmedicinska utredningar från psykolog, fysioterapeut och arbetsterapeut. Signera, komplettera eller returnera. Ditt namn står på beslutet.',
-      sprite: { skin: SK.mork, hair: HR.mork, hairStyle: 'kort', uni: '#f8f8f8', uni2: '#d8d8d0', acc: '#c04838', glasogon: true }
+      sprite: { skin: SK.mork, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
     },
     rehabkoordinator: {
       id: 'rehabkoordinator', namn: 'REHABKOORDINATOR', kort: 'RKO', rum: 'REHABKOORD.',
-      farg: '#c08820',
+      farg: '#00443c',
       uppdrag: 'Spindeln i nätet. Stötta patienten i kontakten med arbetsgivaren utan att ta över ansvaret. Skapa och följa upp rehabplaner. Följa upp långtidssjukskrivna.',
-      sprite: { skin: SK.ljus, hair: HR.rod, hairStyle: 'langt', uni: '#f4ecf0', uni2: '#d8ccd4', acc: '#c08820' }
+      sprite: { skin: SK.ljus, hair: HR.rod, hairStyle: 'langt', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     },
     arbetsterapeut: {
       id: 'arbetsterapeut', namn: 'ARBETSTERAPEUT', kort: 'ARB', rum: 'ARBETSTER.',
-      farg: '#c86828',
+      farg: '#00443c',
       uppdrag: 'Aktivitetsbegreppet kopplat till arbetsförmåga. Vardagsrevidering, aktivitetsbalans, handfunktion och hjälpmedel. Salutogen kommunikation.',
-      sprite: { skin: SK.mellan, hair: HR.gra, hairStyle: 'kort', uni: '#f0f4e8', uni2: '#d4d8c4', acc: '#c86828' }
+      sprite: { skin: SK.mellan, hair: HR.gra, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' }
     }
   };
 
@@ -2223,7 +2316,7 @@ body.touch #pad{
   /* ---------------- personal i overworld ---------------- */
   LESS.npcs = [
     { x: 2, y: 15, dir: 'down', namn: 'MEDARBETARE ROSA',
-      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'knut', uni: '#f0e8d8', uni2: '#d0c8b0', acc: '#c04838' },
+      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'knut', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' },
       repliker: [
         'Hej! Receptionen är också vårdcentralens ansikte utåt.',
         'Tryck A mot disken om du vill byta spelläge, spara eller börja om.'
@@ -2239,13 +2332,13 @@ body.touch #pad{
         'Sjuksköterskan skrev i chatten att vi bokar en tid ihop. Kändes tydligt.'
       ] },
     { x: 16, y: 11, dir: 'down', namn: 'VERKSAMHETSCHEF PIA',
-      sprite: { skin: SK.ljus, hair: HR.gra, hairStyle: 'kort', uni: '#d8d0e0', uni2: '#b8b0c0', acc: '#7858a8' },
+      sprite: { skin: SK.ljus, hair: HR.gra, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' },
       repliker: [
         'Poängen med LESS är inte att spara läkartid. Den är att patienten möter rätt kompetens först.',
         'Läkaren skriver fortfarande under. Ansvaret flyttar inte – kön gör det.'
       ] },
     { x: 24, y: 11, dir: 'down', namn: 'AT-LÄKARE OMAR',
-      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: '#f8f8f8', uni2: '#d8d8d0', acc: '#c04838' },
+      sprite: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c' },
       repliker: [
         'Jag signerar inget jag inte kan försvara. Saknas aktivitetsbegränsning går underlaget tillbaka.',
         'Läs anslagstavlan i korridoren om du vill se hur det går för ärendena.'
@@ -4790,7 +4883,7 @@ body.touch #pad{
         var roll = LESS.roller[E.roll];
         if (roll) {
           var spr = LESS.charSprite('spelare-' + E.roll, roll.sprite, 'up', 0);
-          c.drawImage(spr, 0, 0, 16, 16, 20, 22, 32, 32);
+          c.drawImage(spr, 0, 0, 16, 16, 8, 26, 32, 32);
         }
       }
     }

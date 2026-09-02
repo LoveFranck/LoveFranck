@@ -21,7 +21,10 @@
     white:    '#f8f8f0',
     red:      '#c04838', blue: '#4870b0', sky: '#88c0e8',
     grass:    '#78b058', grassD: '#5c9040',
-    shadow:   'rgba(24,20,16,.20)'
+    shadow:   'rgba(24,20,16,.20)',
+    /* Forsåker vårdcentrals profilfärger, hämtade ur logotypfilen */
+    markDark: '#00443c', markMint: '#75d8c7',
+    markMintD:'#4fae9e', markMintL:'#a6e8dd'
   };
   LESS.PAL = P;
 
@@ -211,10 +214,54 @@
       R(c, x, y + 14, 16, 2, P.wallD);
     },
 
+    logga: function (c, x, y) {              /* logotypmärket som skylt på vägg */
+      R(c, x, y, 16, 16, P.wall);
+      R(c, x, y, 16, 3, P.wallSh);
+      R(c, x, y + 12, 16, 4, P.wallD);
+      LESS.drawLogga(c, x, y, 1, false);
+      /* tunn mörk kant så att skylten lossnar från väggen */
+      R(c, x + 5, y, 6, 1, P.markDark);
+      R(c, x + 5, y + 15, 6, 1, P.markDark);
+      R(c, x, y + 5, 1, 6, P.markDark);
+      R(c, x + 15, y + 5, 1, 6, P.markDark);
+    },
+
     rug: function (c, x, y) {
       R(c, x, y, 16, 16, '#d8c8a0');
       R(c, x + 1, y + 1, 14, 14, '#c8b890');
     }
+  };
+
+
+  /* ---------------- Forsåker-märket ---------------- */
+  /* Rund platta i mint med ett mörkgrönt F under ett tildetecken.
+     Ritas på ett 16-enheters rutnät och skalas med heltal (k=1 → 16 px,
+     k=2 → 32 px) så att pixlarna förblir kvadratiska.                */
+  LESS.drawLogga = function (c, ox, oy, k, utanRing, glyfFarg) {
+    k = k || 1;
+    var mork = glyfFarg || P.markDark;
+    var r = 8, cx = 8, cy = 8, y, dx, x0, w;
+
+    function u(x, y, w, h, col) { R(c, ox + x * k, oy + y * k, w * k, h * k, col); }
+
+    if (!utanRing) {
+      for (y = 0; y < 16; y++) {
+        dx = Math.floor(Math.sqrt(Math.max(0, r * r - (y - cy + 0.5) * (y - cy + 0.5))));
+        x0 = cx - dx; w = dx * 2;
+        if (w > 0) u(x0, y, w, 1, P.markMint);
+      }
+      /* liten dager uppe till vänster */
+      u(4, 2, 3, 1, P.markMintL); u(3, 3, 2, 1, P.markMintL);
+    }
+
+    /* tilde */
+    u(5, 3, 2, 1, mork);
+    u(7, 2, 2, 1, mork);
+    u(9, 3, 2, 1, mork);
+    /* F: stam, övre arm och genomgående tvärslå */
+    u(6, 5, 5, 2, mork);
+    u(6, 5, 2, 8, mork);
+    u(4, 8, 6, 2, mork);
   };
 
   /* ---------------- rut-atlas ---------------- */
@@ -496,29 +543,41 @@
 
   /* ---------------- mötesbakgrunder ---------------- */
 
-  /* Mottagningsrum bakom porträttet */
+  /* Mottagningsrum bakom porträttet.
+     Ytan ovanför y=58 är den som syns när valmenyn är uppe, så allt som ska
+     läsas ligger där: vårdgivarens rygg till vänster (x 8–40), logotypskylten
+     i mitten (x 52–94) och patientens porträtt till höger (x 100–144). */
   LESS.drawRoomBg = function (c, tint) {
     R(c, 0, 0, 160, 144, P.wall);
     R(c, 0, 0, 160, 4, P.wallSh);
-    /* vägg / golv */
     R(c, 0, 92, 160, 52, P.floor);
     R(c, 0, 90, 160, 2, P.wallD);
-    /* fönster */
-    R(c, 8, 20, 34, 26, P.line);
-    R(c, 10, 22, 30, 22, P.sky);
-    R(c, 10, 22, 30, 7, '#a8d8f0');
-    R(c, 10, 36, 30, 8, P.grass);
-    R(c, 24, 22, 2, 22, P.line);
-    R(c, 10, 32, 30, 2, P.line);
-    /* affisch */
-    R(c, 118, 14, 26, 22, P.ink);
-    R(c, 120, 16, 22, 18, '#f0e0a0');
-    R(c, 122, 19, 14, 2, P.line); R(c, 122, 23, 18, 2, P.line);
-    R(c, 122, 27, 10, 2, P.red);
-    /* växt */
-    R(c, 48, 74, 10, 16, P.woodD); R(c, 50, 76, 6, 12, P.wood);
-    R(c, 51, 62, 4, 14, P.greenD);
-    R(c, 44, 58, 8, 8, P.green); R(c, 54, 58, 8, 8, P.green); R(c, 49, 52, 8, 8, P.green);
+
+    /* fönster mot gatan */
+    R(c, 4, 4, 36, 21, P.line);
+    R(c, 6, 6, 32, 17, P.sky);
+    R(c, 6, 6, 32, 6, '#a8d8f0');
+    R(c, 6, 17, 32, 6, P.grass);
+    R(c, 21, 6, 2, 17, P.line);
+    R(c, 6, 13, 32, 2, P.line);
+
+    /* Forsåkers skylt på väggen */
+    R(c, 52, 8, 42, 26, P.markDark);
+    R(c, 54, 10, 38, 22, '#f4f8f6');
+    LESS.drawLogga(c, 56, 13, 1, false);
+    R(c, 74, 15, 15, 2, P.markDark);
+    R(c, 74, 19, 12, 2, P.markDark);
+    R(c, 74, 23, 15, 2, '#3f7a70');
+
+    /* mintgrön list längs väggen */
+    R(c, 0, 84, 160, 2, P.markMint);
+
+    /* växt i hörnet, till stor del dold av textrutan */
+    R(c, 138, 74, 12, 18, P.woodD); R(c, 140, 76, 8, 14, P.wood);
+    R(c, 142, 62, 4, 14, P.greenD);
+    R(c, 134, 58, 9, 9, P.green); R(c, 145, 58, 9, 9, P.green);
+    R(c, 139, 52, 9, 9, P.green);
+
     if (tint) { c.fillStyle = tint; c.fillRect(0, 0, 160, 144); }
   };
 
@@ -528,11 +587,12 @@
     /* skärmram */
     R(c, 6, 8, 148, 96, '#0c1014');
     R(c, 8, 10, 144, 92, '#d8e4e8');
-    /* rubrikrad */
-    R(c, 8, 10, 144, 12, '#3c6c8c');
-    R(c, 12, 14, 4, 4, '#f0f0e0');
-    R(c, 20, 14, 40, 4, '#a8c8d8');
-    R(c, 140, 13, 6, 6, '#c85848');
+    /* rubrikrad i vårdcentralens profilfärg */
+    R(c, 8, 10, 144, 14, P.markDark);
+    LESS.drawLogga(c, 10, 9, 1, true, P.markMint);
+    R(c, 28, 14, 46, 3, P.markMint);
+    R(c, 28, 19, 30, 2, '#3f7a70');
+    R(c, 140, 14, 6, 6, P.markMint);
     /* bubblor */
     R(c, 14, 28, 62, 14, '#f4f4ec'); R(c, 14, 28, 62, 1, '#b8c4c8'); R(c, 14, 41, 62, 1, '#b8c4c8');
     R(c, 18, 32, 44, 2, '#8a98a0'); R(c, 18, 36, 34, 2, '#8a98a0');
@@ -560,13 +620,14 @@
     /* skärm */
     R(c, 14, 20, 100, 74, '#0c1014');
     R(c, 16, 22, 96, 70, '#f4f4e8');
-    R(c, 16, 22, 96, 9, '#c04838');
-    R(c, 20, 25, 30, 3, '#f8f8f0');
+    R(c, 16, 22, 96, 14, P.markDark);
+    LESS.drawLogga(c, 17, 21, 1, true, P.markMint);
+    R(c, 34, 27, 30, 3, P.markMint);
     var i;
     for (i = 0; i < 9; i++) {
-      R(c, 21, 36 + i * 6, (i % 3 === 2 ? 52 : 84), 2, '#8a8a80');
+      R(c, 21, 38 + i * 6, (i % 3 === 2 ? 52 : 84), 2, '#8a8a80');
     }
-    R(c, 21, 36, 40, 2, '#3858a0');
+    R(c, 21, 38, 40, 2, P.markDark);
     R(c, 21, 84, 30, 3, '#38803f');
     /* markör */
     if (((t / 500) | 0) % 2 === 0) R(c, 88, 84, 1, 5, '#20201c');
@@ -603,8 +664,8 @@
     R(c, 24, 44, 112, 54, P.ink);
     R(c, 26, 46, 108, 50, P.white);
     R(c, 26, 46, 108, 8, '#e8e4d8');
-    R(c, 20, 38, 120, 8, '#c85848');       /* tak */
-    R(c, 20, 38, 120, 2, '#e07868');
+    R(c, 20, 38, 120, 8, P.markDark);      /* tak */
+    R(c, 20, 38, 120, 2, '#1d695e');
     /* fönster */
     for (i = 0; i < 4; i++) {
       R(c, 34 + i * 24, 58, 16, 14, P.ink);
@@ -615,9 +676,15 @@
     R(c, 70, 74, 20, 24, P.ink);
     R(c, 72, 76, 16, 22, P.glass);
     R(c, 79, 76, 2, 22, P.ink);
-    /* skylt */
-    R(c, 58, 26, 44, 12, P.ink);
-    R(c, 60, 28, 40, 8, '#f0f0e0');
+    /* skylt med Forsåkers märke */
+    R(c, 50, 18, 60, 20, P.markDark);
+    R(c, 52, 20, 56, 16, '#f4f8f6');
+    LESS.drawLogga(c, 54, 20, 1, false);
+    R(c, 72, 23, 32, 3, P.markDark);
+    R(c, 72, 28, 24, 2, '#3f7a70');
+    R(c, 72, 32, 30, 2, '#3f7a70');
+    /* mintgrön list ovanför entrén */
+    R(c, 26, 54, 108, 2, P.markMint);
     /* buskar */
     R(c, 10, 88, 14, 10, P.greenD); R(c, 12, 86, 10, 6, P.green);
     R(c, 136, 88, 14, 10, P.greenD); R(c, 138, 86, 10, 6, P.green);
