@@ -119,31 +119,47 @@
 
     var body = $('debrief-box');
     var fot = $('debrief-foot');
+
+    function sidhojd() { return Math.max(80, body.clientHeight - 24); }
+    function botten() { return body.scrollTop + body.clientHeight >= body.scrollHeight - 12; }
+
     function uppdateraFot() {
-      var slut = body.scrollTop + body.clientHeight >= body.scrollHeight - 8;
-      fot.textContent = slut
-        ? 'A = fortsätt  ·  ↑↓ = bläddra tillbaka'
-        : 'A / ↓ = läs vidare  ·  ↑ = tillbaka';
+      if (botten()) {
+        fot.innerHTML = '<b>A</b> = fortsätt &nbsp;·&nbsp; ↑↓ = bläddra tillbaka';
+        fot.classList.remove('mer');
+      } else {
+        var sidor = Math.max(1, Math.ceil(body.scrollHeight / sidhojd()));
+        var sida = Math.min(sidor, Math.floor(body.scrollTop / sidhojd()) + 1);
+        fot.innerHTML = '<span class="pil">▼</span> <b>A</b> = nästa sida (' + sida + '/' + sidor +
+                        ') &nbsp;·&nbsp; <b>B</b> = hoppa till slutet';
+        fot.classList.add('mer');
+      }
     }
     body.onscroll = uppdateraFot;
     uppdateraFot();
 
+    function stang() {
+      LESS.sfx('ok');
+      LESS.input.pop(hnd);
+      body.onscroll = null;
+      fot.classList.remove('mer');
+      LESS.show($('debrief'), false);
+      if (done) done(res);
+    }
+
     var hnd = LESS.input.push(function (k) {
-      if (k === 'down') body.scrollTop += 34;
-      else if (k === 'up') body.scrollTop -= 34;
+      if (k === 'down') { body.scrollTop += 48; LESS.sfx('move'); }
+      else if (k === 'up') { body.scrollTop -= 48; LESS.sfx('move'); }
       else if (k === 'a') {
-        /* Kräv att man scrollat till slutet innan man går vidare – eller tryck igen */
-        if (body.scrollTop + body.clientHeight < body.scrollHeight - 8) {
-          body.scrollTop += 120;
-          return;
-        }
-        LESS.sfx('ok');
-        LESS.input.pop(hnd);
-        body.onscroll = null;
-        LESS.show($('debrief'), false);
-        if (done) done(res);
+        /* Bläddra en hel sida i taget tills allt är läst, sedan vidare.
+           Handledarens återkoppling är poängen med mötet – den ska inte
+           gå att klicka förbi av misstag. */
+        if (!botten()) { body.scrollTop += sidhojd(); LESS.sfx('blip'); uppdateraFot(); return; }
+        stang();
       } else if (k === 'b') {
-        body.scrollTop -= 120;
+        /* Har man redan läst: hoppa direkt till slutet. */
+        if (!botten()) { body.scrollTop = body.scrollHeight; LESS.sfx('back'); uppdateraFot(); }
+        else { body.scrollTop -= sidhojd(); LESS.sfx('move'); }
       }
     });
   }
