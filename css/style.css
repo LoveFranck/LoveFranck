@@ -1,0 +1,350 @@
+/* =========================================================
+   LESS – Vårdcentralen
+   Estetik: Pokémon Guld/Silver (Game Boy Color)
+   Logisk skärm: 320x288 (= GBC 160x144 x2). Allt skalas med
+   heltalsfaktor så pixlarna förblir kvadratiska.
+   ========================================================= */
+
+:root{
+  /* GBC-inspirerad grundpalett */
+  --ink:      #10100c;   /* svart ram och text            */
+  --paper:    #f8f8e8;   /* ljus textrutebakgrund         */
+  --paper-sh: #c8c8a8;   /* skugga i textruta             */
+  --gold:     #e8a028;   /* accent (GULD)                 */
+  --silver:   #a8b0c0;   /* accent (SILVER)               */
+  --bronze:   #b87038;   /* accent (BRONS)                */
+  --good:     #38803f;   /* grön                          */
+  --warn:     #b83820;   /* röd                           */
+  --info:     #3858a0;   /* blå                           */
+  --shell:    #2a2a34;   /* konsolens plastram            */
+  --shell-2:  #1a1a22;
+  --screen-bg:#8ab060;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0; padding:0; height:100%;
+  background:#0c0c10;
+  overflow:hidden;
+  -webkit-text-size-adjust:100%;
+  overscroll-behavior:none;
+  touch-action:manipulation;
+}
+
+body{
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Silkscreen","Press Start 2P",ui-monospace,"DejaVu Sans Mono","Courier New",monospace;
+  color:var(--ink);
+  user-select:none; -webkit-user-select:none;
+}
+
+#frame{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+
+/* ---------- Skärmen ---------- */
+
+#stage{
+  position:relative;
+  width:320px; height:288px;
+  transform-origin:top center;
+  background:var(--screen-bg);
+  box-shadow:0 0 0 6px var(--shell), 0 0 0 8px var(--shell-2), 0 10px 30px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+
+#screen{
+  position:absolute; inset:0;
+  width:320px; height:288px;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  display:block;
+}
+
+#ui{ position:absolute; inset:0; }
+
+.hidden{ display:none !important; }
+
+/* ---------- Game Boy-textruta ---------- */
+
+.gbbox{
+  position:absolute;
+  background:var(--paper);
+  color:var(--ink);
+  border:2px solid var(--ink);
+  border-radius:4px;
+  box-shadow:inset 0 0 0 2px var(--paper), inset 0 0 0 3px var(--ink);
+  padding:8px 9px;
+  line-height:1.35;
+  font-size:10px;
+  letter-spacing:.2px;
+}
+
+#dialog{
+  left:8px; right:8px; bottom:8px;
+  min-height:62px;
+}
+/* Frågeläge: rutan flyttar upp så att valmenyn får plats under */
+#dialog.fraga{
+  top:116px; bottom:auto; min-height:0;
+  font-size:9.5px;
+  max-height:52px; overflow:hidden;
+}
+#dialog p{ margin:0; white-space:pre-wrap; }
+#dialog-more{
+  position:absolute; right:8px; bottom:5px;
+  animation:blink .7s steps(1) infinite;
+  font-size:9px;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+/* Talarnamn ovanför rutan */
+.speaker{
+  display:block;
+  font-size:9px;
+  color:var(--info);
+  margin:0 0 3px;
+  letter-spacing:.5px;
+}
+.speaker.pat{ color:var(--warn); }
+.speaker.you{ color:var(--good); }
+
+/* ---------- Valmeny ---------- */
+
+#menu{
+  left:8px; right:8px;
+  bottom:8px;
+  max-height:170px;
+  overflow-y:auto;
+  padding:6px 6px 6px 4px;
+  scrollbar-width:none;
+}
+#menu::-webkit-scrollbar{ display:none; }
+#menu.val{ top:172px; bottom:8px; max-height:none; }
+#menu.compact{ left:auto; right:8px; width:132px; }
+
+.opt{
+  display:flex; align-items:flex-start; gap:4px;
+  padding:2px 2px 3px 10px;
+  position:relative;
+  font-size:10px;
+  line-height:1.3;
+  scroll-margin:6px;
+}
+#menu.val .opt{ font-size:9px; line-height:1.35; }
+.opt .cur{ position:absolute; left:1px; top:2px; opacity:0; }
+.opt.sel .cur{ opacity:1; }
+.opt.sel{ background:#e0e0c0; border-radius:2px; }
+.opt .txt{ flex:1; }
+.opt .cost{
+  font-size:9px; color:#606050; white-space:nowrap; padding-top:1px;
+}
+.opt.used .txt{ color:#909080; text-decoration:line-through; }
+
+#menu .hint{
+  font-size:9px; color:#606050; padding:3px 2px 0 10px; border-top:1px dotted #b0b090; margin-top:3px;
+}
+
+/* ---------- HUD ---------- */
+
+#hud{
+  position:absolute; left:8px; right:8px; top:6px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:6px;
+  font-size:9px;
+}
+#hud-name{
+  background:var(--paper); border:2px solid var(--ink); border-radius:3px;
+  padding:2px 5px; letter-spacing:.4px;
+}
+#hud-clock{
+  background:var(--paper); border:2px solid var(--ink); border-radius:3px;
+  padding:2px 5px; display:flex; align-items:center; gap:4px;
+}
+#hud-bar{
+  width:52px; height:6px; background:#606050; border:1px solid var(--ink);
+}
+#hud-bar-fill{
+  display:block; height:100%; width:100%; background:var(--good);
+  transition:width .25s steps(6);
+}
+#hud-bar-fill.mid{ background:var(--gold); }
+#hud-bar-fill.low{ background:var(--warn); }
+#hud.warn #hud-clock{ animation:blink .5s steps(1) 4; }
+
+/* ---------- Världsrad ---------- */
+
+#worldbar{
+  position:absolute; left:6px; right:6px; top:6px;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:6px;
+  font-size:9px; pointer-events:none;
+}
+#roomlabel{
+  background:var(--paper); border:2px solid var(--ink); border-radius:3px;
+  padding:2px 5px; letter-spacing:.6px; white-space:nowrap;
+}
+#objective{
+  background:var(--ink); color:var(--paper); border:2px solid var(--paper);
+  border-radius:3px; padding:2px 5px; max-width:190px; line-height:1.3;
+}
+#objective:empty{ display:none; }
+
+/* ---------- Banner ---------- */
+
+#banner{
+  position:absolute; left:0; right:0; top:44px;
+  text-align:center; font-size:10px; letter-spacing:1px;
+  color:var(--paper);
+  background:var(--ink);
+  padding:3px 0;
+  border-top:2px solid var(--paper); border-bottom:2px solid var(--paper);
+}
+
+/* ---------- Reaktionssignal ---------- */
+
+#cue{
+  position:absolute; left:0; right:0; top:96px;
+  text-align:center; font-size:10px;
+  color:var(--paper); text-shadow:1px 1px 0 var(--ink);
+  animation:cuepop .9s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes cuepop{
+  0%{ transform:translateY(6px); opacity:0; }
+  20%{ transform:translateY(0); opacity:1; }
+  80%{ opacity:1; }
+  100%{ transform:translateY(-8px); opacity:0; }
+}
+
+/* ---------- Panel (journal / handbok / meny) ---------- */
+
+#panel{ position:absolute; inset:0; background:rgba(16,16,12,.55); }
+#panel-box{
+  position:absolute; left:8px; right:8px; top:10px; bottom:10px;
+  overflow:hidden; display:flex; flex-direction:column;
+}
+#panel-title{
+  margin:0 0 5px; font-size:11px; letter-spacing:1px;
+  border-bottom:2px solid var(--ink); padding-bottom:3px;
+}
+#panel-body{ flex:1; overflow-y:auto; font-size:10px; line-height:1.45; padding-right:2px; }
+#panel-body h3{ font-size:10px; margin:8px 0 2px; color:var(--info); letter-spacing:.5px; }
+#panel-body p{ margin:0 0 5px; }
+#panel-body ul{ margin:0 0 6px; padding-left:14px; }
+#panel-body li{ margin-bottom:2px; }
+#panel-body .kv{ display:flex; gap:6px; margin-bottom:2px; }
+#panel-body .kv b{ min-width:76px; font-weight:normal; color:#606050; }
+.panel-foot{ font-size:9px; color:#606050; padding-top:4px; border-top:1px dotted #b0b090; margin-top:4px; }
+
+/* ---------- Debrief ---------- */
+
+#debrief{ position:absolute; inset:0; background:var(--paper); display:flex; flex-direction:column; }
+#debrief-box{ flex:1; overflow-y:auto; padding:8px 9px 4px; font-size:10px; line-height:1.45; }
+#debrief-foot{
+  font-size:9px; color:#606050; padding:4px 9px 6px; border-top:2px solid var(--ink);
+  background:var(--paper);
+}
+
+.d-grade{
+  text-align:center; border:2px solid var(--ink); border-radius:4px;
+  padding:6px 4px; margin-bottom:8px;
+}
+.d-grade .g{ display:block; font-size:20px; letter-spacing:3px; margin-bottom:2px; }
+.d-grade .s{ display:block; font-size:9px; color:#404038; }
+.d-grade.guld{ background:#fff0c8; } .d-grade.guld .g{ color:#a06c00; }
+.d-grade.silver{ background:#eef0f4; } .d-grade.silver .g{ color:#606878; }
+.d-grade.brons{ background:#f4e4d4; } .d-grade.brons .g{ color:#8a4c1c; }
+.d-grade.omtag{ background:#f6dcd6; } .d-grade.omtag .g{ color:var(--warn); font-size:15px; }
+
+.d-h{ font-size:10px; letter-spacing:1px; border-bottom:2px solid var(--ink); margin:10px 0 5px; padding-bottom:2px; }
+
+.d-row{ margin-bottom:7px; padding-left:13px; position:relative; }
+.d-row .mark{ position:absolute; left:0; top:0; font-size:11px; }
+.d-row.ok .mark{ color:var(--good); }
+.d-row.bad .mark{ color:var(--warn); }
+.d-row.mid .mark{ color:var(--gold); }
+.d-row .said{ display:block; color:#404038; margin-bottom:1px; }
+.d-row .why{ display:block; color:#20201c; }
+.d-row .tag{
+  display:inline-block; font-size:8px; letter-spacing:.5px;
+  border:1px solid #909080; border-radius:2px; padding:0 3px; margin-top:2px; color:#606050;
+}
+
+.meter{ display:flex; align-items:center; gap:5px; margin-bottom:3px; font-size:9px; }
+.meter .mn{ width:96px; color:#404038; }
+.meter .mb{ flex:1; height:7px; background:#d8d8c0; border:1px solid var(--ink); position:relative; }
+.meter .mb i{ display:block; height:100%; background:var(--good); }
+.meter .mb i.lowv{ background:var(--warn); }
+.meter .mb i.midv{ background:var(--gold); }
+.meter .mv{ width:26px; text-align:right; color:#606050; }
+
+.d-note{
+  border:2px solid var(--ink); border-radius:3px; background:#eef4ea;
+  padding:5px 6px; margin:8px 0; font-size:9px; line-height:1.5;
+}
+.d-note b{ display:block; margin-bottom:2px; letter-spacing:.5px; }
+.d-note.warnbox{ background:#f8e8e2; }
+
+/* ---------- Titelskärm ---------- */
+
+#title{ position:absolute; inset:0; display:flex; flex-direction:column;
+        align-items:center; justify-content:flex-start; padding-top:16px; gap:6px; }
+#title-logo{ text-align:center; }
+.t-less{
+  display:block; font-size:44px; letter-spacing:6px; color:#f8e070;
+  text-shadow:2px 2px 0 #a06010, 4px 4px 0 var(--ink);
+}
+.t-sub{
+  display:block; font-size:11px; letter-spacing:4px; color:var(--paper);
+  text-shadow:2px 2px 0 var(--ink); margin-top:2px;
+}
+#title-press{
+  margin-top:150px; font-size:10px; letter-spacing:2px; color:var(--paper);
+  text-shadow:1px 1px 0 var(--ink); animation:blink 1s steps(1) infinite;
+}
+#title-foot{
+  position:absolute; bottom:8px; font-size:8px; letter-spacing:1px;
+  color:var(--paper); text-shadow:1px 1px 0 var(--ink); opacity:.85;
+}
+
+/* ---------- Fade ---------- */
+
+#fade{
+  position:absolute; inset:0; background:var(--ink);
+  opacity:0; pointer-events:none; transition:opacity .18s steps(4);
+}
+#fade.on{ opacity:1; }
+
+/* ---------- Pekkontroller ---------- */
+
+#pad{ display:none; width:min(420px,96vw); }
+body.touch #pad{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-areas:"dpad btns" "sys sys";
+  gap:8px; align-items:center;
+}
+#dpad{ grid-area:dpad; display:grid; grid-template-columns:repeat(3,38px);
+       grid-template-rows:repeat(3,38px); justify-content:center; }
+#dpad .pb:nth-child(1){ grid-column:2; grid-row:1; }
+#dpad .pb:nth-child(2){ grid-column:1; grid-row:2; }
+#dpad .pb:nth-child(3){ grid-column:3; grid-row:2; }
+#dpad .pb:nth-child(4){ grid-column:2; grid-row:3; }
+#btns{ grid-area:btns; display:flex; gap:12px; justify-content:center; align-items:center; }
+#sysbtns{ grid-area:sys; display:flex; gap:10px; justify-content:center; }
+.pb{
+  background:#3a3a48; color:#e8e8d8; border:2px solid #14141c; border-radius:6px;
+  font:inherit; font-size:12px; padding:0; cursor:pointer;
+}
+.pb.round{ width:52px; height:52px; border-radius:50%; font-size:16px; background:#8a3040; }
+.pb.wide{ padding:7px 14px; font-size:10px; letter-spacing:1px; }
+.pb:active{ transform:translateY(1px); filter:brightness(1.25); }
+
+/* ---------- Tillgänglighet ---------- */
+
+@media (prefers-reduced-motion:reduce){
+  #dialog-more,#title-press,#hud.warn #hud-clock{ animation:none; }
+  #cue{ animation:none; }
+  #fade{ transition:none; }
+}
