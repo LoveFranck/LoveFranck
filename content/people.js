@@ -115,6 +115,16 @@
     }
   };
 
+  /* ---------------- handledaren ----------------
+     Samma röst som ger återkopplingen efter mötena, men här med kropp:
+     han står alltid utanför den dörr du ska in genom och kan fråga:s om
+     vägen hur många gånger som helst. */
+  LESS.handledare = {
+    namn: 'HANDLEDARE OVE',
+    sprite: { skin: SK.ljus, hair: HR.vit, hairStyle: 'kort',
+              uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
+  };
+
   /* ---------------- personal i overworld ---------------- */
   LESS.npcs = [
     { x: 2, y: 15, dir: 'down', namn: 'MEDARBETARE ROSA',

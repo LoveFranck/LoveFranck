@@ -195,6 +195,7 @@
       id: 'spelet',
       titel: 'Så funkar spelet',
       punkter: [
+        'Handledare Ove står alltid i korridoren utanför den dörr du ska in genom. Prata med honom när du vill så säger han vart du ska och vad du ska göra där.',
         'Tiden i besöket är den enda mätare du ser. Varje replik och åtgärd kostar minuter.',
         'Patientens förtroende, agens, dina ramar och kvaliteten på underlaget mäts hela tiden – men i det dolda. Du läser dem på patientens kroppsspråk och svar, precis som i verkligheten.',
         'Går tiden ut tvingas du fatta beslutet ändå. Det räknas.',

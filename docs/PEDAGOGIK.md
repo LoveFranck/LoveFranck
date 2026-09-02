@@ -94,6 +94,19 @@ Principen lämnar kön först efter **två rätt i rad** – ett rätt kan vara 
 Det här är utspridd repetition och återhämtningsträning i minimal form: du möter
 inte samma fall igen, du möter samma princip i ett annat sammanhang.
 
+### 5b. Stödet finns där innan man hinner köra fast
+
+En ovan spelare vet inte att triage sker vid datorn i triagerummet – och ett
+spel som låter någon irra runt lär inte ut något alls under tiden. Därför finns
+handledare Ove: han möter upp, förklarar första steget konkret, och står sedan
+alltid utanför rätt dörr. Han går att fråga hur många gånger som helst utan
+kostnad.
+
+Det viktiga är att stödet gäller *vägen till uppgiften*, aldrig uppgiften
+själv. Ove säger vart du ska gå och vilken knapp du ska trycka på. Han säger
+aldrig vad du ska svara patienten. Att göra navigationen gratis och bedömningen
+svår är hela poängen: all kognitiv belastning ska ligga på det som ska läras.
+
 ### 6. Handledartipsen tonas bort
 
 Första gången i en roll ligger ett tips bakom B-knappen på varje beslut. När du

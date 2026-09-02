@@ -2138,6 +2138,7 @@ body.touch #pad{
       id: 'spelet',
       titel: 'Så funkar spelet',
       punkter: [
+        'Handledare Ove står alltid i korridoren utanför den dörr du ska in genom. Prata med honom när du vill så säger han vart du ska och vad du ska göra där.',
         'Tiden i besöket är den enda mätare du ser. Varje replik och åtgärd kostar minuter.',
         'Patientens förtroende, agens, dina ramar och kvaliteten på underlaget mäts hela tiden – men i det dolda. Du läser dem på patientens kroppsspråk och svar, precis som i verkligheten.',
         'Går tiden ut tvingas du fatta beslutet ändå. Det räknas.',
@@ -2303,6 +2304,16 @@ body.touch #pad{
       portratt: { skin: SK.ljus, hair: HR.brun, hairStyle: 'kort', klader: '#78889a', glasogon: true, ogon: '#3a4a3a' },
       bakgrund: 'Sjukskriven 100 % i elva månader för utmattningssyndrom. Kontakten med arbetsgivaren har tystnat.'
     }
+  };
+
+  /* ---------------- handledaren ----------------
+     Samma röst som ger återkopplingen efter mötena, men här med kropp:
+     han står alltid utanför den dörr du ska in genom och kan fråga:s om
+     vägen hur många gånger som helst. */
+  LESS.handledare = {
+    namn: 'HANDLEDARE OVE',
+    sprite: { skin: SK.ljus, hair: HR.vit, hairStyle: 'kort',
+              uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
   };
 
   /* ---------------- personal i overworld ---------------- */
@@ -5504,6 +5515,8 @@ body.touch #pad{
     for (var i = 0; i < LESS.npcs.length; i++) {
       if (LESS.npcs[i].x === nx && LESS.npcs[i].y === ny) { P.steg = (P.steg + 1) % 2; return; }
     }
+    var o = oveRuta();
+    if (o.x === nx && o.y === ny) { P.steg = (P.steg + 1) % 2; return; }
     P.frx = P.px; P.fry = P.py;
     P.tx = nx; P.ty = ny;
     P.gar = true; P.t0 = performance.now();
@@ -5561,6 +5574,9 @@ body.touch #pad{
       var figurer = LESS.npcs.map(function (n) {
         return { px: n.x * TS, py: n.y * TS, spr: LESS.charSprite('npc' + n.x + '_' + n.y, n.sprite, n.dir, 0) };
       });
+      var o = oveRuta();
+      figurer.push({ px: o.x * TS, py: o.y * TS,
+        spr: LESS.charSprite('ove', LESS.handledare.sprite, oveRiktning(o), 0) });
       var rollDef = (LESS.roller[LESS.state.data.spelare.roll] || LESS.roller.ssk).sprite;
       figurer.push({
         px: P.px, py: P.py,
@@ -5575,15 +5591,42 @@ body.touch #pad{
       var mal = malStation();
       if (mal) {
         var mx = mal.x * TS - cam.x + 4, my = mal.y * TS - cam.y - 10 + Math.round(Math.sin(t / 220) * 2);
-        if (mx > -12 && mx < VY_W + 12) {
+        var iBild = mx > 0 && mx < VY_W - 8 && my > 0 && my < VY_H - 8;
+        if (iBild) {
           c.fillStyle = '#101010'; c.fillRect(mx - 1, my - 1, 10, 8);
           c.fillStyle = '#f8e070';
           c.fillRect(mx + 3, my, 2, 4); c.fillRect(mx + 1, my + 3, 6, 1); c.fillRect(mx + 2, my + 4, 4, 1);
           c.fillRect(mx + 3, my + 5, 2, 1);
+        } else {
+          kantpil(c, mal.x * TS + 8 - cam.x, mal.y * TS + 8 - cam.y, t);
         }
       }
     }
   };
+
+  /* Pil vid skärmkanten som pekar mot målet när det ligger utanför bild.
+     Utan den är stationen osynlig tills man råkar gå in i rätt rum. */
+  function kantpil(c, tx, ty, t) {
+    /* Toppmarginalen är större: där ligger rums- och uppdragsraden. */
+    var x = LESS.clamp(tx, 10, VY_W - 10), y = LESS.clamp(ty, 26, VY_H - 10);
+    var puls = Math.round(Math.sin(t / 260) * 2);
+    if (y <= 26) y += puls; else if (y >= VY_H - 10) y -= puls;
+    else if (x <= 10) x += puls; else x -= puls;
+    var dx = tx - x, dy = ty - y, i;
+    var vagrat = Math.abs(dx) > Math.abs(dy);
+    c.fillStyle = '#101010';
+    c.fillRect(x - 7, y - 7, 14, 14);
+    c.fillStyle = '#f8e070';
+    for (i = 0; i < 5; i++) {
+      if (vagrat) {
+        if (dx > 0) c.fillRect(x - 3 + i, y - 4 + i, 1, 9 - i * 2);
+        else        c.fillRect(x + 3 - i, y - 4 + i, 1, 9 - i * 2);
+      } else {
+        if (dy > 0) c.fillRect(x - 4 + i, y - 3 + i, 9 - i * 2, 1);
+        else        c.fillRect(x - 4 + i, y + 3 - i, 9 - i * 2, 1);
+      }
+    }
+  }
 
   /* ---------------- kampanj ---------------- */
 
@@ -5617,12 +5660,153 @@ body.touch #pad{
         o = (pers ? pers.namn.split(' ')[0].toUpperCase() : '') +
             ' · steg ' + (LESS.state.data.kampanj.steg + 1) + '/' + k.arende.steg.length +
             ' → ' + (r ? r.rum : '');
+        /* Väl inne i rummet byts vägvisningen mot vad man faktiskt ska göra. */
+        if (r && rumNamn() === r.rum) {
+          o = (r.rum === 'TRIAGE' || r.rum === 'LÄKARRUM')
+            ? '▶ Gå till datorn och tryck A'
+            : '▶ Gå till skrivbordet och tryck A';
+        }
       } else o = 'Alla ärenden klara – gå till receptionen.';
     } else if (LESS.state.data.lage === 'drill') {
       o = 'ÖVNING · välj rum';
     }
     $('objective').textContent = o;
     LESS.show($('worldbar'), true);
+  }
+
+
+  /* ================= handledaren ==================
+     Ove står alltid i korridoren utanför den dörr spelaren ska in genom, och
+     kan frågas om vägen hur många gånger som helst. Han är spelets svar på
+     "vart ska jag nu?" – utan honom är stationerna osynliga tills man råkar
+     gå in i rätt rum.                                                      */
+
+  var OVE_START = { x: 6, y: 16 };
+  var introKor = false;              /* så att introt inte kan dubbelstartas */
+
+  /* Rutan intill dörren, en rad in i korridoren – aldrig i dörröppningen. */
+  var GUIDE = {
+    ssk:              { x: 5,  y: 10 },
+    psykolog:         { x: 13, y: 10 },
+    fysioterapeut:    { x: 21, y: 10 },
+    lakare:           { x: 28, y: 10 },
+    rehabkoordinator: { x: 16, y: 12 },
+    arbetsterapeut:   { x: 26, y: 12 }
+  };
+
+  /* Vad man faktiskt ska göra när man kommit in i rummet. */
+  var ATGARD = {
+    ssk: 'Ärendet ligger i chatten på datorn. Ställ dig framför skärmen och tryck A.',
+    lakare: 'Utredningen ligger uppe på skärmen. Ställ dig vid datorn och tryck A.',
+    psykolog: 'Ställ dig vid skrivbordet och tryck A, så börjar besöket.',
+    fysioterapeut: 'Ställ dig vid skrivbordet och tryck A, så börjar besöket.',
+    arbetsterapeut: 'Ställ dig vid skrivbordet och tryck A, så börjar besöket.',
+    rehabkoordinator: 'Ställ dig vid skrivbordet och tryck A, så börjar besöket.'
+  };
+
+  function oveRuta() {
+    var d = LESS.state.data;
+    /* Före introduktionen står han bredvid spelaren i väntrummet, sedan
+       vid dörren till det rum ärendet ska till. */
+    if (d.lage === 'kampanj' && d.kampanj.introVisad) {
+      var s = malStation();
+      if (s && GUIDE[s.id]) return GUIDE[s.id];
+      return { x: 5, y: 12 };
+    }
+    return OVE_START;
+  }
+
+  /* Han vänder sig mot spelaren när man kommer nära. */
+  function oveRiktning(r) {
+    var dx = P.tx - r.x, dy = P.ty - r.y;
+    if (Math.abs(dx) + Math.abs(dy) > 5) return r.y < 13 ? 'down' : 'up';
+    if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? 'right' : 'left';
+    return dy > 0 ? 'down' : 'up';
+  }
+
+  /* Grov väderstrecksbeskrivning från spelaren till målet. */
+  function vagbeskrivning(mal) {
+    var dx = mal.x - P.tx, dy = mal.y - P.ty, delar = [];
+    if (dy < -2) delar.push('uppåt'); else if (dy > 2) delar.push('nedåt');
+    if (dx < -3) delar.push('åt vänster'); else if (dx > 3) delar.push('åt höger');
+    if (!delar.length) return 'Du är nästan framme.';
+    return 'Det är ' + delar.join(' och ') + ' härifrån.';
+  }
+
+  function oveRepliker() {
+    var d = LESS.state.data;
+
+    if (d.lage === 'drill') {
+      return ['Övningsläge. Här väljer du fritt vilket rum du vill gå in i.',
+              'Varje profession har egna fall. Ställ dig vid skrivbordet i rummet och tryck A.',
+              'Fall som tränar det du missat kommer tillbaka först.'];
+    }
+
+    var k = kampanjSteg();
+    if (!k) {
+      return ['Alla tre ärenden är klara. Snyggt jobbat.',
+              'Vill du öva vidare byter du till övningsläge vid receptionen.'];
+    }
+
+    var r = LESS.roller[k.fall.roll];
+    var pers = LESS.personer[k.arende.patient];
+    var mal = malStation();
+    var rad = [];
+
+    rad.push('Nu är du ' + (r ? r.namn.toLowerCase() : '') + '. ' +
+             (pers ? pers.namn : 'Patienten') + ' väntar.');
+    rad.push('Du ska in i ' + (r ? r.rum : '') + '.' + (mal ? ' ' + vagbeskrivning(mal) : ''));
+    rad.push(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.');
+    rad.push('Kör du fast kommer du tillbaka hit. Jag står alltid utanför rätt dörr.');
+    return rad;
+  }
+
+  function prataOve() {
+    paus();
+    LESS.sfx('ok');
+    ui.sayAll(oveRepliker().map(function (t) {
+      return { text: t, speaker: { name: LESS.handledare.namn, kind: 'you' } };
+    }), ater);
+  }
+
+  /* Introduktionen första gången man kommer in i huset. */
+  function oveIntro() {
+    var d = LESS.state.data;
+    paus();
+    var rader = [
+      'Där är du ju. Ove heter jag, handledare här på Forsåker.',
+      'Vi jobbar efter LESS: ett sjukskrivningsärende går inte automatiskt till läkare. Sjuksköterskan bedömer först, och bokar psykolog eller fysioterapeut när det passar bättre.',
+      'Idag följer du tre ärenden hela vägen. Du byter roll längs vägen – jag säger till var du ska.',
+      'Du går med piltangenterna eller WASD. A är Z, Enter eller mellanslag. B är X.',
+      'Först ut: Anna Ek har skrivit i chatten. Du ska in i TRIAGE, uppe till vänster i korridoren. Ställ dig framför datorn och tryck A.',
+      'Jag går före och ställer mig utanför dörren. Prata med mig när du vill, jag säger om var du ska.'
+    ];
+    ui.sayAll(rader.map(function (t) {
+      return { text: t, speaker: { name: LESS.handledare.namn, kind: 'you' } };
+    }), function () {
+      d.kampanj.introVisad = true;
+      introKor = false;
+      LESS.state.spara();
+      LESS.sfx('door');
+      ater();
+    });
+  }
+
+  /* Engångstips när man kommer in i rätt rum, en gång per kampanjsteg. */
+  function kollaRumstips() {
+    var d = LESS.state.data;
+    if (d.lage !== 'kampanj') return;
+    var k = kampanjSteg(), mal = malStation();
+    if (!k || !mal) return;
+    var nyckel = d.kampanj.arende + ':' + d.kampanj.steg;
+    if (d.kampanj.rumstips === nyckel) return;
+    var r = LESS.roller[k.fall.roll];
+    if (!r || rumNamn() !== r.rum) return;
+    d.kampanj.rumstips = nyckel;
+    LESS.state.spara();
+    paus();
+    LESS.sfx('alert');
+    ui.say(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.', null, ater);
   }
 
   /* ---------------- interaktion ---------------- */
@@ -5634,6 +5818,9 @@ body.touch #pad{
 
   function tryck() {
     var f = framforRuta(), i;
+
+    var o = oveRuta();
+    if (o.x === f.x && o.y === f.y) { prataOve(); return; }
 
     for (i = 0; i < LESS.npcs.length; i++) {
       if (LESS.npcs[i].x === f.x && LESS.npcs[i].y === f.y) { prataNpc(LESS.npcs[i]); return; }
@@ -5915,7 +6102,7 @@ body.touch #pad{
     if (handler) LESS.input.pop(handler);
     handler = LESS.input.push(function (k) {
       if (!aktiv) return;
-      if (k === 'up' || k === 'down' || k === 'left' || k === 'right') { forsokGa(k); uppdateraVarldsrad(); }
+      if (k === 'up' || k === 'down' || k === 'left' || k === 'right') { forsokGa(k); uppdateraVarldsrad(); kollaRumstips(); }
       else if (k === 'a') tryck();
       else if (k === 'meny') receptionsMeny();
       else if (k === 'b') { /* reserverad */ }
@@ -5924,16 +6111,10 @@ body.touch #pad{
     LESS.ui.globalKeys.journal = function () { paus(); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); };
     LESS.ui.globalKeys.handbok = function () { paus(); ui.panel('HANDBOKEN', handbokHtml(), ater); };
 
-    /* Kampanjens mellanspel första gången man kommer in */
-    if (LESS.state.data.lage === 'kampanj' && !LESS.state.data.kampanj.introVisad) {
-      LESS.state.data.kampanj.introVisad = true;
-      LESS.state.spara();
-      paus();
-      ui.sayAll([
-        { text: 'Vårdcentralen. Klockan är åtta.', speaker: null },
-        { text: 'Idag ska du följa tre ärenden genom hela LESS-flödet – och byta roll på vägen.', speaker: null },
-        { text: 'Piltangenter/WASD för att gå. A (Z eller Enter) för att prata. J = anslagstavla, H = handbok, Esc = meny.', speaker: null }
-      ], ater);
+    /* Handledaren möter upp första gången man kommer in i huset. */
+    if (LESS.state.data.lage === 'kampanj' && !LESS.state.data.kampanj.introVisad && !introKor) {
+      introKor = true;
+      oveIntro();
     }
   }
 
@@ -5952,7 +6133,7 @@ body.touch #pad{
       uppdatera(t);
       if (!P.gar) {
         var d = LESS.input.dir();
-        if (d) { forsokGa(d); uppdateraVarldsrad(); }
+        if (d) { forsokGa(d); uppdateraVarldsrad(); kollaRumstips(); }
       }
     }
   };

@@ -64,6 +64,21 @@ Varje ärende slutar med en epilog som visar hur det gick ett halvår senare.
 **Övningsläge** – gå in i vilket rum du vill och mata på med fall i en roll.
 Urvalet styrs av repetitionskön: principer du missat prioriteras.
 
+### Handledare Ove
+
+Samma röst som ger återkopplingen efter mötena finns också som person i huset.
+Ove möter upp i väntrummet första gången, förklarar LESS på en halv minut och
+går sedan före och ställer sig i korridoren **utanför den dörr du ska in genom**.
+Prata med honom när som helst så säger han vilken roll du är, vem som väntar,
+åt vilket håll rummet ligger och vad du ska göra när du kommer in.
+
+Tre saker till pekar åt samma håll, så att ingen behöver gissa:
+
+* en pil vid skärmkanten som pekar mot rätt rum när det ligger utanför bild
+* en blinkande markör över datorn eller skrivbordet när du är i rummet
+* uppdragsraden högst upp, som byter från `→ TRIAGE` till `▶ Gå till datorn och
+  tryck A` i samma stund som du kliver in
+
 ---
 
 ## Rollerna
