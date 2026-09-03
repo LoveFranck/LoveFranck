@@ -272,6 +272,69 @@ body{
 .chip.kA{ background:var(--mark-mint); }
 .chip.kB{ background:var(--silver); }
 
+/* ---------- Frågeplanscher ---------- */
+
+.planschintro{ font-size:9px; color:#5a5a4c; }
+.planschintro.lagring{ color:var(--mark); }
+.planschfraga{ font-size:11px; line-height:1.4; margin:0 0 5px; }
+.planschbak{ font-size:9px; color:#5a5a4c; }
+.planschradg{
+  font-size:9px; line-height:1.5;
+  border:2px solid var(--ink); border-radius:3px;
+  background:#eef4ea; padding:5px 6px; margin:8px 0 0;
+}
+.planschank{ font-size:9px; margin:5px 0 0; }
+
+.fraga{
+  position:relative;
+  padding:4px 4px 5px 11px;
+  border-bottom:1px dotted #b0b090;
+  font-size:10px; line-height:1.3;
+  scroll-margin:6px;
+}
+.fraga .cur{ position:absolute; left:0; top:4px; opacity:0; }
+.fraga.sel{ background:#e0e0c0; }
+.fraga.sel .cur{ opacity:1; }
+.fraga .ft{ display:block; margin-bottom:3px; }
+.fraga.knapp .ft{ margin-bottom:0; color:var(--info); }
+.fraga .rad{ display:flex; align-items:center; gap:4px; font-size:9px; color:#5a5a4c; }
+.fraga .rad b{ width:52px; font-weight:normal; }
+.fraga .ank{ color:#7a7a68; }
+.fraga .ingen{ color:#9a9a88; }
+
+.skb{
+  display:inline-block; width:64px; height:6px;
+  background:#d8d8c0; border:1px solid var(--ink); position:relative;
+}
+.skb i{ display:block; height:100%; }
+.skb.radg i{ background:#909080; }
+.skb.du i{ background:var(--mark-mint); }
+.skb.andra i{ background:var(--info); }
+.skv{ width:20px; text-align:right; font-variant-numeric:tabular-nums; }
+
+.skalabox{ margin:8px 0 4px; }
+.skalatal{ font-size:22px; letter-spacing:1px; text-align:center; }
+.skalatal span{ font-size:9px; letter-spacing:0; color:#7a7a68; }
+.skala{
+  position:relative; height:14px; margin:4px 0 2px;
+  background:#d8d8c0; border:2px solid var(--ink);
+}
+.skala i{ display:block; height:100%; background:var(--mark-mint); }
+.skala u{ position:absolute; top:0; width:1px; height:100%; background:#a8a894; }
+.skala .radgmark{
+  position:absolute; top:-4px; width:3px; height:18px;
+  background:var(--warn); margin-left:-1px;
+}
+.skalaank{ display:flex; justify-content:space-between; font-size:7px; color:#7a7a68; text-align:center; }
+.skalaank span{ flex:1; line-height:1.2; }
+
+pre.rapport{
+  font-size:9px; line-height:1.4; white-space:pre-wrap; word-break:break-word;
+  background:#f0f0e0; border:2px solid var(--ink); border-radius:3px;
+  padding:5px 6px; margin:6px 0 0;
+  user-select:text; -webkit-user-select:text;
+}
+
 /* ---------- Debrief ---------- */
 
 #debrief{ position:absolute; inset:0; background:var(--paper); display:flex; flex-direction:column; }

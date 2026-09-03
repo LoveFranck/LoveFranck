@@ -20,6 +20,7 @@
     ko: [],                        /* principId-kö för repetition */
     mastery: {},                   /* roll -> antal guld */
     installningar: { tips: true, ljud: true, snabbtext: false },
+    skattningar: {},               /* frågeId -> {varde, kommentar, tid} */
     statistik: { moten: 0, guld: 0, silver: 0, brons: 0, omtag: 0, minuter: 0 }
   };
 
@@ -122,6 +123,19 @@
       if (S.kampanj.klara.indexOf(fallId) < 0) S.kampanj.klara.push(fallId);
       state.spara();
     },
+
+    /* ---------- frågeplanscherna ---------- */
+
+    skatta: function (fragaId, varde, kommentar) {
+      S.skattningar[fragaId] = {
+        varde: LESS.clamp(Math.round(varde), 0, 100),
+        kommentar: kommentar || '',
+        tid: new Date().toISOString().slice(0, 10)
+      };
+      state.spara();
+    },
+    minSkattning: function (fragaId) { return S.skattningar[fragaId] || null; },
+    antalSkattningar: function () { return Object.keys(S.skattningar).length; },
 
     /* ---------- drill ---------- */
 

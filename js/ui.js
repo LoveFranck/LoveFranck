@@ -294,6 +294,30 @@
       el._t = setTimeout(function () { LESS.show(el, false); }, 900);
     },
 
+    /* Passiv panel: visas och döljs av anroparen, som sköter inmatningen
+       själv. Används av frågeplanscherna, som behöver egna tangenter. */
+    visaPanel: function (titel, html, fot) {
+      $('panel-title').textContent = titel;
+      $('panel-body').innerHTML = html;
+      var f = document.querySelector('#panel-box .panel-foot');
+      if (f) f.textContent = fot || 'B / X = tillbaka';
+      LESS.show($('panel'), true);
+      $('panel-body').scrollTop = 0;
+      panelOppen = true;
+    },
+    doljPanel: function () {
+      LESS.show($('panel'), false);
+      panelOppen = false;
+    },
+    panelScroll: function (delta) {
+      var b = $('panel-body');
+      if (b) b.scrollTop += delta;
+    },
+    panelSynlig: function (el) {
+      var b = $('panel-body');
+      if (b && el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+    },
+
     /* ================= panel ================= */
 
     panel: function (title, html, cb) {

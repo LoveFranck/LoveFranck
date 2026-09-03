@@ -43,6 +43,16 @@ behöver bekräftas en gång till för sin egen skull.
 **Att avstå från sjukskrivning.** Ett medicinskt ställningstagande som ska
 motiveras, dokumenteras och gå att ompröva — inte ett administrativt nej.
 
+## Dina frågor samlas i spelet
+
+Osäkerheter om klinisk vardag skattar du på kvotskalan 0–100 och skriver in i
+**din egen lista i `content/fragor.js`**, under rollnyckeln `lakare`. Formatet och
+skalans ankare står i `docs/GRANSKNING.md`.
+
+Frågorna dyker upp på planschen i ditt rum i spelet, där verklig personal kan
+sätta sin siffra bredvid din. Din skattning är en hypotes att motbevisa — ju
+tydligare du motiverar den, desto mer är oenigheten värd.
+
 ## Juridik du ska kunna
 
 - **PSL** – ansvar, vetenskap och beprövad erfarenhet, anmälningsskyldighet

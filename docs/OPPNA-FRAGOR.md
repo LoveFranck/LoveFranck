@@ -1,8 +1,13 @@
 # Öppna frågor
 
-Sådant i innehållet som är flaggat som osäkert och behöver kontrolleras av någon
-som vet. Professionsrådgivarna i `.claude/agents/` skriver in nya fynd här, och
-stryker rader när de är avgjorda.
+Frågor om **regelverk, mandat och innehåll** — sådant som har ett svar någon kan
+slå upp eller besluta. Professionsrådgivarna i `.claude/agents/` skriver in nya
+fynd här och stryker rader när de är avgjorda.
+
+> **Frågor om klinisk vardag hör inte hemma här.** Sådant som "förekommer det
+> här i primärvården?" har sällan ett ja eller nej. De ligger i stället i
+> `content/fragor.js`, skattas av rådgivaren på en kvotskala 0–100 och besvaras
+> av verklig personal på planscherna i spelet. Se `docs/GRANSKNING.md`.
 
 Formatet är enkelt: vad som är osäkert, var det sitter, vem som kan avgöra det,
 och vad som händer med innehållet beroende på svaret.

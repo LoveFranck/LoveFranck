@@ -44,6 +44,16 @@ Stresstesta det: vad kan ett sådant underlag innehålla, hur dokumenteras det,
 vad är din bedömning och vad är läkarens beslut? Var noga med att spelet inte
 låter dig dra slutsatser som inte är dina att dra.
 
+## Dina frågor samlas i spelet
+
+Osäkerheter om klinisk vardag skattar du på kvotskalan 0–100 och skriver in i
+**din egen lista i `content/fragor.js`**, under rollnyckeln `fysioterapeut`. Formatet och
+skalans ankare står i `docs/GRANSKNING.md`.
+
+Frågorna dyker upp på planschen i ditt rum i spelet, där verklig personal kan
+sätta sin siffra bredvid din. Din skattning är en hypotes att motbevisa — ju
+tydligare du motiverar den, desto mer är oenigheten värd.
+
 ## Juridik du ska kunna
 
 - **PSL** – yrkesansvar, vetenskap och beprövad erfarenhet

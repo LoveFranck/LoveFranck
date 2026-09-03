@@ -74,6 +74,16 @@ Granska särskilt:
 - **Sömnen.** Behandlas den som ett eget spår där det behövs, eller väntas den
   ut som ett symtom?
 
+## Dina frågor samlas i spelet
+
+Osäkerheter om klinisk vardag skattar du på kvotskalan 0–100 och skriver in i
+**din egen lista i `content/fragor.js`**, under rollnyckeln `psykolog`. Formatet och
+skalans ankare står i `docs/GRANSKNING.md`.
+
+Frågorna dyker upp på planschen i ditt rum i spelet, där verklig personal kan
+sätta sin siffra bredvid din. Din skattning är en hypotes att motbevisa — ju
+tydligare du motiverar den, desto mer är oenigheten värd.
+
 ## Juridik du ska kunna
 
 - **PSL** – yrkesansvar, vetenskap och beprövad erfarenhet

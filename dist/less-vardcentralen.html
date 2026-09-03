@@ -281,6 +281,69 @@ body{
 .chip.kA{ background:var(--mark-mint); }
 .chip.kB{ background:var(--silver); }
 
+/* ---------- Frågeplanscher ---------- */
+
+.planschintro{ font-size:9px; color:#5a5a4c; }
+.planschintro.lagring{ color:var(--mark); }
+.planschfraga{ font-size:11px; line-height:1.4; margin:0 0 5px; }
+.planschbak{ font-size:9px; color:#5a5a4c; }
+.planschradg{
+  font-size:9px; line-height:1.5;
+  border:2px solid var(--ink); border-radius:3px;
+  background:#eef4ea; padding:5px 6px; margin:8px 0 0;
+}
+.planschank{ font-size:9px; margin:5px 0 0; }
+
+.fraga{
+  position:relative;
+  padding:4px 4px 5px 11px;
+  border-bottom:1px dotted #b0b090;
+  font-size:10px; line-height:1.3;
+  scroll-margin:6px;
+}
+.fraga .cur{ position:absolute; left:0; top:4px; opacity:0; }
+.fraga.sel{ background:#e0e0c0; }
+.fraga.sel .cur{ opacity:1; }
+.fraga .ft{ display:block; margin-bottom:3px; }
+.fraga.knapp .ft{ margin-bottom:0; color:var(--info); }
+.fraga .rad{ display:flex; align-items:center; gap:4px; font-size:9px; color:#5a5a4c; }
+.fraga .rad b{ width:52px; font-weight:normal; }
+.fraga .ank{ color:#7a7a68; }
+.fraga .ingen{ color:#9a9a88; }
+
+.skb{
+  display:inline-block; width:64px; height:6px;
+  background:#d8d8c0; border:1px solid var(--ink); position:relative;
+}
+.skb i{ display:block; height:100%; }
+.skb.radg i{ background:#909080; }
+.skb.du i{ background:var(--mark-mint); }
+.skb.andra i{ background:var(--info); }
+.skv{ width:20px; text-align:right; font-variant-numeric:tabular-nums; }
+
+.skalabox{ margin:8px 0 4px; }
+.skalatal{ font-size:22px; letter-spacing:1px; text-align:center; }
+.skalatal span{ font-size:9px; letter-spacing:0; color:#7a7a68; }
+.skala{
+  position:relative; height:14px; margin:4px 0 2px;
+  background:#d8d8c0; border:2px solid var(--ink);
+}
+.skala i{ display:block; height:100%; background:var(--mark-mint); }
+.skala u{ position:absolute; top:0; width:1px; height:100%; background:#a8a894; }
+.skala .radgmark{
+  position:absolute; top:-4px; width:3px; height:18px;
+  background:var(--warn); margin-left:-1px;
+}
+.skalaank{ display:flex; justify-content:space-between; font-size:7px; color:#7a7a68; text-align:center; }
+.skalaank span{ flex:1; line-height:1.2; }
+
+pre.rapport{
+  font-size:9px; line-height:1.4; white-space:pre-wrap; word-break:break-word;
+  background:#f0f0e0; border:2px solid var(--ink); border-radius:3px;
+  padding:5px 6px; margin:6px 0 0;
+  user-select:text; -webkit-user-select:text;
+}
+
 /* ---------- Debrief ---------- */
 
 #debrief{ position:absolute; inset:0; background:var(--paper); display:flex; flex-direction:column; }
@@ -912,6 +975,22 @@ body.touch #pad{
       R(c, x + 15, y + 5, 1, 6, P.markDark);
     },
 
+    plansch: function (c, x, y) {          /* frågeplansch på väggen */
+      R(c, x, y, 16, 16, P.wall);
+      R(c, x, y, 16, 3, P.wallSh);
+      R(c, x, y + 12, 16, 4, P.wallD);
+      R(c, x + 1, y + 1, 14, 13, P.markDark);
+      R(c, x + 2, y + 2, 12, 11, '#f4f8f6');
+      /* rader med en skattningsstapel efter varje */
+      R(c, x + 3, y + 3, 5, 1, '#8a9a96'); R(c, x + 9, y + 3, 4, 1, P.markMint);
+      R(c, x + 3, y + 5, 6, 1, '#8a9a96'); R(c, x + 10, y + 5, 3, 1, P.markMint);
+      R(c, x + 3, y + 7, 4, 1, '#8a9a96'); R(c, x + 8, y + 7, 5, 1, P.markMint);
+      R(c, x + 3, y + 9, 6, 1, '#8a9a96'); R(c, x + 10, y + 9, 3, 1, P.markMint);
+      R(c, x + 3, y + 11, 3, 1, P.markDark);
+      /* penna på snöre */
+      R(c, x + 13, y + 11, 1, 4, '#8a7050'); R(c, x + 13, y + 15, 1, 1, P.ink);
+    },
+
     rug: function (c, x, y) {
       R(c, x, y, 16, 16, '#d8c8a0');
       R(c, x + 1, y + 1, 14, 14, '#c8b890');
@@ -1386,7 +1465,7 @@ body.touch #pad{
 
   /* Teckenlegend:
      ^ takkant   # vägg    W fönster  G innerfönster  P affisch
-     L logotypskylt (Forsåker)
+     L logotypskylt (Forsåker)   F frågeplansch
      H hylla     B tavla   D dörr     E utgång
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
@@ -1394,7 +1473,7 @@ body.touch #pad{
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
-    /* 1 */ '#W##L##B##W##P#H#W##P##B##W#P#H#',
+    /* 1 */ '#W##L##F##W##P#F#W##P##F##W#P#F#',
     /* 2 */ '#  cd     #  cd     #  cd     #  cd  #',
     /* 3 */ '#    h    #     h   #     h   #    h #',
     /* 4 */ '#         #         #         #      #',
@@ -1406,7 +1485,7 @@ body.touch #pad{
     /*10 */ '#p............................p#',
     /*11 */ '#..............................#',
     /*12 */ '#..............................#',
-    /*13 */ '##L##D#########D#########D###H##',
+    /*13 */ '##L##D#########D#F#######D#F#H##',
     /*14 */ '#xxx     p#  cd    p#  cd     p#',
     /*15 */ '#         #    h    #     h    #',
     /*16 */ '# bbb  bbb#         #  dd      #',
@@ -1442,6 +1521,7 @@ body.touch #pad{
   var TILE_OF = {
     '^': 'wallTop', '#': 'wall', 'W': 'window', 'G': 'wallGlass', 'P': 'poster',
     'H': 'shelf', 'B': 'board', 'D': 'door', 'E': 'doorSign', 'L': 'logga',
+    'F': 'plansch',
     '.': 'floor2', ' ': 'floor', 'r': 'carpet', 'u': 'rug',
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
     'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet'
@@ -1465,7 +1545,16 @@ body.touch #pad{
     { id: 'handbok',          x: 29, y: 13, kind: 'handbok' },
     { id: 'anslagstavla',     x: 9,  y: 9,  kind: 'tavla' },
     { id: 'reception',        x: 2,  y: 14, kind: 'reception' },
-    { id: 'utgang',           x: 5,  y: 20, kind: 'utgang' }
+    { id: 'utgang',           x: 5,  y: 20, kind: 'utgang' },
+
+    /* Frågeplanscher: en i varje professions rum. Här skattar verklig
+       personal hur vanligt förekommande rådgivarnas antaganden faktiskt är. */
+    { id: 'plansch-ssk',    x: 7,  y: 1,  kind: 'plansch', roll: 'ssk' },
+    { id: 'plansch-psy',    x: 15, y: 1,  kind: 'plansch', roll: 'psykolog' },
+    { id: 'plansch-fys',    x: 23, y: 1,  kind: 'plansch', roll: 'fysioterapeut' },
+    { id: 'plansch-lak',    x: 30, y: 1,  kind: 'plansch', roll: 'lakare' },
+    { id: 'plansch-rko',    x: 17, y: 13, kind: 'plansch', roll: 'rehabkoordinator' },
+    { id: 'plansch-arb',    x: 27, y: 13, kind: 'plansch', roll: 'arbetsterapeut' }
   ];
 
   /* ---------------- dörrskyltar ---------------- */
@@ -1788,6 +1877,30 @@ body.touch #pad{
       el._t = setTimeout(function () { LESS.show(el, false); }, 900);
     },
 
+    /* Passiv panel: visas och döljs av anroparen, som sköter inmatningen
+       själv. Används av frågeplanscherna, som behöver egna tangenter. */
+    visaPanel: function (titel, html, fot) {
+      $('panel-title').textContent = titel;
+      $('panel-body').innerHTML = html;
+      var f = document.querySelector('#panel-box .panel-foot');
+      if (f) f.textContent = fot || 'B / X = tillbaka';
+      LESS.show($('panel'), true);
+      $('panel-body').scrollTop = 0;
+      panelOppen = true;
+    },
+    doljPanel: function () {
+      LESS.show($('panel'), false);
+      panelOppen = false;
+    },
+    panelScroll: function (delta) {
+      var b = $('panel-body');
+      if (b) b.scrollTop += delta;
+    },
+    panelSynlig: function (el) {
+      var b = $('panel-body');
+      if (b && el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+    },
+
     /* ================= panel ================= */
 
     panel: function (title, html, cb) {
@@ -1857,6 +1970,7 @@ body.touch #pad{
     ko: [],                        /* principId-kö för repetition */
     mastery: {},                   /* roll -> antal guld */
     installningar: { tips: true, ljud: true, snabbtext: false },
+    skattningar: {},               /* frågeId -> {varde, kommentar, tid} */
     statistik: { moten: 0, guld: 0, silver: 0, brons: 0, omtag: 0, minuter: 0 }
   };
 
@@ -1959,6 +2073,19 @@ body.touch #pad{
       if (S.kampanj.klara.indexOf(fallId) < 0) S.kampanj.klara.push(fallId);
       state.spara();
     },
+
+    /* ---------- frågeplanscherna ---------- */
+
+    skatta: function (fragaId, varde, kommentar) {
+      S.skattningar[fragaId] = {
+        varde: LESS.clamp(Math.round(varde), 0, 100),
+        kommentar: kommentar || '',
+        tid: new Date().toISOString().slice(0, 10)
+      };
+      state.spara();
+    },
+    minSkattning: function (fragaId) { return S.skattningar[fragaId] || null; },
+    antalSkattningar: function () { return Object.keys(S.skattningar).length; },
 
     /* ---------- drill ---------- */
 
@@ -2256,6 +2383,157 @@ body.touch #pad{
   };
 
   LESS.fall = {};      /* fylls av content/cases-*.js */
+
+})(window);
+
+/* ==== content/fragor.js ==== */
+/* fragor.js – professionsrådgivarnas öppna frågor om klinisk vardag.
+
+   Varje fråga handlar om hur något FAKTISKT går till i svensk primärvård, inte
+   om hur det borde gå till. Rådgivaragenten skattar på en kvotskala 0–100 hur
+   vanligt förekommande något är; verklig personal skattar samma fråga i spelet,
+   via planschen på väggen i sitt eget rum.
+
+   Skalan (samma ankare för alla frågor):
+       0   förekommer aldrig i svensk primärvård
+      25   förekommer, men undantagsvis
+      50   ungefär hälften av mottagningarna eller tillfällena
+      75   vanligt, men inte självklart
+     100   görs i princip alltid
+
+   Fältet `skattning` är agentens gissning och ska ses som en hypotes att
+   motbevisa. `sakerhet` säger hur mycket agenten litar på den.
+
+   ⚠ EJ KLINISKT GRANSKAT. */
+
+(function (global) {
+  'use strict';
+  var LESS = global.LESS;
+
+  LESS.fragorAnkare = [
+    [0,   'aldrig'],
+    [25,  'undantagsvis'],
+    [50,  'ungefär hälften'],
+    [75,  'vanligt'],
+    [100, 'i princip alltid']
+  ];
+
+  LESS.fragor = {
+
+    ssk: [
+      { id: 'ssk-chatt-triage',
+        fraga: 'Sker triage av sjukskrivningsärenden i chatt, utan att patienten hörs eller ses?',
+        bakgrund: 'Alla sjuksköterskefall i spelet utspelar sig i chatten. Om det i praktiken alltid blir ett telefonsamtal bör fallen spegla det.',
+        berorFall: ['ssk-anna', 'ssk-bengt', 'ssk-carina'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'ssk-suicidfraga-chatt',
+        fraga: 'Ställs frågan om suicidtankar i skriftlig chatt, eller flyttas ärendet alltid till telefon då?',
+        bakgrund: 'I ssk-anna är suicidfrågan ett av tre obligatoriska val i chatten.',
+        berorFall: ['ssk-anna'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' }
+    ],
+
+    psykolog: [
+      { id: 'psy-ikbt-samma-vecka',
+        fraga: 'Går det att starta iKBT med behandlarstöd inom en vecka från första psykologbesöket?',
+        bakgrund: 'Guldsvaret i psy-anna förutsätter det.',
+        berorFall: ['psy-anna'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'psy-tid-45min',
+        fraga: 'Hinner man en situationsanalys, psykoedukation, sömngenomgång och ett försäkringsmedicinskt underlag på ett nybesök?',
+        bakgrund: 'psy-anna har 44 minuters budget och innehåller alla fyra momenten.',
+        berorFall: ['psy-anna'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' }
+    ],
+
+    fysioterapeut: [
+      { id: 'fys-forsakringsmedicinskt-underlag',
+        fraga: 'Skriver fysioterapeuter i primärvården försäkringsmedicinska underlag som läkare sedan tar ställning till?',
+        bakgrund: 'Hela fysioterapeutens roll i LESS bygger på det.',
+        berorFall: ['fys-bengt', 'fys-farid'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'fys-uppfoljning-10-dagar',
+        fraga: 'Går det att boka en uppföljning tio dagar fram?',
+        bakgrund: 'fys-bengt förutsätter det i sitt bästa alternativ.',
+        berorFall: ['fys-bengt'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' }
+    ],
+
+    arbetsterapeut: [
+      { id: 'at-arbetsplatsbedomning',
+        fraga: 'Gör arbetsterapeuter i primärvården arbetsplatsbesök eller arbetsplatsbedömning?',
+        bakgrund: 'Bästa beslutsalternativet i arb-carina innehåller "arbetsplatsbedömning bokad". Utvecklaren har aldrig sett det göras och misstänker att det hör till företagshälsovården eller specialiserad rehabilitering.',
+        berorFall: ['arb-carina'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'at-arbetsinriktat-uppdrag',
+        fraga: 'Ingår arbetsinriktade insatser över huvud taget i primärvårdsarbetsterapeutens uppdrag, eller är tyngdpunkten ADL, hjälpmedel och äldre?',
+        bakgrund: 'Hela arbetsterapeutens roll i LESS bygger på arbetsinriktat arbete.',
+        berorFall: ['arb-carina', 'arb-gunilla'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'at-ortos-utprovning',
+        fraga: 'Provas tumortoser ut och lämnas ut vid besöket på vårdcentralen?',
+        bakgrund: 'I arb-carina känner patienten skillnaden i rummet, vilket förutsätter att ortosen finns på plats.',
+        berorFall: ['arb-carina'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' }
+    ],
+
+    lakare: [
+      { id: 'lak-signera-annans-underlag',
+        fraga: 'Signerar läkare i primärvården intyg som bygger på en annan professions utredning, utan att själv ha träffat patienten?',
+        bakgrund: 'LESS-modellens juridiska kärna. Hela läkarrollen i spelet bygger på det.',
+        berorFall: ['lak-anna', 'lak-bengt'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'lak-ringer-patienten',
+        fraga: 'Ringer läkaren patienten för att ge besked om ett intygsbeslut samma dag?',
+        bakgrund: 'Bästa alternativet i lak-anna förutsätter ett kort samtal i stället för ett eget besök.',
+        berorFall: ['lak-anna'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' }
+    ],
+
+    rehabkoordinator: [
+      { id: 'rko-sitta-med-vid-samtal',
+        fraga: 'Sitter rehabkoordinatorn med när patienten själv ringer sin chef?',
+        bakgrund: 'Bästa alternativet i rko-anna bygger på det.',
+        berorFall: ['rko-anna'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' },
+
+      { id: 'rko-avstamningsmote-tva-veckor',
+        fraga: 'Går det att få till ett avstämningsmöte inom två veckor?',
+        bakgrund: 'Bästa alternativet i rko-jonas förutsätter det.',
+        berorFall: ['rko-jonas'],
+        skattning: null, sakerhet: null, motivering: '',
+        status: 'väntar på rådgivare' }
+    ]
+  };
+
+  /* Alla frågor i en platt lista, med rollen inbakad. */
+  LESS.allaFragor = function () {
+    var ut = [];
+    Object.keys(LESS.fragor).forEach(function (roll) {
+      LESS.fragor[roll].forEach(function (f) {
+        ut.push({ roll: roll, f: f });
+      });
+    });
+    return ut;
+  };
 
 })(window);
 
@@ -5081,6 +5359,309 @@ body.touch #pad{
 
 })(window);
 
+/* ==== js/plansch.js ==== */
+/* plansch.js – frågeplanscherna på väggen i varje professions rum.
+
+   Rådgivaragenterna skattar hur vanligt förekommande deras antaganden om
+   klinisk vardag är, på en kvotskala 0–100. Här skattar verklig personal samma
+   fråga. Skillnaden mellan gissningen och verkligheten är hela poängen, så
+   ingenting här är rätt eller fel – det är datainsamling, inte en övning.   */
+
+(function (global) {
+  'use strict';
+  var LESS = global.LESS, ui = LESS.ui, $ = LESS.$;
+
+  var STEG_GROVT = 5, STEG_FINT = 1;
+
+  /* ---------------- delad insamling ----------------
+     Publicerad som artefakt får sidan en delad databas, så att kollegor på
+     andra datorer kan skatta samma frågor och svaren når utvecklaren. Som
+     lokal fil eller på GitHub Pages finns ingen sådan – då sparas svaren i
+     webbläsaren och skickas in med kopiera-och-klistra i stället.        */
+
+  var db = null, dbKlar = false, andraCache = {};
+
+  function deltagarId() {
+    try {
+      var id = global.localStorage.getItem('less-deltagare');
+      if (!id) {
+        id = 'd' + Math.random().toString(36).slice(2, 10);
+        global.localStorage.setItem('less-deltagare', id);
+      }
+      return id;
+    } catch (e) { return 'd-anonym'; }
+  }
+
+  function kopplaDb() {
+    if (dbKlar) return Promise.resolve(db);
+    if (!global.claude || typeof global.claude.use !== 'function') {
+      dbKlar = true;
+      return Promise.resolve(null);
+    }
+    return global.claude.use('db').then(function (d) {
+      db = d; dbKlar = true; return d;
+    }, function () { dbKlar = true; return null; });
+  }
+  kopplaDb();
+
+  function delaSkattning(roll, f, varde) {
+    if (!db) return;
+    try {
+      db.doc('skattningar/' + f.id + '__' + deltagarId()).set({
+        fragaId: f.id,
+        roll: roll,
+        varde: varde,
+        radgivare: f.skattning == null ? null : f.skattning,
+        deltagare: deltagarId(),
+        tid: new Date().toISOString()
+      }).then(null, function () { /* lokalt sparat räcker */ });
+    } catch (e) { /* tyst */ }
+  }
+
+  /* Andras svar per fråga: antal och median. */
+  function hamtaAndra(roll) {
+    if (!db) return Promise.resolve({});
+    return db.collection('skattningar').where('roll', '==', roll).get().then(function (snap) {
+      var per = {};
+      snap.docs.forEach(function (d) {
+        var v = d.data() || {};
+        if (typeof v.varde !== 'number' || !v.fragaId) return;
+        (per[v.fragaId] = per[v.fragaId] || []).push(v.varde);
+      });
+      var ut = {};
+      Object.keys(per).forEach(function (id) {
+        var a = per[id].slice().sort(function (x, y) { return x - y; });
+        var m = a.length % 2 ? a[(a.length - 1) / 2] : Math.round((a[a.length / 2 - 1] + a[a.length / 2]) / 2);
+        ut[id] = { n: a.length, median: m };
+      });
+      return ut;
+    }, function () { return {}; });
+  }
+
+  function rollNamn(roll) {
+    var r = LESS.roller[roll];
+    return r ? r.namn : roll.toUpperCase();
+  }
+
+  /* ---------------- små byggstenar ---------------- */
+
+  function stapel(varde, klass) {
+    if (varde == null) return '<span class="ingen">–</span>';
+    return '<span class="skb ' + (klass || '') + '"><i style="width:' + varde + '%"></i></span>' +
+           '<span class="skv">' + varde + '</span>';
+  }
+
+  function ankartext(varde) {
+    if (varde == null) return '';
+    var a = LESS.fragorAnkare, i, bast = a[0];
+    for (i = 0; i < a.length; i++) if (Math.abs(a[i][0] - varde) < Math.abs(bast[0] - varde)) bast = a[i];
+    return bast[1];
+  }
+
+  /* ---------------- listvyn ---------------- */
+
+  function visa(roll, klar) {
+    var fragor = (LESS.fragor && LESS.fragor[roll]) || [];
+    var andra = andraCache[roll] || {};
+    var rader = fragor.length + 2;          /* + exportrad + tillbaka */
+    var sel = 0;
+    var handler = null;
+
+    function rita() {
+      var h = '';
+      h += '<p class="planschintro">Rådgivaren har gissat hur vanligt det här är i verkligheten. ' +
+           'Sätt din egen siffra bredvid. Inget är rätt eller fel – det är din vardag som är facit.</p>';
+      h += '<p class="planschintro lagring">' + (db
+        ? '● Svaren delas automatiskt. Kollegor på andra datorer kan skatta samma frågor.'
+        : '○ Svaren sparas bara i den här webbläsaren. Välj “Visa mina svar att skicka in” när du är klar.') + '</p>';
+
+      if (!fragor.length) {
+        h += '<p>Inga frågor uppsatta för den här rollen ännu.</p>';
+      }
+
+      fragor.forEach(function (f, i) {
+        var min = LESS.state.minSkattning(f.id);
+        h += '<div class="fraga' + (i === sel ? ' sel' : '') + '" id="frg' + i + '">' +
+             '<span class="cur">▶</span>' +
+             '<span class="ft">' + LESS.esc(f.fraga) + '</span>' +
+             '<span class="rad"><b>rådgivaren</b>' + stapel(f.skattning, 'radg') +
+               (f.skattning != null ? '<span class="ank">' + LESS.esc(ankartext(f.skattning)) + '</span>' : '') +
+             '</span>' +
+             '<span class="rad"><b>du</b>' + stapel(min ? min.varde : null, 'du') +
+               (min ? '<span class="ank">' + LESS.esc(ankartext(min.varde)) + '</span>' : '') +
+             '</span>' +
+             (andra[f.id]
+               ? '<span class="rad"><b>andra (' + andra[f.id].n + ')</b>' +
+                 stapel(andra[f.id].median, 'andra') + '<span class="ank">median</span></span>'
+               : '') +
+             '</div>';
+      });
+
+      h += '<div class="fraga knapp' + (sel === fragor.length ? ' sel' : '') + '" id="frg' + fragor.length + '">' +
+           '<span class="cur">▶</span><span class="ft">Visa mina svar att skicka in</span></div>';
+      h += '<div class="fraga knapp' + (sel === fragor.length + 1 ? ' sel' : '') + '" id="frg' + (fragor.length + 1) + '">' +
+           '<span class="cur">▶</span><span class="ft">Tillbaka</span></div>';
+
+      ui.visaPanel('FRÅGOR · ' + rollNamn(roll), h, '↑↓ = välj  ·  A = skatta  ·  B = tillbaka');
+      ui.panelSynlig($('frg' + sel));
+    }
+
+    function stang() {
+      LESS.input.pop(handler);
+      ui.doljPanel();
+      if (klar) klar();
+    }
+
+    function oppna() {
+      rita();
+      /* Hämta andras svar i bakgrunden och rita om när de kommit. */
+      kopplaDb().then(function () {
+        if (!db) return;
+        hamtaAndra(roll).then(function (res) {
+          andraCache[roll] = res; andra = res;
+          if (LESS.input.top() === handler) rita();
+        });
+      });
+      handler = LESS.input.push(function (k) {
+        if (k === 'down') { sel = (sel + 1) % rader; LESS.sfx('move'); rita(); }
+        else if (k === 'up') { sel = (sel - 1 + rader) % rader; LESS.sfx('move'); rita(); }
+        else if (k === 'a') {
+          LESS.sfx('ok');
+          if (sel < fragor.length) {
+            LESS.input.pop(handler);
+            skatta(roll, fragor[sel], oppna);
+          } else if (sel === fragor.length) {
+            LESS.input.pop(handler);
+            exportera(roll, oppna);
+          } else stang();
+        }
+        else if (k === 'b') { LESS.sfx('back'); stang(); }
+      });
+    }
+    oppna();
+  }
+
+  /* ---------------- skattningsvyn ---------------- */
+
+  function skatta(roll, f, klar) {
+    var min = LESS.state.minSkattning(f.id);
+    var varde = min ? min.varde : (f.skattning != null ? f.skattning : 50);
+    var handler = null;
+
+    function rita() {
+      var h = '';
+      h += '<p class="planschfraga">' + LESS.esc(f.fraga) + '</p>';
+      if (f.bakgrund) h += '<p class="planschbak">' + LESS.esc(f.bakgrund) + '</p>';
+
+      h += '<div class="skalabox">';
+      h += '<div class="skalatal">' + varde + '<span> av 100</span></div>';
+      h += '<div class="skala"><i style="width:' + varde + '%"></i>';
+      LESS.fragorAnkare.forEach(function (a) {
+        h += '<u style="left:' + a[0] + '%"></u>';
+      });
+      if (f.skattning != null) h += '<b class="radgmark" style="left:' + f.skattning + '%"></b>';
+      h += '</div>';
+      h += '<div class="skalaank">';
+      LESS.fragorAnkare.forEach(function (a) {
+        h += '<span>' + a[0] + '<br>' + LESS.esc(a[1]) + '</span>';
+      });
+      h += '</div>';
+      h += '<p class="planschank">Din bedömning: <b>' + LESS.esc(ankartext(varde)) + '</b></p>';
+      h += '</div>';
+
+      if (f.skattning != null) {
+        h += '<p class="planschradg"><b>Rådgivarens gissning: ' + f.skattning + '</b>' +
+             (f.sakerhet ? ' (säkerhet: ' + LESS.esc(f.sakerhet) + ')' : '') +
+             (f.motivering ? '<br>' + LESS.esc(f.motivering) : '') + '</p>';
+      } else {
+        h += '<p class="planschradg">Rådgivaren har inte skattat den här frågan ännu.</p>';
+      }
+
+      if (f.berorFall && f.berorFall.length) {
+        h += '<p class="planschbak">Påverkar fallen: ' + LESS.esc(f.berorFall.join(', ')) + '</p>';
+      }
+
+      ui.visaPanel('SKATTA · ' + rollNamn(roll), h,
+        '←→ = ±5  ·  ↑↓ = ±1  ·  A = spara  ·  B = avbryt');
+    }
+
+    function stang(sparat) {
+      LESS.input.pop(handler);
+      if (sparat) { LESS.sfx('done'); } else { LESS.sfx('back'); }
+      if (klar) klar();
+    }
+
+    rita();
+    handler = LESS.input.push(function (k) {
+      if (k === 'left') { varde = LESS.clamp(varde - STEG_GROVT, 0, 100); LESS.sfx('move'); rita(); }
+      else if (k === 'right') { varde = LESS.clamp(varde + STEG_GROVT, 0, 100); LESS.sfx('move'); rita(); }
+      else if (k === 'down') { varde = LESS.clamp(varde - STEG_FINT, 0, 100); rita(); }
+      else if (k === 'up') { varde = LESS.clamp(varde + STEG_FINT, 0, 100); rita(); }
+      else if (k === 'a') {
+        LESS.state.skatta(f.id, varde);
+        delaSkattning(roll, f, varde);
+        delete andraCache[roll];
+        stang(true);
+      }
+      else if (k === 'b') { stang(false); }
+    });
+  }
+
+  /* ---------------- exportvyn ---------------- */
+
+  function rapport(roll) {
+    var fragor = (LESS.fragor && LESS.fragor[roll]) || [];
+    var rader = ['LESS – Vårdcentralen · skattningar', rollNamn(roll),
+                 new Date().toISOString().slice(0, 10), ''];
+    var n = 0;
+    fragor.forEach(function (f) {
+      var min = LESS.state.minSkattning(f.id);
+      if (!min) return;
+      n++;
+      rader.push(f.id);
+      rader.push('  ' + f.fraga);
+      rader.push('  rådgivaren: ' + (f.skattning == null ? '–' : f.skattning) +
+                 '   du: ' + min.varde + '   (' + ankartext(min.varde) + ')');
+      rader.push('');
+    });
+    if (!n) rader.push('Inga skattningar gjorda ännu.');
+    return rader.join('\n');
+  }
+
+  function exportera(roll, klar) {
+    var text = rapport(roll);
+    var handler = null;
+    var kopierat = false;
+
+    function rita() {
+      var h = '<p class="planschintro">' + (db
+                ? 'Dina svar är redan delade. Den här texten är en kopia du kan spara eller skicka vidare.'
+                : 'Markera texten och kopiera den, eller tryck A för att kopiera automatiskt. ' +
+                  'Skicka den till den som bygger spelet.') + '</p>' +
+              '<pre class="rapport">' + LESS.esc(text) + '</pre>' +
+              (kopierat ? '<p class="planschank"><b>Kopierat till urklipp.</b></p>' : '');
+      ui.visaPanel('DINA SVAR · ' + rollNamn(roll), h, 'A = kopiera  ·  B = tillbaka');
+    }
+
+    rita();
+    handler = LESS.input.push(function (k) {
+      if (k === 'down') ui.panelScroll(30);
+      else if (k === 'up') ui.panelScroll(-30);
+      else if (k === 'a') {
+        if (global.navigator && navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            kopierat = true; LESS.sfx('ok'); rita();
+          }, function () { LESS.sfx('wrong'); });
+        } else LESS.sfx('wrong');
+      }
+      else if (k === 'b') { LESS.sfx('back'); LESS.input.pop(handler); if (klar) klar(); }
+    });
+  }
+
+  LESS.plansch = { visa: visa, rapport: rapport };
+
+})(window);
+
 /* ==== js/encounter.js ==== */
 /* encounter.js – mötesmotorn.
 
@@ -6230,6 +6811,11 @@ body.touch #pad{
   function station(s) {
     if (s.kind === 'handbok') { paus(); LESS.sfx('ok'); ui.panel('HANDBOKEN', handbokHtml(), ater); return; }
     if (s.kind === 'tavla')   { paus(); LESS.sfx('ok'); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); return; }
+    if (s.kind === 'plansch') {
+      paus(); LESS.sfx('ok');
+      LESS.plansch.visa(s.roll, ater);
+      return;
+    }
     if (s.kind === 'reception') { receptionsMeny(); return; }
     if (s.kind === 'utgang')  { utgang(); return; }
     if (s.role) startRoll(s.role);

@@ -208,6 +208,37 @@ socialförsäkringsbalken, arbetsmiljölagen och Socialstyrelsens föreskrifter 
 intyg — och alla är instruerade att slå upp aktuell lydelse i stället för att
 gissa.
 
+### Frågeplanscherna – där verkligheten får svara
+
+I varje professions rum hänger en **plansch** med den rollens öppna frågor. De
+handlar alltid om hur något *faktiskt* går till, inte hur det borde gå till.
+
+Rådgivaragenten har skattat varje fråga på en **kvotskala 0–100** för hur vanligt
+förekommande något är, med samma ankare för alla frågor:
+
+| 0 | 25 | 50 | 75 | 100 |
+|---|---|---|---|---|
+| aldrig | undantagsvis | ungefär hälften | vanligt | i princip alltid |
+
+Verklig personal går fram till planschen i sitt eget rum och sätter sin egen
+siffra bredvid agentens. Ingenting är rätt eller fel — det är datainsamling, inte
+en övning, och skillnaden mellan gissningen och verkligheten är hela poängen.
+
+**Frågorna bor i `content/fragor.js`**, en lista per roll. Agenterna skriver in
+sina skattningar där; spelet läser samma fil.
+
+**Så når svaren dig:**
+
+* **Som publicerad artefakt** delas svaren automatiskt. Kollegor kan svara från
+  vilken dator som helst, och planschen visar dessutom `andra (n)` med medianen
+  av alla svar — den blir en levande samsynstavla. Du läser in dem med Artifact-
+  verktygets `read_db` på samlingen `skattningar`.
+* **Som lokal fil eller på GitHub Pages** finns ingen delad lagring. Svaren
+  sparas i webbläsaren och skickas in via *Visa mina svar att skicka in*, som
+  ger en textrapport att kopiera och mejla.
+
+Spelet känner av vilket läge det är i och säger det överst på planschen.
+
 ### Verklighetsförankring
 
 Det som skiljer dem från en lärobok är att de också ska väga in den informella

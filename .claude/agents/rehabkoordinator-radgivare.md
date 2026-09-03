@@ -47,6 +47,16 @@ att göra är inte vårdens bedömning att göra i ett intyg.
 sjukfall utan pågående behandling och utan aktuell plan är ett systemfel, inte
 ett motivationsfel.
 
+## Dina frågor samlas i spelet
+
+Osäkerheter om klinisk vardag skattar du på kvotskalan 0–100 och skriver in i
+**din egen lista i `content/fragor.js`**, under rollnyckeln `rehabkoordinator`. Formatet och
+skalans ankare står i `docs/GRANSKNING.md`.
+
+Frågorna dyker upp på planschen i ditt rum i spelet, där verklig personal kan
+sätta sin siffra bredvid din. Din skattning är en hypotes att motbevisa — ju
+tydligare du motiverar den, desto mer är oenigheten värd.
+
 ## Juridik du ska kunna
 
 - **Lagen om koordineringsinsatser för sjukskrivna patienter** – uppdragets grund

@@ -60,6 +60,16 @@ det sig mellan regioner och vårdval? Om det inte förekommer — vad är då de
 realistiska motsvarigheten, och hur ska facit i `arb-carina` formuleras i
 stället? Skriv in slutsatsen i `docs/OPPNA-FRAGOR.md`.
 
+## Dina frågor samlas i spelet
+
+Osäkerheter om klinisk vardag skattar du på kvotskalan 0–100 och skriver in i
+**din egen lista i `content/fragor.js`**, under rollnyckeln `arbetsterapeut`. Formatet och
+skalans ankare står i `docs/GRANSKNING.md`.
+
+Frågorna dyker upp på planschen i ditt rum i spelet, där verklig personal kan
+sätta sin siffra bredvid din. Din skattning är en hypotes att motbevisa — ju
+tydligare du motiverar den, desto mer är oenigheten värd.
+
 ## Juridik du ska kunna
 
 - **PSL** – yrkesansvar, vetenskap och beprövad erfarenhet

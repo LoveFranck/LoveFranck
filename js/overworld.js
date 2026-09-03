@@ -398,6 +398,11 @@
   function station(s) {
     if (s.kind === 'handbok') { paus(); LESS.sfx('ok'); ui.panel('HANDBOKEN', handbokHtml(), ater); return; }
     if (s.kind === 'tavla')   { paus(); LESS.sfx('ok'); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); return; }
+    if (s.kind === 'plansch') {
+      paus(); LESS.sfx('ok');
+      LESS.plansch.visa(s.roll, ater);
+      return;
+    }
     if (s.kind === 'reception') { receptionsMeny(); return; }
     if (s.kind === 'utgang')  { utgang(); return; }
     if (s.role) startRoll(s.role);

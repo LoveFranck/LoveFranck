@@ -226,6 +226,22 @@
       R(c, x + 15, y + 5, 1, 6, P.markDark);
     },
 
+    plansch: function (c, x, y) {          /* frågeplansch på väggen */
+      R(c, x, y, 16, 16, P.wall);
+      R(c, x, y, 16, 3, P.wallSh);
+      R(c, x, y + 12, 16, 4, P.wallD);
+      R(c, x + 1, y + 1, 14, 13, P.markDark);
+      R(c, x + 2, y + 2, 12, 11, '#f4f8f6');
+      /* rader med en skattningsstapel efter varje */
+      R(c, x + 3, y + 3, 5, 1, '#8a9a96'); R(c, x + 9, y + 3, 4, 1, P.markMint);
+      R(c, x + 3, y + 5, 6, 1, '#8a9a96'); R(c, x + 10, y + 5, 3, 1, P.markMint);
+      R(c, x + 3, y + 7, 4, 1, '#8a9a96'); R(c, x + 8, y + 7, 5, 1, P.markMint);
+      R(c, x + 3, y + 9, 6, 1, '#8a9a96'); R(c, x + 10, y + 9, 3, 1, P.markMint);
+      R(c, x + 3, y + 11, 3, 1, P.markDark);
+      /* penna på snöre */
+      R(c, x + 13, y + 11, 1, 4, '#8a7050'); R(c, x + 13, y + 15, 1, 1, P.ink);
+    },
+
     rug: function (c, x, y) {
       R(c, x, y, 16, 16, '#d8c8a0');
       R(c, x + 1, y + 1, 14, 14, '#c8b890');

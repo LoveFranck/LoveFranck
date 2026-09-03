@@ -5,7 +5,7 @@
 
   /* Teckenlegend:
      ^ takkant   # vägg    W fönster  G innerfönster  P affisch
-     L logotypskylt (Forsåker)
+     L logotypskylt (Forsåker)   F frågeplansch
      H hylla     B tavla   D dörr     E utgång
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
@@ -13,7 +13,7 @@
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
-    /* 1 */ '#W##L##B##W##P#H#W##P##B##W#P#H#',
+    /* 1 */ '#W##L##F##W##P#F#W##P##F##W#P#F#',
     /* 2 */ '#  cd     #  cd     #  cd     #  cd  #',
     /* 3 */ '#    h    #     h   #     h   #    h #',
     /* 4 */ '#         #         #         #      #',
@@ -25,7 +25,7 @@
     /*10 */ '#p............................p#',
     /*11 */ '#..............................#',
     /*12 */ '#..............................#',
-    /*13 */ '##L##D#########D#########D###H##',
+    /*13 */ '##L##D#########D#F#######D#F#H##',
     /*14 */ '#xxx     p#  cd    p#  cd     p#',
     /*15 */ '#         #    h    #     h    #',
     /*16 */ '# bbb  bbb#         #  dd      #',
@@ -61,6 +61,7 @@
   var TILE_OF = {
     '^': 'wallTop', '#': 'wall', 'W': 'window', 'G': 'wallGlass', 'P': 'poster',
     'H': 'shelf', 'B': 'board', 'D': 'door', 'E': 'doorSign', 'L': 'logga',
+    'F': 'plansch',
     '.': 'floor2', ' ': 'floor', 'r': 'carpet', 'u': 'rug',
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
     'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet'
@@ -84,7 +85,16 @@
     { id: 'handbok',          x: 29, y: 13, kind: 'handbok' },
     { id: 'anslagstavla',     x: 9,  y: 9,  kind: 'tavla' },
     { id: 'reception',        x: 2,  y: 14, kind: 'reception' },
-    { id: 'utgang',           x: 5,  y: 20, kind: 'utgang' }
+    { id: 'utgang',           x: 5,  y: 20, kind: 'utgang' },
+
+    /* Frågeplanscher: en i varje professions rum. Här skattar verklig
+       personal hur vanligt förekommande rådgivarnas antaganden faktiskt är. */
+    { id: 'plansch-ssk',    x: 7,  y: 1,  kind: 'plansch', roll: 'ssk' },
+    { id: 'plansch-psy',    x: 15, y: 1,  kind: 'plansch', roll: 'psykolog' },
+    { id: 'plansch-fys',    x: 23, y: 1,  kind: 'plansch', roll: 'fysioterapeut' },
+    { id: 'plansch-lak',    x: 30, y: 1,  kind: 'plansch', roll: 'lakare' },
+    { id: 'plansch-rko',    x: 17, y: 13, kind: 'plansch', roll: 'rehabkoordinator' },
+    { id: 'plansch-arb',    x: 27, y: 13, kind: 'plansch', roll: 'arbetsterapeut' }
   ];
 
   /* ---------------- dörrskyltar ---------------- */

@@ -46,6 +46,16 @@ formuleringen, inte lägre.
 läkare, vad som får delegeras och vad som aldrig får det. Att hänvisa vidare är
 ett beslut, inte en icke-handling, och ska dokumenteras som ett sådant.
 
+## Dina frågor samlas i spelet
+
+Osäkerheter om klinisk vardag skattar du på kvotskalan 0–100 och skriver in i
+**din egen lista i `content/fragor.js`**, under rollnyckeln `ssk`. Formatet och
+skalans ankare står i `docs/GRANSKNING.md`.
+
+Frågorna dyker upp på planschen i ditt rum i spelet, där verklig personal kan
+sätta sin siffra bredvid din. Din skattning är en hypotes att motbevisa — ju
+tydligare du motiverar den, desto mer är oenigheten värd.
+
 ## Juridik du ska kunna
 
 - **PSL** (patientsäkerhetslagen) – vårdgivarens och den enskildes ansvar,

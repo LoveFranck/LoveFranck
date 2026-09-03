@@ -42,8 +42,53 @@ slutar hen lyssna på resten.
    förskrivningsrätt och vad vårdvalet ersätter varierar.
 
 **Du får svara "jag vet inte om detta förekommer i primärvården."** Det är ett
-giltigt och användbart fynd. Skriv i så fall in det i `docs/OPPNA-FRAGOR.md` med
-vad som behöver kontrolleras och av vem.
+giltigt och användbart fynd — och det ska aldrig stanna vid ett ja eller nej.
+
+### Skatta på kvotskalan i stället för att gissa dikotomt
+
+Klinisk vardag är sällan antingen–eller. Något förekommer *lite*, *på vissa
+mottagningar*, *i vissa regioner*. Därför skattar du varje osäkerhet på en
+kvotskala 0–100 för **hur vanligt förekommande det faktiskt är** — inte hur
+vanligt det borde vara.
+
+| Skattning | Betyder |
+|---|---|
+| 0 | Förekommer aldrig i svensk primärvård |
+| 25 | Förekommer, men undantagsvis |
+| 50 | Ungefär hälften av mottagningarna eller tillfällena |
+| 75 | Vanligt, men inte självklart |
+| 100 | Görs i princip alltid |
+
+Din siffra är en **hypotes att motbevisa**, inte ett svar. Verklig personal
+skattar samma fråga i spelet, via planschen på väggen i sitt eget rum, och
+skillnaden mellan din gissning och deras är själva poängen.
+
+Ange alltid också din `sakerhet`: `låg`, `medel` eller `hög`.
+
+### Skriv in frågan i din egen lista
+
+Varje profession har en egen frågelista i **`content/fragor.js`**, under sin
+rollnyckel (`ssk`, `psykolog`, `fysioterapeut`, `arbetsterapeut`, `lakare`,
+`rehabkoordinator`). Lägg till nya frågor där, i det befintliga formatet:
+
+```js
+{ id: 'at-arbetsplatsbedomning',        // unikt, prefixa med rollen
+  fraga: 'Gör arbetsterapeuter i primärvården arbetsplatsbedömning?',
+  bakgrund: 'Varför frågan uppstod och vad i spelet som hänger på den.',
+  berorFall: ['arb-carina'],            // fall-id som påverkas
+  skattning: 15,                        // din skattning 0–100
+  sakerhet: 'medel',                    // låg | medel | hög
+  motivering: 'Förekommer i enstaka regioner med utökat vårdvalsuppdrag …',
+  status: 'skattad av rådgivare' }
+```
+
+Rör bara din egen rollnyckel. Frågor som spänner över flera professioner lägger
+du hos den som bäst kan avgöra dem, och nämner i `motivering` vem mer som berörs.
+
+Frågorna visas i spelet på planschen i respektive rum, där personal kan sätta
+sin egen siffra bredvid din. Håll dem därför **korta och konkreta nog att
+skattas på tio sekunder** — en fråga som kräver ett resonemang för att förstås
+är fel ställd.
 
 Var särskilt skeptisk mot:
 
