@@ -31,7 +31,7 @@
     lakare: {
       id: 'lakare', namn: 'LÄKARE', kort: 'LÄK', rum: 'LÄKARE',
       farg: '#00443c',
-      uppdrag: 'Granska och ta ställning till försäkringsmedicinska utredningar från psykolog, fysioterapeut och arbetsterapeut. Signera, komplettera eller returnera. Ditt namn står på beslutet.',
+      uppdrag: 'Jourläkare på förmiddagen, utan egna bokade patienter. Utredaren hämtar dig och föredrar ärendet, sedan går ni in till patienten tillsammans. Du granskar, kompletterar det bara du kan komplettera, tar ställning och signerar – på plats, med patienten kvar. Ditt namn står på beslutet.',
       sprite: { skin: SK.mork, hair: HR.mork, hairStyle: 'kort', uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
     },
     rehabkoordinator: {

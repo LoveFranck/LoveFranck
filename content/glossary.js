@@ -19,12 +19,16 @@
         'Kärnan: ett sjukskrivningsärende triageras INTE automatiskt till läkare.',
         'Sjuksköterskan gör en första bedömning av om en F-diagnos (psykisk ohälsa) eller M-diagnos (rörelseorganen) rimligen ligger i botten. Om så är fallet bokas patienten direkt till psykolog respektive fysioterapeut – inte till en akut läkartid.',
         'Psykolog/fysioterapeut/arbetsterapeut gör den försäkringsmedicinska utredningen. Läkaren granskar, tar ställning och signerar – det medicinska beslutet och namnet är fortsatt läkarens.',
+        'Utredningarna schemaläggs på förmiddagen, och samtidigt finns en jourläkare utan egna bokade patienter. När utredningen är klar hämtar utredaren läkaren och föredrar ärendet. Sedan går de in tillsammans: patient, utredare och läkare talas kort vid, och läkaren tar ställning på plats.',
+        'Patienten lämnar alltså vårdcentralen samma förmiddag, med ett besked och efter att ha blivit bedömd av läkare. Läkaren återkommer inte senare.',
         'Syftet: patienten möter rätt kompetens direkt, behandlingen startar tidigare och färre hamnar i långa passiva sjukskrivningar med rådet att "gå hem och vila upp sig".'
       ],
       punkter: [
         'Sjukskrivning är en åtgärd med biverkningar – den ska ordineras, doseras och följas upp.',
         'Stäng dörren till det som inte hjälper. Öppna en annan dörr samtidigt – aldrig bara stänga.',
-        'Läkaren är kvar som försäkringsmedicinskt ansvarig, men behöver inte vara första kontakten.'
+        'Läkaren är kvar som försäkringsmedicinskt ansvarig, men behöver inte vara första kontakten.',
+        'Jourupplägget är det som gör konstruktionen hållbar: läkaren träffar faktiskt patienten, vilket är huvudregeln när ett intyg utfärdas. Det som flyttats är utredningsarbetet, inte bedömningen och inte ansvaret.',
+        'Trepartsmötet har en egen fallgrop: att de två i personalen diskuterar patienten över hennes huvud. Vänd dig till patienten först, sammanfatta vad du uppfattat och be henne rätta dig.'
       ],
       todo: 'FYLL I: vad bokstäverna i LESS står för hos er.'
     },

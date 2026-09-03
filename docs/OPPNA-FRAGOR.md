@@ -119,29 +119,43 @@ själv?
 **Vem avgör:** `lakare-radgivare`, mot Socialstyrelsens föreskrifter om att
 utfärda intyg — och i slutänden verksamhetens medicinskt ansvariga.
 
-**Slutsats (`lakare-radgivare`, 2026-09-03): konstruktionen håller, med tre
-villkor.** Gränsen går inte vid om läkaren har träffat patienten, utan vid
-6 kap. 2 § HSLF-FS 2018:54 — att bara uttala sig om det man har tillräcklig
-kännedom om. Villkoren:
+**Slutsats (`lakare-radgivare`, 2026-09-03), reviderad efter förtydligande av
+modellen:** konstruktionen håller, och jourupplägget löser det svåraste
+villkoret genom design i stället för genom undantag.
+
+Rådgivaren identifierade tre villkor för att en läkare ska kunna stå bakom ett
+intyg byggt på annans utredning. Gränsen går inte vid om läkaren har träffat
+patienten, utan vid 6 kap. 2 § HSLF-FS 2018:54 — att bara uttala sig om det man
+har tillräcklig kännedom om.
 
 1. **Källa per uppgift** enligt 6 kap. 3 och 8 §§. Det ska framgå vad som är
    psykologens iakttagelse, vad som är patientens uppgift, och vad som är
    läkarens egen bedömning.
-2. **Egen kontakt i någon form vid förstagångsintyg**, eftersom 5 kap. 2 § gör
-   undersökning till huvudregel. Kontaktsättet är däremot fritt — telefon eller
-   digitalt räcker om läkaren bedömer det patientsäkert — men det ska anges i
-   intyget enligt 6 kap. 5 §.
+2. **Egen kontakt vid förstagångsintyg**, eftersom 5 kap. 2 § gör undersökning
+   till huvudregel. — **Detta villkor är uppfyllt genom upplägget.** I LESS
+   schemaläggs utredningarna på förmiddagen med en jourläkare utan egna bokade
+   patienter. Utredaren hämtar läkaren, föredrar ärendet, och de går in
+   tillsammans medan patienten är kvar. Läkaren träffar alltså patienten, och
+   patienten lämnar vårdcentralen efter att ha blivit bedömd av läkare.
+   Rådgivarens oro gällde ett scenario som inte är modellen.
 3. **Somatisk differentialdiagnostik och röda flaggor kan inte bockas av genom
    att läsa någon annans anteckning.** En psykolog kan bedöma suicidrisk men
    inte utesluta hypotyreos; en fysioterapeut kan testa neurologi men frågar
-   sällan om nattlig smärta och viktnedgång.
+   sällan om nattlig smärta och viktnedgång. Detta villkor kvarstår oförändrat,
+   och jourupplägget ger tvärtom det naturliga tillfället att fylla luckan: med
+   patienten sittande, i samma möte.
 
 Uppgiften att skriva sjukintyg till Försäkringskassan får inte delegeras. Det
 är granskningen och signaturen som är läkarens — inte utredningsarbetet.
 
-**Status:** avgjord, ändringarna införda i `content/cases-lakare.js`.
-Verksamhetens medicinskt ansvariga bör ändå läsa igenom slutsatsen innan spelet
-används i utbildning.
+**Status:** avgjord. Fallen `lak-anna` och `lak-bengt` är omskrivna till
+trepartsmöten enligt modellen. Verksamhetens medicinskt ansvariga bör ändå läsa
+igenom slutsatsen innan spelet används i utbildning.
+
+**Ny fråga som följer av upplägget:** går det att bemanna en jourläkare utan
+egna bokade patienter en förmiddag i veckan? Den ligger i `content/fragor.js`
+som `lak-jourpass-schemalagt` och väntar på rådgivarens skattning — hela
+modellen står och faller med den.
 
 ---
 

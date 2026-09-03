@@ -57,6 +57,15 @@ från menyn i receptionen.
 
 ## Spellägen
 
+**Jourupplägget.** Utredningarna schemaläggs på förmiddagen, och samtidigt finns
+en jourläkare utan egna bokade patienter. När utredningen är klar hämtar
+utredaren läkaren och föredrar ärendet; sedan går de in tillsammans medan
+patienten är kvar. Patienten lämnar vårdcentralen samma förmiddag, med ett
+besked och efter att ha blivit bedömd av läkare. Det är också det som gör
+konstruktionen juridiskt hållbar — läkaren träffar faktiskt patienten, vilket är
+huvudregeln när ett intyg utfärdas. Det som flyttats är utredningsarbetet, inte
+bedömningen och inte ansvaret.
+
 **Kampanj** – tre ärenden hela vägen genom flödet. Du byter roll längs vägen,
 och dina beslut följer med patienten: triagerar du Anna till läkare i steg 1 så
 möter psykologen henne i steg 2 med fyra veckors sjukskrivning redan utskriven.
@@ -96,7 +105,7 @@ Tre saker till pekar åt samma håll, så att ingen behöver gissa:
 | Psykolog | Psykologrum | Sjukskrivningsärenden med F-diagnos i botten. Försäkringsmedicinsk utredning, psykoedukation, insatser som ökar agens. |
 | Fysioterapeut | Fysioterapi | Sjukskrivningsärenden med M-diagnos i botten. Utredning, belastningsanpassning, hjälpmedel. |
 | Arbetsterapeut | Arbetsterapi | Aktivitetsbegreppet, vardagsrevidering, handfunktion, hjälpmedel. |
-| Läkare | Läkarrum | Granska utredningarna. Signera, justera, komplettera eller returnera. Ditt namn står på beslutet. |
+| Läkare | Läkarrum | Jourläkare på förmiddagen, utan egna bokade patienter. Utredaren hämtar dig och föredrar ärendet, sedan går ni in till patienten tillsammans. Du granskar, kompletterar det bara du kan komplettera och tar ställning på plats. |
 | Rehabkoordinator | Rehabkoordinator | Stötta i arbetsgivarkontakten utan att ta över. Rehabplaner och uppföljning. |
 
 ---

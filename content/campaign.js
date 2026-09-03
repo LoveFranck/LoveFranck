@@ -15,7 +15,7 @@
         steg: [
           { fall: 'ssk-anna', mellanspel: ['Ett nytt ärende ligger i chattkorgen.', 'Du är sjuksköterska idag.'] },
           { fall: 'psy-anna', mellanspel: ['Tre dagar senare. Torsdag.', 'Nu är du psykolog.'] },
-          { fall: 'lak-anna', mellanspel: ['Samma eftermiddag.', 'Nu är du läkaren som ska ta ställning.'] },
+          { fall: 'lak-anna', mellanspel: ['Samma förmiddag. Anna sitter kvar i rummet.', 'Nu är du jourläkaren som Karin kommer och hämtar.'] },
           { fall: 'rko-anna', mellanspel: ['Två veckor senare.', 'Nu är du rehabkoordinator.'] }
         ],
         epilog: [
@@ -48,7 +48,7 @@
         steg: [
           { fall: 'ssk-bengt', mellanspel: ['Nästa ärende i chatten.', 'Du är sjuksköterska.'] },
           { fall: 'fys-bengt', mellanspel: ['Dagen efter. Fredag morgon.', 'Nu är du fysioterapeut.'] },
-          { fall: 'lak-bengt', mellanspel: ['Utredningen ligger i din inkorg.', 'Nu är du läkaren.'] }
+          { fall: 'lak-bengt', mellanspel: ['Samma förmiddag. Bengt sitter kvar.', 'Nu är du jourläkaren som Sara kommer och hämtar.'] }
         ],
         epilog: [
           { om: { nyckel: 'bengt-beslut', varde: '100' },

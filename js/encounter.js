@@ -130,6 +130,14 @@
       } else {
         LESS.drawRoomBg(c);
         LESS.drawPortrait(c, p.portratt, E.humor, 100, 8);
+        /* Trepartsmöte: kollegan som gjort utredningen står med i rummet. */
+        if (E.lage === 'trepart' && E.fall.kollega) {
+          var kr = LESS.roller[E.fall.kollega];
+          if (kr) {
+            c.drawImage(LESS.charSprite('kollega-' + E.fall.kollega, kr.sprite, 'left', 0),
+                        0, 0, 16, 16, 58, 30, 32, 32);
+          }
+        }
         var roll = LESS.roller[E.roll];
         if (roll) {
           var spr = LESS.charSprite('spelare-' + E.roll, roll.sprite, 'up', 0);
