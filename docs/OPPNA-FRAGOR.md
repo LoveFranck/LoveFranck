@@ -128,9 +128,12 @@ intyg byggt på annans utredning. Gränsen går inte vid om läkaren har träffa
 patienten, utan vid 6 kap. 2 § HSLF-FS 2018:54 — att bara uttala sig om det man
 har tillräcklig kännedom om.
 
-1. **Källa per uppgift** enligt 6 kap. 3 och 8 §§. Det ska framgå vad som är
-   psykologens iakttagelse, vad som är patientens uppgift, och vad som är
-   läkarens egen bedömning.
+1. **Källa per uppgift** enligt 6 kap. 3 §. Det ska framgå varifrån en uppgift
+   kommer, och intygsutfärdarens egna bedömningar ska gå att skilja från annat:
+   vad som är psykologens iakttagelse, vad som är patientens uppgift, och vad
+   som är läkarens egen bedömning. (Rådgivaren har läst 5 kap. 2 §, 6 kap. 2 §
+   och 6 kap. 3 § i den konsoliderade lydelsen. Den tidigare hänvisningen till
+   en 6 kap. 8 § gick inte att verifiera och är struken.)
 2. **Egen kontakt vid förstagångsintyg**, eftersom 5 kap. 2 § gör undersökning
    till huvudregel. — **Detta villkor är uppfyllt genom upplägget.** I LESS
    schemaläggs utredningarna på förmiddagen med en jourläkare utan egna bokade
@@ -154,8 +157,14 @@ igenom slutsatsen innan spelet används i utbildning.
 
 **Ny fråga som följer av upplägget:** går det att bemanna en jourläkare utan
 egna bokade patienter en förmiddag i veckan? Den ligger i `content/fragor.js`
-som `lak-jourpass-schemalagt` och väntar på rådgivarens skattning — hela
-modellen står och faller med den.
+som `lak-jourpass-schemalagt`. Rådgivarens skattning (2026-09-03): **15 av 100,
+säkerhet medel** — passet utan förbokade patienter finns i schemat på många
+mottagningar (dagjour, adm-tid), men det är inte fritt, och en obokad
+läkarförmiddag i veckan är svår att försvara mot tillgänglighetskraven.
+Rådgivaren har därför lagt en fråga med lägre ribba, `lak-avbryta-passet`
+(skattning 45): kan en läkare avbrytas 10–15 minuter mitt i sitt pass? Om
+svaret på den första frågan blir lågt och den andra högt är det den andra
+modellen LESS bör beskriva.
 
 ---
 
@@ -166,5 +175,32 @@ modellen står och faller med den.
 **Frågan:** Vad står bokstäverna för?
 
 **Vem avgör:** verksamheten.
+
+**Status:** öppen.
+
+---
+
+## 6. Läkarens egen anteckning när underlaget kommer från annan profession
+
+**Var:** `content/cases-lakare.js`, `lak-anna` och `lak-bengt`. Läkaren granskar
+och signerar ett intyg som bygger på psykologens eller fysioterapeutens
+utredning.
+
+**Frågan:** Det finns ingen formell handlingstyp som heter "försäkringsmedicinskt
+underlag" — det är en journalanteckning av en annan legitimerad yrkesutövare. Vad
+ska då stå i **läkarens egen** anteckning för att intygsansvaret ska vara spårbart:
+räcker en hänvisning till kollegans anteckning, eller måste läkaren återge det
+hon själv iakttagit och grundar bedömningen på? Och hur ska ett ställningstagande
+att **inte** sjukskriva dokumenteras, så att det går att ompröva?
+
+**Varför det spelar roll:** utan en egen anteckning finns bara kollegans text och
+ett signerat intyg. Då går det inte i efterhand att visa vad läkaren själv hade
+kännedom om — vilket är exakt det 6 kap. 2 § HSLF-FS 2018:54 kräver. Spelet lär
+i dag ut att läkaren ska skriva en egen bedömning (`lak-anna`, bästa
+beslutsalternativet), men inte vad den minst ska innehålla.
+
+**Vem avgör:** verksamhetens medicinskt ansvariga, mot regionens rutin för
+journalföring och intyg. Detta är en dokumentationsfråga med ett uppslagbart
+svar, inte en fråga om klinisk vardag.
 
 **Status:** öppen.

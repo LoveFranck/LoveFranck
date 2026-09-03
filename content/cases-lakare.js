@@ -16,13 +16,14 @@
       patient: 'anna',
       lage: 'trepart',
       kollega: 'psykolog',
-      minuter: 26,
+      minuter: 28,
       kampanj: 'anna',
       svarighet: 2,
-      principer: ['signering', 'rodflagga', 'dfa-aktivitet', 'grad', 'bedda-e'],
+      principer: ['signering', 'rodflagga', 'dfa-aktivitet', 'grad', 'bedda-e', 'beslutsstod'],
       journal: [
         ['Ärende', 'Anna Ek, 34 år. Försäkringsmedicinsk utredning av leg. psykolog Karin Lund, klar för föredragning.'],
-        ['Diagnos', 'F41.1 Generaliserat ångestsyndrom (psykologens bedömning)'],
+        ['Diagnos', 'F41.1 Generaliserat ångestsyndrom (psykologens förslag)'],
+        ['Förlopp', 'Debut i maj, i samband med omorganisationen. Tre månader. Inga tidigare ångestepisoder, ingen tidigare kontakt för psykisk ohälsa.'],
         ['Funktion – psykologens iakttagelse', 'Uttalad autonom reaktion när arbetsplatsen kommer på tal. Tappar tråden två gånger under besöket.'],
         ['Funktion – Annas uppgift', 'Vaknar 03–04 och somnar inte om. Sömnen bruten sedan i maj.'],
         ['Aktivitet – Annas uppgift, stämd mot arbetsbeskrivningen', 'Klarar textproduktion hemifrån. Klarar ej närvaro på arbetsplatsen eller möten.'],
@@ -58,9 +59,9 @@
           tidPer: 2,
           tips: 'Du ska kunna försvara det här inför Försäkringskassan, inför Anna och inför dig själv om ett år.',
           val: [
-            { text: 'Att DFA-kedjan går att följa och att aktivitetsbegränsningen är kopplad till faktiska arbetsuppgifter',
+            { text: 'Att hela DFA-kedjan går att följa – att diagnosen är rimlig mot förloppet och att aktivitetsbegränsningen är kopplad till faktiska arbetsuppgifter',
               ratt: true, princip: 'bedda-d1', fx: { underlag: 12 },
-              varfor: 'Kedjan är kärnan. Utan en aktivitetsbegränsning i arbetsuppgifter är intyget inte bedömbart, hur välskrivet det än är i övrigt.' },
+              varfor: 'Kedjan är kärnan, och den börjar i D. Diagnosen är det första du signerar för, och F41.1 följer inte självklart av tre månaders besvär med debut i en omorganisation: generaliserat ångestsyndrom förutsätter långvarig, fritt flytande oro över flera livsområden, medan det här är situationsbundet och stressutlöst. F43-spektrum ligger närmare, och skillnaden får försäkringsmedicinska följder – beslutsstödets rekommendationer skiljer sig mellan dem. Sedan A: utan en aktivitetsbegränsning i faktiska arbetsuppgifter är intyget inte bedömbart, hur välskrivet det än är i övrigt.' },
             { text: 'Att källan till varje uppgift framgår: Karins iakttagelse, Annas uppgift eller annan handling',
               ratt: true, princip: 'signering', fx: { underlag: 10, sakerhet: 8 },
               varfor: 'Du signerar för innehållet. Då måste det framgå vad som är observerat och vad som är berättat – annars kan du inte stå för det, och Försäkringskassan kan inte väga det.' },
@@ -149,18 +150,18 @@
             { text: 'Att välja behandlingsmetod', ratt: false,
               varfor: 'Behandlingen är psykologens område. Du tar ställning till om planen är rimlig, inte till hur den ska utföras.' }
           ],
-          forklaring: 'Det som gör LESS-flödet försvarbart är att varje profession svarar för det den kan – och att det som ingen annan kan göra hamnar hos dig, uttryckligen. Trötthet, sömnstörning och koncentrationssvikt har en somatisk differentialdiagnostik som en psykolog varken får eller kan göra. Står det "inget noterat" på den raden är den din.' },
+          forklaring: 'Det som gör LESS-flödet försvarbart är att varje profession svarar för det den kan – och att det som ingen annan kan göra hamnar hos dig, uttryckligen. Trötthet, sömnstörning och koncentrationssvikt har en somatisk differentialdiagnostik som en psykolog varken får eller kan göra. Står det "inget noterat" på den raden är den din. Detsamma gäller diagnoskoden och själva intyget: uppgiften att utfärda det får inte delegeras, och enligt Socialstyrelsens intygsföreskrifter (HSLF-FS 2018:54, 6 kap. 2 §) får du bara uttala dig om sådant du har tillräcklig kännedom om.' },
 
         { typ: 'val',
           fraga: 'Hur tar du det somatiska med Anna sittande?',
           tips: 'Det ska rymmas i ett jourpass som ska räcka till fler utredningar, och det ska ändå hålla.',
           val: [
-            { text: 'Kort riktad genomgång: vikt, tyreoideasymtom, mediciner, alkohol, snarkning och dagtrötthet. Prover om något faller ut.',
+            { text: 'Kort riktad genomgång: vikt, tyreoideasymtom, mediciner, alkohol, snarkning och dagtrötthet – och TSH och blodstatus i samma vända, oavsett utfall.',
               tid: 5, ok: true, princip: 'rodflagga',
               humor: 'neutral', reaktion: 'Anna svarar snabbt på allt. Karin antecknar.',
               svar: 'Nej, ingenting av det. Jag har alltid varit frisk i kroppen.',
               fx: { sakerhet: 16, underlag: 12 },
-              varfor: 'Riktad, inte fullständig. Fem minuter räcker för att kunna skriva att det somatiska är övervägt och vad du grundar det på – och det är den raden som gör att du kan stå för intyget.' },
+              varfor: 'Riktad, inte fullständig. Fem minuter räcker för att kunna skriva vad det somatiska övervägandet bestod i och vad du grundar det på – och det är den raden som gör att du kan stå för intyget. Proverna tar du ändå: hypertyreos härmar ångest nästan symtom för symtom, TSH och blodstatus kostar nästan ingenting när hon redan är på plats, och det är det normala svaret som gör raden skrivbar. Vänta däremot inte in svaren innan du ger beskedet. De ändrar inte handläggningen idag, och att skjuta upp beslutet för deras skull vore att köpa din egen trygghet för Annas pengar.' },
             { text: 'Hoppa över det. Karin har träffat henne i en timme, hade hon varit sjuk hade det märkts.',
               tid: 1, ok: false, princip: 'rodflagga',
               humor: 'neutral', reaktion: 'Ingen märker något. Mötet går fort.',
@@ -172,7 +173,7 @@
               humor: 'trott', reaktion: 'Karin tittar på klockan. Nästa utredning väntar.',
               svar: 'Ska jag klä av mig?',
               fx: { sakerhet: 10, underlag: 4, tydlighet: -6 },
-              varfor: 'Ingen skada sker, men tio minuter av ett jourpass för en anamnestiskt frisk 34-åring utan symtom är fel dos. Riktad anamnes med prover vid utfall ger samma säkerhet till en tredjedel av tiden.' }
+              varfor: 'Ingen skada sker, men tio minuter av ett jourpass för en anamnestiskt frisk 34-åring utan kroppsliga symtom är fel dos – och ett brett provpaket producerar bifynd du sedan är skyldig att hantera fast de inte betyder något. Riktad anamnes plus TSH och blodstatus ger samma säkerhet på en tredjedel av tiden.' }
           ] },
 
         { typ: 'beslut',
@@ -180,13 +181,13 @@
           fraga: 'Anna sitter kvar. Vad blir ditt besked?',
           tips: 'Hon går härifrån idag med ett besked. Det är hela poängen med upplägget – och det är också vad som gör att beslutet måste vara ditt.',
           val: [
-            { text: 'Ta ställning enligt förslaget och signera det, med Anna i rummet',
+            { text: 'Ta ställning enligt förslaget och ge Anna beskedet med Karin i rummet',
               okOm: { nyckel: 'anna-forslag', varden: { ingen: true, '25': true, '100': false, inget: false }, standard: true },
               princip: 'signering', tid: 3,
               kampanj: { nyckel: 'anna-beslut', varde: 'signerat' },
               fx: { underlag: 10, tydlighet: 10, allians: 8 },
               utfall: 'Anna får beskedet av dig, ansikte mot ansikte, samma förmiddag som utredningen gjordes.',
-              varfor: 'Kedjan håller: kollegan har utrett, du har granskat, kompletterat det bara du kan komplettera och träffat patienten. Skriv samtidigt din egen bedömning i journalen med vad du grundar den på och vad du själv hört. Blir ställningstagandet att inte sjukskriva är det just det som ska dokumenteras: skälet, vad som gäller i stället och när det omprövas.',
+              varfor: 'Kedjan håller: kollegan har utrett, du har granskat, kompletterat det bara du kan komplettera och träffat patienten. Skriv samtidigt din egen bedömning i journalen med vad du grundar den på och vad du själv hört. Blir ställningstagandet att inte sjukskriva är det just det som ska dokumenteras: skälet, vad som gäller i stället och när det omprövas. Säg också vad som händer praktiskt. Blir det deltid är det arbetsgivaren som betalar sjuklön de första fjorton dagarna, och intyget dit behöver inte innehålla diagnosen om Anna inte vill det – men deltid förutsätter att chefen får veta något alls, och det har hon ännu inte sagt.',
               varforFel: 'Underlaget bakom förslaget håller inte. Att signera för att kollegan står bredvid och patienten väntar är precis det tryck upplägget skapar – och det är därför granskningen måste vara på riktigt.' },
 
             { text: 'Justera grad eller längd efter en kort dialog med Karin och Anna, och signera det',
@@ -228,7 +229,7 @@
       minuter: 15,
       kampanj: 'bengt',
       svarighet: 2,
-      principer: ['signering', 'grad', 'dfa-aktivitet', 'ansvar', 'rodflagga'],
+      principer: ['signering', 'grad', 'dfa-aktivitet', 'ansvar', 'rodflagga', 'beslutsstod'],
       journal: [
         ['Ärende', 'Bengt Nilsson, 52 år, lagerarbetare. Utredning av leg. fysioterapeut Sara Ohlin.'],
         ['Diagnos', 'M54.5 Lumbago'],
@@ -267,7 +268,7 @@
             { text: 'Att besvären har varat kortare än sex veckor', ratt: false },
             { text: 'Att slätröntgen av ländryggen är gjord', ratt: false }
           ],
-          forklaring: 'Sara har testat reflexer, kraft och känsel. Det säger något om nervrötterna men ingenting om malignitet, infektion eller cauda equina – de frågorna är anamnestiska, och på den raden står "ej dokumenterat". Duration är ingen röd flagga, och slätröntgen vid lumbago ändrar varken handläggning eller intyg. Fördelen med upplägget är att du kan ställa frågorna själv, om två minuter, med Bengt sittande framför dig. Röda flaggor går alltid före flödet, också när flödet fungerar.' },
+          forklaring: 'Sara har testat reflexer, kraft och känsel. Det säger något om nervrötterna men ingenting om malignitet, infektion eller cauda equina – de frågorna är anamnestiska, och på den raden står "ej dokumenterat". Duration är ingen röd flagga, och slätröntgen vid lumbago ändrar varken handläggning eller intyg. Listan är heller inte fullständig: uttalat trauma, kortisonbehandling eller annan immunsuppression, intravenöst missbruk och en kraftnedsättning som tilltar hör också dit. Faller någon av dem ut byter ärendet spår – till bilddiagnostik eller ett standardiserat vårdförlopp – och intygsfrågan får vänta. Fördelen med upplägget är att du kan ställa frågorna själv, om två minuter, med Bengt sittande framför dig. Röda flaggor går alltid före flödet, också när flödet fungerar.' },
 
         { typ: 'replik', humor: 'smarta',
           text: 'Jaha, så nu ska doktorn också titta. Jag har ju redan gått igenom allt med henne.' },
@@ -311,14 +312,14 @@
 
         { typ: 'val',
           fraga: 'Hur formulerar du intyget så att det håller?',
-          tips: 'Försäkringskassan ska kunna följa resonemanget utan att ringa dig.',
+          tips: 'Den som läser ska kunna följa resonemanget utan att ringa dig – och de första två veckorna är det chefen som läser, inte Försäkringskassan.',
           val: [
             { text: 'Skriva ut både begränsning och kvarvarande förmåga, ange att partiell nedsättning avser de moment som inte kan utföras, och sätta uppföljningsdatum.',
               tid: 4, ok: true, princip: 'dfa-aktivitet',
               humor: 'neutral', reaktion: 'Texten blir kort men går att följa rad för rad.',
               svar: '',
               fx: { underlag: 16, tydlighet: 10 },
-              varfor: 'Det är kombinationen av begränsning, kvarvarande förmåga och omprövningsdatum som gör ett intyg bedömbart och som förhindrar automatiska förlängningar. Skriv också ut varifrån varje uppgift kommer – fyndet är Saras, aktivitetsprofilen är Bengts uppgift, bedömningen är din. Sjukpenning finns bara i fjärdedelar: du beskriver momenten i text, men graden måste bli 25, 50, 75 eller 100, och hur du översatte momenten till en fjärdedel av arbetstiden ska gå att läsa.' },
+              varfor: 'Det är kombinationen av begränsning, kvarvarande förmåga och omprövningsdatum som gör ett intyg bedömbart och som förhindrar automatiska förlängningar. Skriv också ut varifrån varje uppgift kommer – fyndet är Saras, aktivitetsprofilen är Bengts uppgift, bedömningen är din. Sjukpenning finns bara i fjärdedelar: du beskriver momenten i text, men graden måste bli 25, 50, 75 eller 100, och hur du översatte momenten till en fjärdedel av arbetstiden ska gå att läsa. Håll också reda på vem som läser. Bengt är inne på dag nio: till och med dag fjorton är det arbetsgivaren som betalar sjuklön och som är mottagare av intyget, och dit är diagnosen frivillig – Bengt bestämmer själv om chefen ska få se den. Först från dag femton är det Försäkringskassan som prövar.' },
             { text: 'Skriva "kan ej utföra sitt arbete" och ange 100 procent.',
               tid: 2, ok: false, princip: 'dfa-aktivitet',
               humor: 'neutral', reaktion: 'Intyget är klart på två minuter.',
@@ -348,7 +349,14 @@
               kampanj: { nyckel: 'bengt-beslut', varde: '100' },
               fx: { underlag: -14, agens: -12 },
               utfall: 'Bengt är hemma i fyra veckor. Ryggen är bättre men konditionen sämre, och han återvänder till exakt samma pallar.',
-              varfor: 'Underlaget säger att han klarar truck och plock. Att ändå skriva heltid är att signera något som motsägs av handlingen du själv läst.' },
+              varfor: 'Underlaget säger att han klarar truck och plock. Att ändå skriva heltid är att signera något som motsägs av handlingen du själv läst. Fyra veckor på heltid ligger dessutom klart över beslutsstödets rekommendation vid akut lumbago med tungt arbete, som är upp till två veckor. Beslutsstödet är vägledning och inget tak – men en avvikelse åt det hållet ska motiveras i intyget, och här finns ingen motivering att skriva.' },
+            { text: 'Avstå från sjukskrivning idag: skriv ett intyg som beskriver momenten, be Bengt fråga chefen om anpassning och boka avstämning om tre dagar',
+              ok: 'delvis', princip: 'ansvar', tid: 3,
+              kampanj: { nyckel: 'bengt-beslut', varde: 'anpassning' },
+              fx: { agens: 10, underlag: -4, tydlighet: -6 },
+              utfall: 'Chefen svarar på måndag och kan erbjuda truckpass. Dagarna dessförinnan blir obetalda.',
+              varfor: 'Medicinskt är resonemanget riktigt, och att avstå från sjukskrivning är ett ställningstagande som ska motiveras och dokumenteras – inte ett administrativt nej. Två saker talar ändå emot att göra det till förstahandsval här. Bengt är inne på dag nio, och utan intyg finns ingen sjuklön från dag åtta; blir chefens svar nej har han redan förlorat dagar han inte får tillbaka. Och du lägger förhandlingen på en man med ont i ryggen som ännu inte vet vad han får begära. Det partiella intyget med noterad kvarvarande förmåga gör samma sak utan den risken: det beskriver att förmågan finns om momenten erbjuds, och behöver aldrig användas om anpassningen kommer. Värt att diskutera i gruppen – hur ofta hinner chefen svara samma dag hos er?' },
+
             { text: 'Skicka hem Bengt och ta ställning senare i lugn och ro',
               ok: false, princip: 'signering', tid: 2,
               kampanj: { nyckel: 'bengt-beslut', varde: 'returnerat' },
@@ -373,10 +381,10 @@
       endastDrill: true,
       principer: ['signering', 'bedda-d1', 'dfa-funktion', 'dfa-aktivitet', 'plan'],
       journal: [
-        ['Ärende', 'Jonas Ek, 38 år, IT-support. Försäkringsmedicinskt underlag från kollega på mottagningen.'],
+        ['Ärende', 'Jonas Ek, 38 år, IT-support. Försäkringsmedicinskt underlag från behandlande kollega på mottagningen – inte läkare.'],
         ['Diagnos', 'F43.8A Utmattningssyndrom'],
         ['Text i underlaget', '"Patienten är mycket trött och orkar inte arbeta. Behöver sjukskrivning 100 % i 3 månader."'],
-        ['Rehabkedjan', 'Sjukskriven 100 % i elva månader. Passerat dag 180. Detta är en begäran om förlängning.'],
+        ['Rehabkedjan', 'Sjukskriven 100 % i elva månader, drygt 330 dagar. Passerat dag 180. Den begärda förlängningen på tre månader passerar dag 365.'],
         ['Övrigt', 'Ingen funktionsbeskrivning. Ingen behandling angiven. Ingen uppföljning. Ingen källa till någon uppgift.']
       ],
       intro: [
@@ -409,7 +417,7 @@
               varfor: 'Hör inte hemma i intyget och löser inte bristerna.' },
             { text: 'Laboratorieprover',
               ratt: false,
-              varfor: 'Somatisk differentialdiagnostik vid utmattning – tyreoidea, blodstatus, B12 och folat, glukos, sömnapné – är ditt ansvar och ska vara gjord någon gång i ärendet. Men den avgörs inte här: det som gör just det här underlaget obedömbart är att hela kedjan saknas. Ta den somatiska frågan i din egen journalanteckning, inte i kompletteringsbegäran.' }
+              varfor: 'Somatisk differentialdiagnostik vid utmattning – tyreoidea, blodstatus, B12 och folat, glukos, sömnapné – är ditt ansvar. Men efter elva månader är frågan inte om den gjordes en gång i början, utan om något ändrats sedan dess. Den frågan avgör du i din egen journalanteckning, inte i en kompletteringsbegäran till en kollega som varken får ordinera prover eller tolka dem. Det som gör just det här underlaget obedömbart är att hela kedjan saknas.' }
           ] },
 
         { typ: 'val',
@@ -427,7 +435,7 @@
               humor: 'neutral', reaktion: 'Intyget går iväg. Klockan är 16.40.',
               svar: 'Kollega: "Tack, du är en klippa. Jag hann inte mer idag."',
               fx: { allians: 8, underlag: -20, sakerhet: -14 },
-              varfor: 'Det här är det val som känns bäst i stunden: kollegan blir tacksam, Jonas får sitt intyg, och du hinner hem. Sedan står ditt namn under ett intyg du inte kan försvara, och nästa gång går det inte att kräva kvalitet – du har redan visat att det inte behövs. Att intyga något man inte har kännedom om är inte en administrativ slarvsak; osant intygande är straffbart, och det är intygsutfärdaren som är den som intygar.' },
+              varfor: 'Det här är det val som känns bäst i stunden: kollegan blir tacksam, Jonas får sitt intyg, och du hinner hem. Sedan står ditt namn under ett intyg du inte kan försvara, och nästa gång går det inte att kräva kvalitet – du har redan visat att det inte behövs. Att intyga något man inte har kännedom om är inte en administrativ slarvsak; osant intygande är straffbart enligt brottsbalken 15 kap. 11 §, och det är intygsutfärdaren som intygar.' },
             { text: 'Returnera underlaget utan kommentar.',
               tid: 1, ok: 'delvis', princip: 'signering',
               humor: 'neutral', reaktion: 'Underlaget skickas tillbaka.',
@@ -444,7 +452,7 @@
               ok: true, princip: 'signering', tid: 2,
               fx: { underlag: 14, sakerhet: 10 },
               utfall: 'Kompletteringen kommer in samma eftermiddag. Intyget blir bedömbart.',
-              varfor: 'Ett underlag som inte går att följa ska inte signeras. Men returen måste vara användbar, annars är den bara en fördröjning som kostar Jonas pengar. Frågorna ska gå att besvara i en mening var: (1) Vilka konkreta arbetsuppgifter klarar han inte, och vilka klarar han? (2) Vad sågs vid besöket – vilka observationer eller test ligger bakom "mycket trött"? (3) Vilken behandling är påbörjad eller inbokad, och vilket datum omprövas sjukskrivningen? Sätt ett datum för svaret, och se till att Jonas får veta idag att intyget dröjer och varför.' },
+              varfor: 'Ett underlag som inte går att följa ska inte signeras. Men returen måste vara användbar, annars är den bara en fördröjning som kostar Jonas pengar. Frågorna ska gå att besvara i en mening var: (1) Vilka konkreta arbetsuppgifter klarar han inte, och vilka klarar han? (2) Vad sågs vid besöket – vilka observationer eller test ligger bakom "mycket trött"? (3) Vilken behandling är påbörjad eller inbokad, och vilket datum omprövas sjukskrivningen? Läs dem sedan mot rätt tidsgräns: den begärda förlängningen passerar dag 365. Där prövas arbetsförmågan mot hela arbetsmarknaden, och sjukpenning på normalnivå tar slut efter 364 dagar – därefter blir det fortsatt sjukpenning på 75 procent, som Jonas måste ansöka om själv. Ett intyg som bara beskriver IT-supporten räcker inte dit, och det är Jonas ekonomi som bär konsekvensen. Sätt ett datum för svaret, och se till att Jonas får veta idag att intyget dröjer och varför.' },
             { text: 'Signera enligt förslaget',
               ok: false, princip: 'signering', tid: 1,
               fx: { underlag: -24, sakerhet: -18 },
