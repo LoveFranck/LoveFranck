@@ -430,8 +430,8 @@ pre.rapport{
   background:var(--paper);
   border:2px solid var(--mark);
   border-radius:3px;
-  padding:2px 7px 2px 4px;
-  font-size:8px; letter-spacing:2px;
+  padding:2px 6px 2px 4px;
+  font-size:8px; letter-spacing:1px; white-space:nowrap;
   color:var(--mark);
 }
 #title-brand .mark{
@@ -550,7 +550,7 @@ body.touch #pad{
           <span class="t-sub">VÅRDCENTRALEN</span>
         </div>
         <div id="title-press">TRYCK PÅ START</div>
-        <div id="title-brand"><span class="mark" aria-hidden="true"></span>FORSÅKER VÅRDCENTRAL</div>
+        <div id="title-brand"><span class="mark" aria-hidden="true"></span>FORSÅKER, VÅRDCENTRALEN SOM FÖRSÖKER</div>
         <div id="title-foot">ETT LÄROMEDEL OM SJUKSKRIVNING</div>
       </div>
 
@@ -724,7 +724,10 @@ body.touch #pad{
     /* dörr / scenbyte */
     door:    [[520, 0.04, 0.5], [700, 0.04, 0.5]],
     /* nytt ärende */
-    alert:   [[1047, 0.06, 0.6], [0, 0.04, 0], [1047, 0.06, 0.6]]
+    alert:   [[1047, 0.06, 0.6], [0, 0.04, 0], [1047, 0.06, 0.6]],
+    /* pingis: racket och bordskant */
+    studs:   [[740, 0.025, 0.5]],
+    kant:    [[420, 0.025, 0.4]]
   };
 
   LESS.sfx = function (name) {
@@ -973,6 +976,52 @@ body.touch #pad{
       R(c, x + 5, y + 15, 6, 1, P.markDark);
       R(c, x, y + 5, 1, 6, P.markDark);
       R(c, x + 15, y + 5, 1, 6, P.markDark);
+    },
+
+    skynke: function (c, x, y) {           /* tygskynke i korridorens ände */
+      R(c, x, y, 16, 16, '#5a6470');
+      R(c, x, y, 16, 2, '#3a424c');
+      var i;
+      for (i = 0; i < 4; i++) {
+        R(c, x + i * 4, y + 2, 3, 14, i % 2 ? '#6e7986' : '#616c78');
+        R(c, x + i * 4 + 3, y + 2, 1, 14, '#4a535e');
+      }
+      R(c, x, y + 14, 16, 2, '#454e58');
+    },
+
+    betong: function (c, x, y) {           /* skyddsrummets väggar */
+      R(c, x, y, 16, 16, '#8e8e88');
+      R(c, x, y, 16, 3, '#a2a29a');
+      R(c, x, y + 13, 16, 3, '#6e6e68');
+      R(c, x + 3, y + 6, 4, 1, '#7c7c76');
+      R(c, x + 10, y + 9, 3, 1, '#7c7c76');
+    },
+
+    betonggolv: function (c, x, y) {
+      R(c, x, y, 16, 16, '#b4b0a4');
+      R(c, x + 7, y, 1, 16, '#a8a498');
+      R(c, x, y + 7, 16, 1, '#a8a498');
+      R(c, x + 2, y + 11, 2, 1, '#a09c90');
+    },
+
+    pingis: function (c, x, y) {           /* pingisbord */
+      TILE.betonggolv(c, x, y);
+      R(c, x, y + 1, 16, 11, '#1c5c3a');
+      R(c, x, y + 1, 16, 1, '#2a7a4e');
+      R(c, x, y + 6, 16, 1, '#e8e8e0');
+      R(c, x, y + 11, 16, 1, '#123f28');
+      R(c, x + 1, y + 12, 2, 4, '#4a4a44');
+      R(c, x + 13, y + 12, 2, 4, '#4a4a44');
+    },
+
+    pingisnat: function (c, x, y) {        /* bordets mittsektion med nät och racket */
+      TILE.pingis(c, x, y);
+      R(c, x + 7, y - 2, 2, 4, '#3a3a34');
+      R(c, x + 2, y + 2, 4, 3, '#c04838');
+      R(c, x + 3, y + 5, 1, 2, '#8a6a40');
+      R(c, x + 10, y + 7, 4, 3, '#20303c');
+      R(c, x + 11, y + 4, 1, 3, '#8a6a40');
+      R(c, x + 7, y + 8, 2, 2, '#f8f8f0');
     },
 
     plansch: function (c, x, y) {          /* frågeplansch på väggen */
@@ -1409,6 +1458,50 @@ body.touch #pad{
     R(c, 20, 103, 3, 5, '#f0f0e8');
   };
 
+
+  /* ---------------- Everdrones drönare ----------------
+     Grå multirotor som bär hjärtstartaren i en lina under sig. Stationerad
+     bakom vårdcentralen på riktigt; här lyfter den på titelskärmen.        */
+  LESS.drawDrone = function (c, x, y, t, medAed) {
+    var kropp = '#6a6e74', kroppD = '#4a4e54', kroppL = '#8e939a';
+    var rotorPa = ((t / 60) | 0) % 2 === 0;
+
+    /* armar */
+    R(c, x - 6, y + 1, 6, 1, kroppD);
+    R(c, x + 12, y + 1, 6, 1, kroppD);
+    R(c, x - 5, y + 5, 5, 1, kroppD);
+    R(c, x + 13, y + 5, 5, 1, kroppD);
+
+    /* rotorer – två lägen ger illusionen av rotation */
+    [[-8, 0], [16, 0], [-7, 4], [15, 4]].forEach(function (o, i) {
+      var rx = x + o[0], ry = y + o[1];
+      if (rotorPa === (i % 2 === 0)) {
+        R(c, rx - 1, ry, 8, 1, '#b8bcc2');
+      } else {
+        R(c, rx + 2, ry - 1, 2, 3, '#b8bcc2');
+      }
+      R(c, rx + 2, ry, 2, 1, kroppD);
+    });
+
+    /* skrov */
+    R(c, x, y, 12, 7, kroppD);
+    R(c, x + 1, y + 1, 10, 5, kropp);
+    R(c, x + 1, y + 1, 10, 1, kroppL);
+    R(c, x + 3, y + 2, 5, 2, '#2a3038');          /* kameraruta */
+    R(c, x + 9, y + 3, 2, 1, '#c04838');          /* positionsljus */
+    R(c, x, y + 3, 1, 1, '#58c060');
+
+    if (medAed) {
+      /* lina och hjärtstartare */
+      R(c, x + 5, y + 7, 1, 5, '#3a3a34');
+      R(c, x + 2, y + 12, 8, 7, '#c8a018');
+      R(c, x + 2, y + 12, 8, 1, '#e0b830');
+      R(c, x + 3, y + 14, 2, 3, '#f8f8f0');
+      R(c, x + 6, y + 14, 3, 1, '#20201c');
+      R(c, x + 6, y + 16, 3, 1, '#20201c');
+    }
+  };
+
   /* Titelbakgrund: vårdcentralen utifrån */
   LESS.drawTitleBg = function (c, t) {
     var i;
@@ -1425,6 +1518,19 @@ body.touch #pad{
     /* gångväg */
     R(c, 66, 96, 28, 48, '#d8cfae');
     for (i = 0; i < 5; i++) R(c, 66, 100 + i * 10, 28, 1, '#c0b894');
+    /* Drönaren lyfter bakom huset och flyger iväg. 16 sekunders cykel.
+       Ritas före byggnaden så att taket skymmer den under starten.        */
+    var cyk = (t % 16000) / 16000, dx = null, dy = 0;
+    if (cyk >= 0.06 && cyk < 0.34) {
+      var k = (cyk - 0.06) / 0.28;
+      dx = 118; dy = Math.round(54 - k * k * 48);
+    } else if (cyk >= 0.34 && cyk < 0.70) {
+      var k2 = (cyk - 0.34) / 0.36;
+      dx = Math.round(118 + k2 * k2 * 74);
+      dy = Math.round(6 - k2 * 5 + Math.sin(k2 * 8) * 1.5);
+    }
+    if (dx !== null && dx < 168) LESS.drawDrone(c, dx, dy, t, true);
+
     /* byggnad */
     R(c, 24, 44, 112, 54, P.ink);
     R(c, 26, 46, 108, 50, P.white);
@@ -1450,6 +1556,7 @@ body.touch #pad{
     R(c, 72, 32, 30, 2, '#3f7a70');
     /* mintgrön list ovanför entrén */
     R(c, 26, 54, 108, 2, P.markMint);
+
     /* buskar */
     R(c, 10, 88, 14, 10, P.greenD); R(c, 12, 86, 10, 6, P.green);
     R(c, 136, 88, 14, 10, P.greenD); R(c, 138, 86, 10, 6, P.green);
@@ -1458,7 +1565,9 @@ body.touch #pad{
 })(window);
 
 /* ==== js/map.js ==== */
-/* map.js – vårdcentralens planlösning (32 x 22 rutor à 16 px) */
+/* map.js – vårdcentralens planlösning (32 x 35 rutor à 16 px)
+   Raderna 0–21 är huset. 22–34 är skyddsrummet under det, som inte går
+   att se från huset – man kommer dit genom skynket i korridorens ände. */
 (function (global) {
   'use strict';
   var LESS = global.LESS;
@@ -1469,7 +1578,8 @@ body.touch #pad{
      H hylla     B tavla   D dörr     E utgång
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
-     b bänk       p växt    e brits      k skåp   r matta        */
+     b bänk       p växt    e brits      k skåp   r matta
+     S tygskynke  C betong   g betonggolv q pingisbord  n bordets mitt  */
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -1483,7 +1593,7 @@ body.touch #pad{
     /* 8 */ '#         #         #         #      #',
     /* 9 */ '####D####B##D#######D######D####',
     /*10 */ '#p............................p#',
-    /*11 */ '#..............................#',
+    /*11 */ '#..............................S',
     /*12 */ '#..............................#',
     /*13 */ '##L##D#########D#F#######D#F#H##',
     /*14 */ '#xxx     p#  cd    p#  cd     p#',
@@ -1493,7 +1603,24 @@ body.touch #pad{
     /*18 */ '# bbb  bbb# p      k# p      k #',
     /*19 */ '#p       p#         #          #',
     /*20 */ '#####E##########################',
-    /*21 */ '################################'
+    /*21 */ '################################',
+
+    /* Under huset ligger skyddsrummet. Raderna 22–26 är massiv betong och
+       fungerar som buffert: kameran når aldrig ner till rad 27 uppifrån, så
+       rummet syns inte på kartan förrän man klivit in genom skynket.       */
+    /*22 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*23 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*24 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*25 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*26 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*27 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*28 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*29 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*30 */ 'CCCCCCCCCCgggqqnqqggggCCCCCCCCCC',
+    /*31 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*32 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*33 */ 'CCCCCCCCCCCCCCCCSCCCCCCCCCCCCCCC',
+    /*34 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'
   ];
 
   /* Raderna 2–8 skrivs rumsvis för läsbarhet – sätt ihop dem här så att
@@ -1524,10 +1651,12 @@ body.touch #pad{
     'F': 'plansch',
     '.': 'floor2', ' ': 'floor', 'r': 'carpet', 'u': 'rug',
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
-    'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet'
+    'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet',
+    'S': 'skynke', 'C': 'betong', 'g': 'betonggolv',
+    'q': 'pingis', 'n': 'pingisnat'
   };
 
-  var WALKABLE = { ' ': 1, '.': 1, 'D': 1, 'E': 1, 'r': 1, 'u': 1 };
+  var WALKABLE = { ' ': 1, '.': 1, 'D': 1, 'E': 1, 'r': 1, 'u': 1, 'g': 1 };
 
   function at(x, y) {
     if (x < 0 || y < 0 || x >= W || y >= H) return '#';
@@ -1554,8 +1683,18 @@ body.touch #pad{
     { id: 'plansch-fys',    x: 23, y: 1,  kind: 'plansch', roll: 'fysioterapeut' },
     { id: 'plansch-lak',    x: 30, y: 1,  kind: 'plansch', roll: 'lakare' },
     { id: 'plansch-rko',    x: 17, y: 13, kind: 'plansch', roll: 'rehabkoordinator' },
-    { id: 'plansch-arb',    x: 27, y: 13, kind: 'plansch', roll: 'arbetsterapeut' }
+    { id: 'plansch-arb',    x: 27, y: 13, kind: 'plansch', roll: 'arbetsterapeut' },
+
+    /* Skyddsrummet: skynket i korridorens ände och vägen tillbaka. */
+    { id: 'skynke-in',  x: 31, y: 11, kind: 'skynke', till: { x: 16, y: 32, dir: 'up' } },
+    { id: 'skynke-ut',  x: 16, y: 33, kind: 'skynke', till: { x: 30, y: 11, dir: 'left' } }
   ];
+
+  /* Pingisbordet upptar rad 30, kolumn 13–17. Vilken bordsruta man än står
+     vänd mot ska A starta en match. */
+  for (var pq = 13; pq <= 17; pq++) {
+    STATIONS.push({ id: 'pingis' + pq, x: pq, y: 30, kind: 'pingis' });
+  }
 
   /* ---------------- dörrskyltar ---------------- */
   var LABELS = [
@@ -1971,6 +2110,8 @@ body.touch #pad{
     mastery: {},                   /* roll -> antal guld */
     installningar: { tips: true, ljud: true, snabbtext: false },
     skattningar: {},               /* frågeId -> {varde, kommentar, tid} */
+    namn: '',                      /* signatur på planschen */
+    pingis: { hittat: false, vinster: {}, forluster: {} },
     statistik: { moten: 0, guld: 0, silver: 0, brons: 0, omtag: 0, minuter: 0 }
   };
 
@@ -5828,6 +5969,279 @@ body.touch #pad{
 
 })(window);
 
+/* ==== js/pong.js ==== */
+/* pong.js – skyddsrummets pingisbord (easter egg)
+
+   En liten Pong-variant i Game Boy-format. Fyra motståndare med fallande
+   svårighetsgrad: Sam är svårast, John lättast. Skillnaden ligger i tre
+   saker som var för sig känns rättvisa i stället för orättvisa:
+
+     fart      – hur snabbt racketen orkar följa med
+     miss      – hur många pixlar fel motståndaren siktar
+     reaktion  – hur långt bollen hunnit innan hen börjar röra sig
+
+   Ingen av dem fuskar: racketen lyder samma regler som spelarens.
+   Texten ritas med en egen 3x5-pixelfont så att rutan håller ihop med
+   resten av spelet – ingen systemfont i canvasen.                          */
+(function (global) {
+  'use strict';
+  var LESS = global.LESS;
+
+  var W = 160, H = 144;
+  var PLAN_Y = 24;                 /* spelplanens överkant (under poängraden) */
+  var PLAN_H = H - PLAN_Y - 6;
+  var PADDEL_H = 24, PADDEL_B = 3;
+  var MAL = 5;                     /* först till fem bollar */
+
+  var MOTSTANDARE = [
+    { id: 'sam',    namn: 'Sam',    fart: 2.30, miss: 2,  reaktion: 0.05,
+      rykte: 'Spelade seriepingis. Ler inte förrän det står 5–0.' },
+    { id: 'martin', namn: 'Martin', fart: 1.75, miss: 6,  reaktion: 0.22,
+      rykte: 'Bra hand, dålig uppvärmning. Vinner om du slarvar.' },
+    { id: 'filip',  namn: 'Filip',  fart: 1.35, miss: 11, reaktion: 0.38,
+      rykte: 'Byter grepp mellan varje boll. Går att läsa.' },
+    { id: 'john',   namn: 'John',   fart: 1.00, miss: 17, reaktion: 0.55,
+      rykte: 'Hittade bollen under bordet. Lovar ingenting.' }
+  ];
+
+  /* ---------------- 3x5-font ---------------- */
+
+  var GLYF = {
+    A: '###:#.#:###:#.#:#.#', B: '##.:#.#:##.:#.#:##.', C: '###:#..:#..:#..:###',
+    D: '##.:#.#:#.#:#.#:##.', E: '###:#..:##.:#..:###', F: '###:#..:##.:#..:#..',
+    G: '###:#..:#.#:#.#:###', H: '#.#:#.#:###:#.#:#.#', I: '###:.#.:.#.:.#.:###',
+    J: '..#:..#:..#:#.#:###', K: '#.#:#.#:##.:#.#:#.#', L: '#..:#..:#..:#..:###',
+    M: '#.#:###:###:#.#:#.#', N: '##.:#.#:#.#:#.#:#.#', O: '###:#.#:#.#:#.#:###',
+    P: '###:#.#:###:#..:#..', Q: '###:#.#:#.#:###:..#', R: '###:#.#:##.:#.#:#.#',
+    S: '###:#..:###:..#:###', T: '###:.#.:.#.:.#.:.#.', U: '#.#:#.#:#.#:#.#:###',
+    V: '#.#:#.#:#.#:#.#:.#.', W: '#.#:#.#:###:###:#.#', X: '#.#:#.#:.#.:#.#:#.#',
+    Y: '#.#:#.#:.#.:.#.:.#.', Z: '###:..#:.#.:#..:###',
+    '0': '###:#.#:#.#:#.#:###', '1': '.#.:##.:.#.:.#.:###', '2': '###:..#:###:#..:###',
+    '3': '###:..#:###:..#:###', '4': '#.#:#.#:###:..#:..#', '5': '###:#..:###:..#:###',
+    '6': '###:#..:###:#.#:###', '7': '###:..#:..#:..#:..#', '8': '###:#.#:###:#.#:###',
+    '9': '###:#.#:###:..#:###',
+    '-': '...:...:###:...:...', ':': '...:.#.:...:.#.:...',
+    '!': '.#.:.#.:.#.:...:.#.', '?': '###:..#:.##:...:.#.',
+    '.': '...:...:...:...:.#.', ',': '...:...:...:.#.:#..',
+    '/': '..#:..#:.#.:#..:#..'
+  };
+  /* Prickar ovanför: Å en, Ä och Ö två. */
+  var PRICK = { 'Å': ['A', 1], 'Ä': ['A', 2], 'Ö': ['O', 2] };
+
+  function bredd(s) { return s.length * 4 - 1; }
+
+  function skriv(c, s, x, y, farg) {
+    c.fillStyle = farg;
+    s = String(s).toUpperCase();
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charAt(i), gx = x + i * 4, p = PRICK[ch];
+      if (p) { 
+        if (p[1] === 1) c.fillRect(gx + 1, y - 2, 1, 1);
+        else { c.fillRect(gx, y - 2, 1, 1); c.fillRect(gx + 2, y - 2, 1, 1); }
+        ch = p[0];
+      }
+      var g = GLYF[ch];
+      if (!g) continue;
+      var rader = g.split(':');
+      for (var r = 0; r < 5; r++) {
+        for (var k = 0; k < 3; k++) {
+          if (rader[r].charAt(k) === '#') c.fillRect(gx + k, y + r, 1, 1);
+        }
+      }
+    }
+  }
+  LESS.pixelText = skriv;
+  LESS.pixelBredd = bredd;
+
+  /* ---------------- matchens tillstånd ---------------- */
+
+  var G = null, handler = null, slutfor = null;
+
+  function nyMatch(m) {
+    return {
+      mot: m, avvikelse: 0,
+      py: PLAN_Y + (PLAN_H - PADDEL_H) / 2,
+      oy: PLAN_Y + (PLAN_H - PADDEL_H) / 2,
+      bx: W / 2, by: PLAN_Y + PLAN_H / 2,
+      vx: 0, vy: 0,
+      poang: 0, motpoang: 0,
+      lage: 'serve',               /* serve | spel | slut */
+      servaMot: false,
+      slag: 0, sistT: 0, text: null
+    };
+  }
+
+  function serva() {
+    G.bx = W / 2; G.by = PLAN_Y + PLAN_H / 2;
+    G.slag = 0;
+    G.vx = (G.servaMot ? 1 : -1) * 1.6;
+    G.vy = Math.random() * 1.4 - 0.7;
+    nyAvvikelse();
+    G.lage = 'spel';
+  }
+
+  function nyAvvikelse() {
+    G.avvikelse = (Math.random() * 2 - 1) * G.mot.miss;
+  }
+
+  /* ---------------- simulering ---------------- */
+
+  function stegPaddel(dt) {
+    var d = LESS.input.held, fart = 2.6 * dt;
+    if (d.up) G.py -= fart;
+    if (d.down) G.py += fart;
+    G.py = LESS.clamp(G.py, PLAN_Y, PLAN_Y + PLAN_H - PADDEL_H);
+
+    var m = G.mot;
+    var mitt = G.oy + PADDEL_H / 2;
+    var mal, steg = m.fart * dt;
+    if (G.vx > 0) {
+      /* bollen är på väg mot motståndaren – hen rör sig först när den
+         hunnit förbi sin reaktionströskel */
+      if (G.bx / W < m.reaktion) return;
+      mal = G.by + G.avvikelse;
+    } else {
+      /* bollen på väg bort: gå långsamt tillbaka mot mitten */
+      mal = PLAN_Y + PLAN_H / 2;
+      steg *= 0.45;
+    }
+    var diff = mal - mitt;
+    if (Math.abs(diff) < steg) G.oy += diff;
+    else G.oy += diff > 0 ? steg : -steg;
+    G.oy = LESS.clamp(G.oy, PLAN_Y, PLAN_Y + PLAN_H - PADDEL_H);
+  }
+
+  function studs(pady, motHoger) {
+    var rel = LESS.clamp((G.by + 1.5 - (pady + PADDEL_H / 2)) / (PADDEL_H / 2), -1, 1);
+    G.slag += 1;
+    var fart = Math.min(1.6 + G.slag * 0.10, 3.3);
+    G.vx = (motHoger ? 1 : -1) * fart * (1 - Math.abs(rel) * 0.26);
+    G.vy = rel * fart * 0.72;
+    if (motHoger) nyAvvikelse();
+    LESS.sfx('studs');
+  }
+
+  function poang(tillMot) {
+    if (tillMot) G.motpoang += 1; else G.poang += 1;
+    LESS.sfx(tillMot ? 'cold' : 'warm');
+    G.servaMot = tillMot;
+    if (G.poang >= MAL || G.motpoang >= MAL) { avsluta(); return; }
+    G.lage = 'serve';
+    G.bx = W / 2; G.by = PLAN_Y + PLAN_H / 2; G.vx = 0; G.vy = 0;
+  }
+
+  function stegBoll(dt) {
+    G.bx += G.vx * dt;
+    G.by += G.vy * dt;
+
+    if (G.by <= PLAN_Y) { G.by = PLAN_Y; G.vy = -G.vy; LESS.sfx('kant'); }
+    if (G.by >= PLAN_Y + PLAN_H - 3) { G.by = PLAN_Y + PLAN_H - 3; G.vy = -G.vy; LESS.sfx('kant'); }
+
+    if (G.vx < 0 && G.bx <= 8 + PADDEL_B && G.bx >= 2) {
+      if (G.by + 3 >= G.py && G.by <= G.py + PADDEL_H) { G.bx = 8 + PADDEL_B; studs(G.py, true); }
+    }
+    if (G.vx > 0 && G.bx + 3 >= W - 11 && G.bx <= W - 5) {
+      if (G.by + 3 >= G.oy && G.by <= G.oy + PADDEL_H) { G.bx = W - 14; studs(G.oy, false); }
+    }
+
+    if (G.bx < -6) poang(true);
+    else if (G.bx > W + 6) poang(false);
+  }
+
+  /* ---------------- rendering ---------------- */
+
+  function R(c, x, y, w, h, f) { c.fillStyle = f; c.fillRect(x | 0, y | 0, w | 0, h | 0); }
+
+  var scene = {
+    draw: function (c, t) {
+      if (!G) return;
+      var dt = G.sistT ? Math.min((t - G.sistT) / 16.7, 3) : 1;
+      G.sistT = t;
+      if (G.lage === 'spel') { stegPaddel(dt); stegBoll(dt); }
+      else if (G.lage === 'serve') stegPaddel(dt);
+
+      var i;
+      R(c, 0, 0, W, H, '#8e8e88');
+      R(c, 0, PLAN_Y - 3, W, PLAN_H + 6, '#123f28');
+      R(c, 2, PLAN_Y, W - 4, PLAN_H, '#1c5c3a');
+      R(c, 2, PLAN_Y, W - 4, 1, '#2a7a4e');
+      R(c, 2, PLAN_Y + PLAN_H - 1, W - 4, 1, '#2a7a4e');
+      for (i = PLAN_Y + 2; i < PLAN_Y + PLAN_H - 2; i += 6) R(c, W / 2 - 1, i, 2, 4, '#e8e8e0');
+
+      /* poängrad */
+      R(c, 0, 0, W, PLAN_Y - 3, '#20201c');
+      skriv(c, 'DU', 5, 5, '#f8e070');
+      skriv(c, String(G.poang), 5, 13, '#f8f8f0');
+      var n = G.mot.namn;
+      skriv(c, n, W - 5 - bredd(n), 5, '#75d8c7');
+      skriv(c, String(G.motpoang), W - 5 - bredd('0'), 13, '#f8f8f0');
+      var mid = 'FÖRST TILL ' + MAL;
+      skriv(c, mid, (W - bredd(mid)) / 2, 9, '#8a9a96');
+
+      R(c, 8, G.py, PADDEL_B, PADDEL_H, '#f8e070');
+      R(c, W - 11, G.oy, PADDEL_B, PADDEL_H, '#75d8c7');
+      R(c, G.bx, G.by, 3, 3, '#f8f8f0');
+
+      if (G.lage === 'serve' && ((t / 400) | 0) % 2 === 0) {
+        var s = 'TRYCK A';
+        skriv(c, s, (W - bredd(s)) / 2, PLAN_Y + PLAN_H / 2 - 3, '#f8f8f0');
+      }
+      if (G.text) {
+        var by = PLAN_Y + PLAN_H / 2 - 13;
+        R(c, 10, by, W - 20, 26, '#20201c');
+        R(c, 11, by + 1, W - 22, 24, '#f8f8f0');
+        skriv(c, G.text[0], (W - bredd(G.text[0])) / 2, by + 6, '#20201c');
+        if (G.text[1]) skriv(c, G.text[1], (W - bredd(G.text[1])) / 2, by + 15, '#20201c');
+      }
+    }
+  };
+
+  /* ---------------- slut ---------------- */
+
+  function avsluta() {
+    G.lage = 'slut';
+    var vann = G.poang > G.motpoang;
+    var d = LESS.state.data;
+    if (!d.pingis) d.pingis = { hittat: true, vinster: {}, forluster: {} };
+    var bok = vann ? d.pingis.vinster : d.pingis.forluster;
+    bok[G.mot.id] = (bok[G.mot.id] || 0) + 1;
+    LESS.state.spara();
+    LESS.sfx(vann ? 'done' : 'fail');
+    G.text = vann
+      ? ['DU VANN', G.poang + '-' + G.motpoang + ' MOT ' + G.mot.namn]
+      : [G.mot.namn + ' VANN', G.motpoang + '-' + G.poang];
+  }
+
+  function stang() {
+    if (handler) { LESS.input.pop(handler); handler = null; }
+    G = null;
+    var k = slutfor; slutfor = null;
+    if (k) k();
+  }
+
+  /* ---------------- start ---------------- */
+
+  function start(motId, klar) {
+    slutfor = klar;
+    var m = null;
+    for (var i = 0; i < MOTSTANDARE.length; i++) if (MOTSTANDARE[i].id === motId) m = MOTSTANDARE[i];
+    G = nyMatch(m || MOTSTANDARE[3]);
+    nyAvvikelse();
+    LESS.setScene(scene);
+    if (handler) LESS.input.pop(handler);
+    handler = LESS.input.push(function (k) {
+      if (!G) return;
+      if (k === 'b' || k === 'meny') { LESS.sfx('back'); stang(); return; }
+      if (k !== 'a') return;
+      if (G.lage === 'serve') { LESS.sfx('ok'); serva(); }
+      else if (G.lage === 'slut') stang();
+    });
+  }
+
+  LESS.pong = { motstandare: MOTSTANDARE, start: start };
+
+})(window);
+
 /* ==== js/encounter.js ==== */
 /* encounter.js – mötesmotorn.
 
@@ -6602,7 +7016,8 @@ body.touch #pad{
     { namn: 'KORRIDOR',          x1: 1,  y1: 9,  x2: 30, y2: 13 },
     { namn: 'VÄNTRUM',           x1: 1,  y1: 14, x2: 9,  y2: 20 },
     { namn: 'REHABKOORDINATOR',  x1: 11, y1: 14, x2: 19, y2: 20 },
-    { namn: 'ARBETSTERAPI',      x1: 21, y1: 14, x2: 30, y2: 20 }
+    { namn: 'ARBETSTERAPI',      x1: 21, y1: 14, x2: 30, y2: 20 },
+    { namn: 'SKYDDSRUM',         x1: 10, y1: 27, x2: 21, y2: 32 }
   ];
 
   var P = null;      /* spelaren */
@@ -6704,8 +7119,8 @@ body.touch #pad{
         c.drawImage(f.spr, Math.round(f.px - cam.x), Math.round(f.py - cam.y - 4));
       });
 
-      /* markör över målrummet i kampanjläget */
-      var mal = malStation();
+      /* markör över målrummet i kampanjläget – inte nere i skyddsrummet */
+      var mal = P.ty < 22 ? malStation() : null;
       if (mal) {
         var mx = mal.x * TS - cam.x + 4, my = mal.y * TS - cam.y - 10 + Math.round(Math.sin(t / 220) * 2);
         var iBild = mx > 0 && mx < VY_W - 8 && my > 0 && my < VY_H - 8;
@@ -6992,7 +7407,74 @@ body.touch #pad{
     }
     if (s.kind === 'reception') { receptionsMeny(); return; }
     if (s.kind === 'utgang')  { utgang(); return; }
+    if (s.kind === 'skynke')  { skynke(s); return; }
+    if (s.kind === 'pingis')  { pingisbordet(); return; }
     if (s.role) startRoll(s.role);
+  }
+
+  /* ---------------- skyddsrummet (easter egg) ----------------
+     Längst bort i korridoren hänger ett tygskynke. Bakom det ligger
+     skyddsrummet med pingisbordet. Ingen skylt, ingen kantpil och inget i
+     menyerna pekar dit – rummet finns inte på kartan förrän man klivit in. */
+
+  function flyttaTill(t) {
+    P.tx = t.x; P.ty = t.y;
+    P.px = t.x * TS; P.py = t.y * TS;
+    P.frx = P.px; P.fry = P.py;
+    P.dir = t.dir || 'down';
+    P.gar = false; P.buffert = null;
+  }
+
+  function skynke(s) {
+    var d = LESS.state.data;
+    if (!d.pingis) d.pingis = { hittat: false, vinster: {}, forluster: {} };
+    var forsta = !d.pingis.hittat && s.id === 'skynke-in';
+    paus();
+    LESS.sfx('door');
+
+    function in_() {
+      ui.transition(function () {
+        flyttaTill(s.till);
+        ater();
+      });
+    }
+
+    if (forsta) {
+      d.pingis.hittat = true;
+      LESS.state.spara();
+      ui.sayAll([
+        { text: 'Bakom skynket går en trappa ner. Det luktar betong och gammal linoleum.' },
+        { text: 'Skyddsrummet. Någon har ställt in ett pingisbord här nere.' }
+      ], in_);
+      return;
+    }
+    in_();
+  }
+
+  /* Fyra motståndare med fallande svårighetsgrad. Vinster och förluster
+     sparas per motståndare så att man ser vem man faktiskt slagit. */
+  function pingisbordet() {
+    paus();
+    LESS.sfx('ok');
+    var d = LESS.state.data;
+    if (!d.pingis) d.pingis = { hittat: true, vinster: {}, forluster: {} };
+
+    var items = LESS.pong.motstandare.map(function (m) {
+      var v = d.pingis.vinster[m.id] || 0, f = d.pingis.forluster[m.id] || 0;
+      var status = (v || f) ? '  ·  ' + v + '–' + f : '';
+      return { text: m.namn + status, hint: m.rykte };
+    });
+    items.push({ text: 'Lägg tillbaka racketen' });
+
+    ui.say('Två rack ligger kvar på bordet. Vem tar du?', null, function () {
+      ui.menu(items, { cancel: true }, function (i) {
+        var m = LESS.pong.motstandare[i];
+        if (!m) { ater(); return; }
+        ui.transition(function () {
+          LESS.pong.start(m.id, function () { ui.transition(ater); });
+        });
+      });
+    });
   }
 
   /* Kontrollöversikt med en liten bild av tangentbordet.

@@ -421,8 +421,8 @@ pre.rapport{
   background:var(--paper);
   border:2px solid var(--mark);
   border-radius:3px;
-  padding:2px 7px 2px 4px;
-  font-size:8px; letter-spacing:2px;
+  padding:2px 6px 2px 4px;
+  font-size:8px; letter-spacing:1px; white-space:nowrap;
   color:var(--mark);
 }
 #title-brand .mark{

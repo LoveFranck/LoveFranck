@@ -226,6 +226,52 @@
       R(c, x + 15, y + 5, 1, 6, P.markDark);
     },
 
+    skynke: function (c, x, y) {           /* tygskynke i korridorens ände */
+      R(c, x, y, 16, 16, '#5a6470');
+      R(c, x, y, 16, 2, '#3a424c');
+      var i;
+      for (i = 0; i < 4; i++) {
+        R(c, x + i * 4, y + 2, 3, 14, i % 2 ? '#6e7986' : '#616c78');
+        R(c, x + i * 4 + 3, y + 2, 1, 14, '#4a535e');
+      }
+      R(c, x, y + 14, 16, 2, '#454e58');
+    },
+
+    betong: function (c, x, y) {           /* skyddsrummets väggar */
+      R(c, x, y, 16, 16, '#8e8e88');
+      R(c, x, y, 16, 3, '#a2a29a');
+      R(c, x, y + 13, 16, 3, '#6e6e68');
+      R(c, x + 3, y + 6, 4, 1, '#7c7c76');
+      R(c, x + 10, y + 9, 3, 1, '#7c7c76');
+    },
+
+    betonggolv: function (c, x, y) {
+      R(c, x, y, 16, 16, '#b4b0a4');
+      R(c, x + 7, y, 1, 16, '#a8a498');
+      R(c, x, y + 7, 16, 1, '#a8a498');
+      R(c, x + 2, y + 11, 2, 1, '#a09c90');
+    },
+
+    pingis: function (c, x, y) {           /* pingisbord */
+      TILE.betonggolv(c, x, y);
+      R(c, x, y + 1, 16, 11, '#1c5c3a');
+      R(c, x, y + 1, 16, 1, '#2a7a4e');
+      R(c, x, y + 6, 16, 1, '#e8e8e0');
+      R(c, x, y + 11, 16, 1, '#123f28');
+      R(c, x + 1, y + 12, 2, 4, '#4a4a44');
+      R(c, x + 13, y + 12, 2, 4, '#4a4a44');
+    },
+
+    pingisnat: function (c, x, y) {        /* bordets mittsektion med nät och racket */
+      TILE.pingis(c, x, y);
+      R(c, x + 7, y - 2, 2, 4, '#3a3a34');
+      R(c, x + 2, y + 2, 4, 3, '#c04838');
+      R(c, x + 3, y + 5, 1, 2, '#8a6a40');
+      R(c, x + 10, y + 7, 4, 3, '#20303c');
+      R(c, x + 11, y + 4, 1, 3, '#8a6a40');
+      R(c, x + 7, y + 8, 2, 2, '#f8f8f0');
+    },
+
     plansch: function (c, x, y) {          /* frågeplansch på väggen */
       R(c, x, y, 16, 16, P.wall);
       R(c, x, y, 16, 3, P.wallSh);
@@ -660,6 +706,50 @@
     R(c, 20, 103, 3, 5, '#f0f0e8');
   };
 
+
+  /* ---------------- Everdrones drönare ----------------
+     Grå multirotor som bär hjärtstartaren i en lina under sig. Stationerad
+     bakom vårdcentralen på riktigt; här lyfter den på titelskärmen.        */
+  LESS.drawDrone = function (c, x, y, t, medAed) {
+    var kropp = '#6a6e74', kroppD = '#4a4e54', kroppL = '#8e939a';
+    var rotorPa = ((t / 60) | 0) % 2 === 0;
+
+    /* armar */
+    R(c, x - 6, y + 1, 6, 1, kroppD);
+    R(c, x + 12, y + 1, 6, 1, kroppD);
+    R(c, x - 5, y + 5, 5, 1, kroppD);
+    R(c, x + 13, y + 5, 5, 1, kroppD);
+
+    /* rotorer – två lägen ger illusionen av rotation */
+    [[-8, 0], [16, 0], [-7, 4], [15, 4]].forEach(function (o, i) {
+      var rx = x + o[0], ry = y + o[1];
+      if (rotorPa === (i % 2 === 0)) {
+        R(c, rx - 1, ry, 8, 1, '#b8bcc2');
+      } else {
+        R(c, rx + 2, ry - 1, 2, 3, '#b8bcc2');
+      }
+      R(c, rx + 2, ry, 2, 1, kroppD);
+    });
+
+    /* skrov */
+    R(c, x, y, 12, 7, kroppD);
+    R(c, x + 1, y + 1, 10, 5, kropp);
+    R(c, x + 1, y + 1, 10, 1, kroppL);
+    R(c, x + 3, y + 2, 5, 2, '#2a3038');          /* kameraruta */
+    R(c, x + 9, y + 3, 2, 1, '#c04838');          /* positionsljus */
+    R(c, x, y + 3, 1, 1, '#58c060');
+
+    if (medAed) {
+      /* lina och hjärtstartare */
+      R(c, x + 5, y + 7, 1, 5, '#3a3a34');
+      R(c, x + 2, y + 12, 8, 7, '#c8a018');
+      R(c, x + 2, y + 12, 8, 1, '#e0b830');
+      R(c, x + 3, y + 14, 2, 3, '#f8f8f0');
+      R(c, x + 6, y + 14, 3, 1, '#20201c');
+      R(c, x + 6, y + 16, 3, 1, '#20201c');
+    }
+  };
+
   /* Titelbakgrund: vårdcentralen utifrån */
   LESS.drawTitleBg = function (c, t) {
     var i;
@@ -676,6 +766,19 @@
     /* gångväg */
     R(c, 66, 96, 28, 48, '#d8cfae');
     for (i = 0; i < 5; i++) R(c, 66, 100 + i * 10, 28, 1, '#c0b894');
+    /* Drönaren lyfter bakom huset och flyger iväg. 16 sekunders cykel.
+       Ritas före byggnaden så att taket skymmer den under starten.        */
+    var cyk = (t % 16000) / 16000, dx = null, dy = 0;
+    if (cyk >= 0.06 && cyk < 0.34) {
+      var k = (cyk - 0.06) / 0.28;
+      dx = 118; dy = Math.round(54 - k * k * 48);
+    } else if (cyk >= 0.34 && cyk < 0.70) {
+      var k2 = (cyk - 0.34) / 0.36;
+      dx = Math.round(118 + k2 * k2 * 74);
+      dy = Math.round(6 - k2 * 5 + Math.sin(k2 * 8) * 1.5);
+    }
+    if (dx !== null && dx < 168) LESS.drawDrone(c, dx, dy, t, true);
+
     /* byggnad */
     R(c, 24, 44, 112, 54, P.ink);
     R(c, 26, 46, 108, 50, P.white);
@@ -701,6 +804,7 @@
     R(c, 72, 32, 30, 2, '#3f7a70');
     /* mintgrön list ovanför entrén */
     R(c, 26, 54, 108, 2, P.markMint);
+
     /* buskar */
     R(c, 10, 88, 14, 10, P.greenD); R(c, 12, 86, 10, 6, P.green);
     R(c, 136, 88, 14, 10, P.greenD); R(c, 138, 86, 10, 6, P.green);

@@ -15,7 +15,8 @@
     { namn: 'KORRIDOR',          x1: 1,  y1: 9,  x2: 30, y2: 13 },
     { namn: 'VÄNTRUM',           x1: 1,  y1: 14, x2: 9,  y2: 20 },
     { namn: 'REHABKOORDINATOR',  x1: 11, y1: 14, x2: 19, y2: 20 },
-    { namn: 'ARBETSTERAPI',      x1: 21, y1: 14, x2: 30, y2: 20 }
+    { namn: 'ARBETSTERAPI',      x1: 21, y1: 14, x2: 30, y2: 20 },
+    { namn: 'SKYDDSRUM',         x1: 10, y1: 27, x2: 21, y2: 32 }
   ];
 
   var P = null;      /* spelaren */
@@ -117,8 +118,8 @@
         c.drawImage(f.spr, Math.round(f.px - cam.x), Math.round(f.py - cam.y - 4));
       });
 
-      /* markör över målrummet i kampanjläget */
-      var mal = malStation();
+      /* markör över målrummet i kampanjläget – inte nere i skyddsrummet */
+      var mal = P.ty < 22 ? malStation() : null;
       if (mal) {
         var mx = mal.x * TS - cam.x + 4, my = mal.y * TS - cam.y - 10 + Math.round(Math.sin(t / 220) * 2);
         var iBild = mx > 0 && mx < VY_W - 8 && my > 0 && my < VY_H - 8;
@@ -405,7 +406,74 @@
     }
     if (s.kind === 'reception') { receptionsMeny(); return; }
     if (s.kind === 'utgang')  { utgang(); return; }
+    if (s.kind === 'skynke')  { skynke(s); return; }
+    if (s.kind === 'pingis')  { pingisbordet(); return; }
     if (s.role) startRoll(s.role);
+  }
+
+  /* ---------------- skyddsrummet (easter egg) ----------------
+     Längst bort i korridoren hänger ett tygskynke. Bakom det ligger
+     skyddsrummet med pingisbordet. Ingen skylt, ingen kantpil och inget i
+     menyerna pekar dit – rummet finns inte på kartan förrän man klivit in. */
+
+  function flyttaTill(t) {
+    P.tx = t.x; P.ty = t.y;
+    P.px = t.x * TS; P.py = t.y * TS;
+    P.frx = P.px; P.fry = P.py;
+    P.dir = t.dir || 'down';
+    P.gar = false; P.buffert = null;
+  }
+
+  function skynke(s) {
+    var d = LESS.state.data;
+    if (!d.pingis) d.pingis = { hittat: false, vinster: {}, forluster: {} };
+    var forsta = !d.pingis.hittat && s.id === 'skynke-in';
+    paus();
+    LESS.sfx('door');
+
+    function in_() {
+      ui.transition(function () {
+        flyttaTill(s.till);
+        ater();
+      });
+    }
+
+    if (forsta) {
+      d.pingis.hittat = true;
+      LESS.state.spara();
+      ui.sayAll([
+        { text: 'Bakom skynket går en trappa ner. Det luktar betong och gammal linoleum.' },
+        { text: 'Skyddsrummet. Någon har ställt in ett pingisbord här nere.' }
+      ], in_);
+      return;
+    }
+    in_();
+  }
+
+  /* Fyra motståndare med fallande svårighetsgrad. Vinster och förluster
+     sparas per motståndare så att man ser vem man faktiskt slagit. */
+  function pingisbordet() {
+    paus();
+    LESS.sfx('ok');
+    var d = LESS.state.data;
+    if (!d.pingis) d.pingis = { hittat: true, vinster: {}, forluster: {} };
+
+    var items = LESS.pong.motstandare.map(function (m) {
+      var v = d.pingis.vinster[m.id] || 0, f = d.pingis.forluster[m.id] || 0;
+      var status = (v || f) ? '  ·  ' + v + '–' + f : '';
+      return { text: m.namn + status, hint: m.rykte };
+    });
+    items.push({ text: 'Lägg tillbaka racketen' });
+
+    ui.say('Två rack ligger kvar på bordet. Vem tar du?', null, function () {
+      ui.menu(items, { cancel: true }, function (i) {
+        var m = LESS.pong.motstandare[i];
+        if (!m) { ater(); return; }
+        ui.transition(function () {
+          LESS.pong.start(m.id, function () { ui.transition(ater); });
+        });
+      });
+    });
   }
 
   /* Kontrollöversikt med en liten bild av tangentbordet.

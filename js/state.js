@@ -21,6 +21,8 @@
     mastery: {},                   /* roll -> antal guld */
     installningar: { tips: true, ljud: true, snabbtext: false },
     skattningar: {},               /* frågeId -> {varde, kommentar, tid} */
+    namn: '',                      /* signatur på planschen */
+    pingis: { hittat: false, vinster: {}, forluster: {} },
     statistik: { moten: 0, guld: 0, silver: 0, brons: 0, omtag: 0, minuter: 0 }
   };
 

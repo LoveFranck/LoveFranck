@@ -1,4 +1,6 @@
-/* map.js – vårdcentralens planlösning (32 x 22 rutor à 16 px) */
+/* map.js – vårdcentralens planlösning (32 x 35 rutor à 16 px)
+   Raderna 0–21 är huset. 22–34 är skyddsrummet under det, som inte går
+   att se från huset – man kommer dit genom skynket i korridorens ände. */
 (function (global) {
   'use strict';
   var LESS = global.LESS;
@@ -9,7 +11,8 @@
      H hylla     B tavla   D dörr     E utgång
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
-     b bänk       p växt    e brits      k skåp   r matta        */
+     b bänk       p växt    e brits      k skåp   r matta
+     S tygskynke  C betong   g betonggolv q pingisbord  n bordets mitt  */
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -23,7 +26,7 @@
     /* 8 */ '#         #         #         #      #',
     /* 9 */ '####D####B##D#######D######D####',
     /*10 */ '#p............................p#',
-    /*11 */ '#..............................#',
+    /*11 */ '#..............................S',
     /*12 */ '#..............................#',
     /*13 */ '##L##D#########D#F#######D#F#H##',
     /*14 */ '#xxx     p#  cd    p#  cd     p#',
@@ -33,7 +36,24 @@
     /*18 */ '# bbb  bbb# p      k# p      k #',
     /*19 */ '#p       p#         #          #',
     /*20 */ '#####E##########################',
-    /*21 */ '################################'
+    /*21 */ '################################',
+
+    /* Under huset ligger skyddsrummet. Raderna 22–26 är massiv betong och
+       fungerar som buffert: kameran når aldrig ner till rad 27 uppifrån, så
+       rummet syns inte på kartan förrän man klivit in genom skynket.       */
+    /*22 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*23 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*24 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*25 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*26 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*27 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*28 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*29 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*30 */ 'CCCCCCCCCCgggqqnqqggggCCCCCCCCCC',
+    /*31 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*32 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
+    /*33 */ 'CCCCCCCCCCCCCCCCSCCCCCCCCCCCCCCC',
+    /*34 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'
   ];
 
   /* Raderna 2–8 skrivs rumsvis för läsbarhet – sätt ihop dem här så att
@@ -64,10 +84,12 @@
     'F': 'plansch',
     '.': 'floor2', ' ': 'floor', 'r': 'carpet', 'u': 'rug',
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
-    'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet'
+    'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet',
+    'S': 'skynke', 'C': 'betong', 'g': 'betonggolv',
+    'q': 'pingis', 'n': 'pingisnat'
   };
 
-  var WALKABLE = { ' ': 1, '.': 1, 'D': 1, 'E': 1, 'r': 1, 'u': 1 };
+  var WALKABLE = { ' ': 1, '.': 1, 'D': 1, 'E': 1, 'r': 1, 'u': 1, 'g': 1 };
 
   function at(x, y) {
     if (x < 0 || y < 0 || x >= W || y >= H) return '#';
@@ -94,8 +116,18 @@
     { id: 'plansch-fys',    x: 23, y: 1,  kind: 'plansch', roll: 'fysioterapeut' },
     { id: 'plansch-lak',    x: 30, y: 1,  kind: 'plansch', roll: 'lakare' },
     { id: 'plansch-rko',    x: 17, y: 13, kind: 'plansch', roll: 'rehabkoordinator' },
-    { id: 'plansch-arb',    x: 27, y: 13, kind: 'plansch', roll: 'arbetsterapeut' }
+    { id: 'plansch-arb',    x: 27, y: 13, kind: 'plansch', roll: 'arbetsterapeut' },
+
+    /* Skyddsrummet: skynket i korridorens ände och vägen tillbaka. */
+    { id: 'skynke-in',  x: 31, y: 11, kind: 'skynke', till: { x: 16, y: 32, dir: 'up' } },
+    { id: 'skynke-ut',  x: 16, y: 33, kind: 'skynke', till: { x: 30, y: 11, dir: 'left' } }
   ];
+
+  /* Pingisbordet upptar rad 30, kolumn 13–17. Vilken bordsruta man än står
+     vänd mot ska A starta en match. */
+  for (var pq = 13; pq <= 17; pq++) {
+    STATIONS.push({ id: 'pingis' + pq, x: pq, y: 30, kind: 'pingis' });
+  }
 
   /* ---------------- dörrskyltar ---------------- */
   var LABELS = [
