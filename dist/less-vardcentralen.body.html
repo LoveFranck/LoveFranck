@@ -4653,7 +4653,7 @@ body.touch #pad{
       minuter: 18,
       kampanj: 'anna',
       svarighet: 2,
-      principer: ['signering', 'bedda-d1', 'dfa-aktivitet', 'grad'],
+      principer: ['signering', 'bedda-d1', 'dfa-aktivitet', 'rodflagga', 'grad'],
       journal: [
         ['Ärende', 'Anna Ek, 34 år. Försäkringsmedicinsk utredning av leg. psykolog Karin Lund.'],
         ['Diagnos', 'F41.1 Generaliserat ångestsyndrom (psykologens bedömning)'],
@@ -4665,7 +4665,7 @@ body.touch #pad{
         ['Åtgärd', 'KBT med exponering påbörjad. Uppföljning inbokad om en vecka.']
       ],
       intro: [
-        'Femton minuter mellan två besök. Psykologens utredning ligger uppe på skärmen.',
+        'En lucka mellan två besök. Psykologens utredning ligger uppe på skärmen.',
         'Det är ditt namn som ska stå under beslutet.'
       ],
       introExtra: [
@@ -4909,12 +4909,13 @@ body.touch #pad{
       minuter: 16,
       svarighet: 3,
       endastDrill: true,
-      principer: ['signering', 'bedda-d1', 'dfa-aktivitet'],
+      principer: ['signering', 'bedda-d1', 'dfa-funktion', 'dfa-aktivitet', 'plan'],
       journal: [
-        ['Ärende', 'Jonas Ek, 38 år. Underlag inkommet.'],
+        ['Ärende', 'Jonas Ek, 38 år, IT-support. Försäkringsmedicinskt underlag från kollega på mottagningen.'],
         ['Diagnos', 'F43.8A Utmattningssyndrom'],
         ['Text i underlaget', '"Patienten är mycket trött och orkar inte arbeta. Behöver sjukskrivning 100 % i 3 månader."'],
-        ['Övrigt', 'Ingen funktionsbeskrivning. Ingen behandling angiven. Ingen uppföljning.']
+        ['Rehabkedjan', 'Sjukskriven 100 % i elva månader. Passerat dag 180. Detta är en begäran om förlängning.'],
+        ['Övrigt', 'Ingen funktionsbeskrivning. Ingen behandling angiven. Ingen uppföljning. Ingen källa till någon uppgift.']
       ],
       intro: [
         'Underlaget är tre rader långt.',
@@ -4934,7 +4935,7 @@ body.touch #pad{
               varfor: '"Mycket trött" är ett symtom som patienten uppger, inte en beskriven funktionsnedsättning.' },
             { text: 'Aktivitetsbegränsning: inget om vilka arbetsuppgifter som inte fungerar',
               ratt: true, princip: 'dfa-aktivitet', fx: { underlag: 14 },
-              varfor: '"Orkar inte arbeta" är en slutsats. Utan konkreta arbetsmoment finns ingen kedja att bedöma.' },
+              varfor: '"Orkar inte arbeta" är en slutsats. Utan konkreta arbetsmoment finns ingen kedja att bedöma. Efter dag 180 prövas förmågan dessutom mot normalt förekommande arbeten och inte bara mot IT-supporten – då räcker den formuleringen ännu mindre.' },
             { text: 'Åtgärd och uppföljning: ingen behandling påbörjad, inget datum för omprövning',
               ratt: true, princip: 'plan', fx: { underlag: 12, tydlighet: 8 },
               varfor: 'Tre månaders sjukskrivning utan behandling och utan omprövningsdatum är en frånvaro, inte en åtgärd.' },
@@ -4946,7 +4947,7 @@ body.touch #pad{
               varfor: 'Hör inte hemma i intyget och löser inte bristerna.' },
             { text: 'Laboratorieprover',
               ratt: false,
-              varfor: 'Kan vara motiverat i differentialdiagnostiken men är inte det som gör underlaget obedömbart.' }
+              varfor: 'Somatisk differentialdiagnostik vid utmattning – tyreoidea, blodstatus, B12 och folat, glukos, sömnapné – är ditt ansvar och ska vara gjord någon gång i ärendet. Men den avgörs inte här: det som gör just det här underlaget obedömbart är att hela kedjan saknas. Ta den somatiska frågan i din egen journalanteckning, inte i kompletteringsbegäran.' }
           ] },
 
         { typ: 'val',
@@ -4961,10 +4962,10 @@ body.touch #pad{
               varfor: 'Bristen åtgärdas, patienten får besked samma dag och kollegan lär sig något konkret. Det är så kvaliteten i ett delegerat utredningsflöde hålls uppe.' },
             { text: 'Signera för att inte göra kollegan besviken, och skärpa till det vid nästa förlängning.',
               tid: 1, ok: false, princip: 'signering',
-              humor: 'neutral', reaktion: 'Intyget går iväg.',
-              svar: '',
-              fx: { underlag: -20, sakerhet: -14 },
-              varfor: 'Ditt namn står under ett intyg du inte kan försvara. Och nästa gång blir det svårare att kräva kvalitet, eftersom du redan visat att det inte behövs.' },
+              humor: 'neutral', reaktion: 'Intyget går iväg. Klockan är 16.40.',
+              svar: 'Kollega: "Tack, du är en klippa. Jag hann inte mer idag."',
+              fx: { allians: 8, underlag: -20, sakerhet: -14 },
+              varfor: 'Det här är det val som känns bäst i stunden: kollegan blir tacksam, Jonas får sitt intyg, och du hinner hem. Sedan står ditt namn under ett intyg du inte kan försvara, och nästa gång går det inte att kräva kvalitet – du har redan visat att det inte behövs. Att intyga något man inte har kännedom om är inte en administrativ slarvsak; osant intygande är straffbart, och det är intygsutfärdaren som är den som intygar.' },
             { text: 'Returnera underlaget utan kommentar.',
               tid: 1, ok: 'delvis', princip: 'signering',
               humor: 'neutral', reaktion: 'Underlaget skickas tillbaka.',
@@ -4981,7 +4982,7 @@ body.touch #pad{
               ok: true, princip: 'signering', tid: 2,
               fx: { underlag: 14, sakerhet: 10 },
               utfall: 'Kompletteringen kommer in samma eftermiddag. Intyget blir bedömbart.',
-              varfor: 'Ett underlag som inte går att följa ska inte signeras. Med konkreta frågor och ett datum blir returen en åtgärd i stället för en fördröjning.' },
+              varfor: 'Ett underlag som inte går att följa ska inte signeras. Men returen måste vara användbar, annars är den bara en fördröjning som kostar Jonas pengar. Frågorna ska gå att besvara i en mening var: (1) Vilka konkreta arbetsuppgifter klarar han inte, och vilka klarar han? (2) Vad sågs vid besöket – vilka observationer eller test ligger bakom "mycket trött"? (3) Vilken behandling är påbörjad eller inbokad, och vilket datum omprövas sjukskrivningen? Sätt ett datum för svaret, och se till att Jonas får veta idag att intyget dröjer och varför.' },
             { text: 'Signera enligt förslaget',
               ok: false, princip: 'signering', tid: 1,
               fx: { underlag: -24, sakerhet: -18 },

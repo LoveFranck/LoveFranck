@@ -107,7 +107,7 @@ i slutänden verksamhetens medicinskt ansvariga.
 
 ---
 
-## 4. Läkarens ansvar för att signera annans utredning
+## 4. Läkarens ansvar för att signera annans utredning — AVGJORD
 
 **Var:** `content/cases-lakare.js`, och LESS-modellens juridiska kärna.
 
@@ -119,7 +119,29 @@ själv?
 **Vem avgör:** `lakare-radgivare`, mot Socialstyrelsens föreskrifter om att
 utfärda intyg — och i slutänden verksamhetens medicinskt ansvariga.
 
-**Status:** öppen.
+**Slutsats (`lakare-radgivare`, 2026-09-03): konstruktionen håller, med tre
+villkor.** Gränsen går inte vid om läkaren har träffat patienten, utan vid
+6 kap. 2 § HSLF-FS 2018:54 — att bara uttala sig om det man har tillräcklig
+kännedom om. Villkoren:
+
+1. **Källa per uppgift** enligt 6 kap. 3 och 8 §§. Det ska framgå vad som är
+   psykologens iakttagelse, vad som är patientens uppgift, och vad som är
+   läkarens egen bedömning.
+2. **Egen kontakt i någon form vid förstagångsintyg**, eftersom 5 kap. 2 § gör
+   undersökning till huvudregel. Kontaktsättet är däremot fritt — telefon eller
+   digitalt räcker om läkaren bedömer det patientsäkert — men det ska anges i
+   intyget enligt 6 kap. 5 §.
+3. **Somatisk differentialdiagnostik och röda flaggor kan inte bockas av genom
+   att läsa någon annans anteckning.** En psykolog kan bedöma suicidrisk men
+   inte utesluta hypotyreos; en fysioterapeut kan testa neurologi men frågar
+   sällan om nattlig smärta och viktnedgång.
+
+Uppgiften att skriva sjukintyg till Försäkringskassan får inte delegeras. Det
+är granskningen och signaturen som är läkarens — inte utredningsarbetet.
+
+**Status:** avgjord, ändringarna införda i `content/cases-lakare.js`.
+Verksamhetens medicinskt ansvariga bör ändå läsa igenom slutsatsen innan spelet
+används i utbildning.
 
 ---
 
