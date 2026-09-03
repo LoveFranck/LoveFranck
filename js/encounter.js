@@ -98,6 +98,15 @@
 
   function kostText(min) { return '⏱' + min; }
 
+  /* Alternativens ordning blandas vid varje spelning. Annars lär man sig
+     positionen i stället för principen – och det rätta svaret hamnar lätt
+     först när man skriver innehållet. Sätt blanda: false på en beat vars
+     ordning bär betydelse (t.ex. en stigande skala). */
+  function blanda(lista, agare) {
+    if (agare && agare.blanda === false) return lista.slice();
+    return LESS.shuffle(lista);
+  }
+
   /* Liten markering i frågerutan om att handledartips finns bakom B. */
   function markeraTips() {
     var el = LESS.$('dialog-text');
@@ -175,14 +184,15 @@
 
   function korVal(b, next) {
     if (b.humor) E.humor = b.humor;
+    var val = blanda(b.val, b);
     function meny() {
       ui.setDialog(b.fraga, null, 'fraga');
-      var items = b.val.map(function (o) {
+      var items = val.map(function (o) {
         return { text: o.text, cost: kostText(o.tid == null ? 1 : o.tid) };
       });
       valMeny(items, b, function (i) {
         ui.hideDialog();
-        hanteraVal(b.val[i], b, next);
+        hanteraVal(val[i], b, next);
       });
     }
     if (b.text) {
@@ -214,13 +224,14 @@
   function korKontroll(b, next) {
     applyFx(b.fx);
     var forsta = true;
+    var val = blanda(b.val, b);
 
     function fraga() {
       ui.banner(b.banner || 'FAKTAKONTROLL');
       ui.setDialog(b.fraga, null, 'fraga');
-      var items = b.val.map(function (o) { return { text: o.text }; });
+      var items = val.map(function (o) { return { text: o.text }; });
       valMeny(items, b, function (i) {
-        var o = b.val[i];
+        var o = val[i];
         ui.hideDialog();
         if (o.ratt) {
           LESS.sfx('ok');
@@ -250,11 +261,12 @@
   function korFlera(b, next) {
     applyFx(b.fx);
     var valda = [], antal = b.antal || 3, tidPer = b.tidPer == null ? 1 : b.tidPer;
+    var val = blanda(b.val, b);
 
     function meny(start) {
       ui.banner(b.banner || 'VÄLJ');
       ui.setDialog(b.fraga + '  (' + valda.length + '/' + antal + ')', null, 'fraga');
-      var items = b.val.map(function (o, i) {
+      var items = val.map(function (o, i) {
         return { text: (valda.indexOf(i) >= 0 ? '▣ ' : '▢ ') + o.text, cost: kostText(tidPer) };
       });
       items.push({ text: '▶ KLAR', disabled: valda.length !== antal });
@@ -267,7 +279,7 @@
           ui.panel('HANDLEDAREN', '<p>' + LESS.esc(tt) + '</p>', function () { meny(start); });
         } : null
       }, function (i) {
-        if (i === b.val.length) { ui.hideDialog(); klar(); return; }
+        if (i === val.length) { ui.hideDialog(); klar(); return; }
         var pos = valda.indexOf(i);
         if (pos >= 0) { valda.splice(pos, 1); LESS.sfx('back'); }
         else if (valda.length < antal) { valda.push(i); LESS.sfx('ok'); }
@@ -281,14 +293,14 @@
       kostaTid(antal * tidPer);
       var bra = 0;
       valda.forEach(function (i) {
-        var o = b.val[i];
+        var o = val[i];
         applyFx(o.fx);
         if (o.flagga) E.flaggor[o.flagga] = true;
         if (o.ratt) bra++;
         logga({ fraga: b.fraga, text: o.text, ok: !!o.ratt, varfor: o.varfor, princip: o.princip });
       });
       /* Rätt svar som inte valdes räknas som missade – de är också lärdomar. */
-      b.val.forEach(function (o, i) {
+      val.forEach(function (o, i) {
         if (o.ratt && valda.indexOf(i) < 0) {
           logga({ fraga: b.fraga, text: 'Valde inte: ' + o.text, ok: false, varfor: o.varfor, princip: o.princip });
         }
@@ -302,40 +314,61 @@
     meny(0);
   }
 
-  function korOrdna(b, next) {
+  /* Kedjeövning: DFA eller SORKK byggs ett led i taget. Varje led har sin
+     egen lista med rimliga kandidater, så det går inte att sortera fram rätt
+     svar genom uteslutning – man måste veta vad ledet faktiskt betyder.   */
+  function korKedja(b, next) {
     applyFx(b.fx);
-    var kvar = LESS.shuffle(b.delar.map(function (d, i) { return i; }));
-    var steg = 0, felIStg = false, nagotFel = false;
+    var steg = 0, felIStg = false, loggat = false, antalFel = 0;
 
     function fraga() {
-      if (steg >= b.delar.length) {
-        logga({ fraga: b.fraga, text: nagotFel ? 'Kedjan byggdes med fel på vägen' : 'Kedjan byggdes korrekt',
-                ok: !nagotFel, varfor: b.forklaring, princip: b.princip });
+      if (steg >= b.lank.length) {
+        logga({
+          fraga: b.fraga,
+          text: antalFel === 0 ? 'Kedjan byggdes rätt hela vägen'
+                               : 'Kedjan byggdes med ' + antalFel + ' felplacerad' + (antalFel > 1 ? 'e' : 't') + ' led',
+          ok: antalFel === 0 ? true : (antalFel === 1 ? 'delvis' : false),
+          varfor: b.forklaring, princip: b.princip
+        });
         ui.banner(null);
         ui.say(b.forklaring, { name: 'HANDLEDAREN', kind: 'you' }, next);
         return;
       }
-      var mal = b.delar[steg];
-      ui.banner(b.banner || 'DFA-KEDJAN');
-      ui.setDialog('Vilken rad är ' + mal.etikett + '?', null, 'fraga');
-      var items = kvar.map(function (i) { return { text: b.delar[i].text }; });
-      valMeny(items, b, function (n) {
+
+      var l = b.lank[steg];
+      var val = blanda(l.val, l);
+      ui.banner((b.banner || 'KEDJAN') + ' · ' + l.etikett);
+      ui.setDialog(l.fraga, null, 'fraga');
+
+      valMeny(val.map(function (o) { return { text: o.text }; }), b, function (i) {
+        var o = val[i];
         ui.hideDialog();
-        var idx = kvar[n];
-        if (b.delar[idx].etikett === mal.etikett) {
-          LESS.sfx('ok');
-          kvar.splice(n, 1);
-          steg++; felIStg = false;
-          ui.cue('✔ ' + mal.etikett);
-          fraga();
-        } else {
-          LESS.sfx('wrong');
-          nagotFel = true;
-          if (!felIStg) { kostaTid(b.tidFel == null ? 2 : b.tidFel); felIStg = true; }
-          ui.cue('✘ Det är ' + b.delar[idx].etikett + '.');
-          if (E.tidUt) { steg = b.delar.length; fraga(); return; }
-          fraga();
+
+        if (!loggat) {
+          logga({ fraga: l.etikett, text: l.etikett + ': ' + o.text, ok: !!o.ratt, led: true,
+                  varfor: o.varfor || l.forklaring, princip: l.princip || b.princip });
+          loggat = true;
         }
+
+        if (o.ratt) {
+          LESS.sfx('ok');
+          ui.cue('✔ ' + l.etikett);
+          steg++; felIStg = false; loggat = false;
+          if (l.forklaring) ui.say(l.forklaring, { name: 'HANDLEDAREN', kind: 'you' }, fraga);
+          else fraga();
+          return;
+        }
+
+        LESS.sfx('wrong');
+        if (!felIStg) {
+          antalFel++;
+          kostaTid(b.tidFel == null ? 1 : b.tidFel);
+          felIStg = true;
+        }
+        if (E.tidUt) { steg++; felIStg = false; loggat = false; fraga(); return; }
+        ui.cue('✘ Inte det ledet.');
+        ui.say(o.varfor || 'Det hör hemma någon annanstans i kedjan.',
+               { name: 'HANDLEDAREN', kind: 'you' }, fraga);
       });
     }
     fraga();
@@ -344,11 +377,12 @@
   function korBeslut(b, next) {
     ui.banner(b.banner || 'BESLUT');
     ui.setDialog(b.fraga, null, 'fraga');
-    var items = b.val.map(function (o) {
+    var val = blanda(b.val, b);
+    var items = val.map(function (o) {
       return { text: o.text, cost: o.tid ? kostText(o.tid) : null };
     });
     valMeny(items, b, function (i) {
-      var o = b.val[i], ok = loesOk(o);
+      var o = val[i], ok = loesOk(o);
       ui.hideDialog();
       ui.banner(null);
       kostaTid(o.tid == null ? 1 : o.tid);
@@ -398,7 +432,7 @@
       case 'val':      korVal(b, nastaBeat); break;
       case 'kontroll': korKontroll(b, nastaBeat); break;
       case 'flera':    korFlera(b, nastaBeat); break;
-      case 'ordna':    korOrdna(b, nastaBeat); break;
+      case 'kedja':    korKedja(b, nastaBeat); break;
       case 'beslut':   korBeslut(b, nastaBeat); break;
       default:         nastaBeat();
     }

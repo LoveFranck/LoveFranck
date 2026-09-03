@@ -2048,6 +2048,26 @@ body.touch #pad{
     },
 
     {
+      id: 'sorkk',
+      titel: 'SORKK – situationsanalysen',
+      text: [
+        'Ett sätt att ta ett enda tillfälle och se varför beteendet återkommer. Fem led, i den här ordningen.'
+      ],
+      lista: [
+        ['S – Situation', 'Det yttre läget, så konkret att det skulle gå att filma: tid, plats, vad som händer runt omkring.'],
+        ['O – Organismfaktorer', 'Vad personen bär med sig in i situationen: sömn, kroppsligt tillstånd, tidigare inlärning, förväntningar.'],
+        ['R – Respons', 'Tanke, känsla, kroppsreaktion och beteende. Beteendet är det som konsekvenserna hänger på.'],
+        ['K – Kortsiktig konsekvens', 'Vad som händer inom minuter. Här sitter oftast förklaringen: lättnad kommer snabbt och belönar beteendet varje gång.'],
+        ['K – Långsiktig konsekvens', 'Vad som byggs upp över veckor och månader. Priset betalas långsamt och märks därför inte i stunden.']
+      ],
+      punkter: [
+        'Analysen görs tillsammans med patienten, i hennes eget material. Poängen är att hon ska se mönstret, inte att du ska.',
+        'Undvikande känns nästan alltid rätt i stunden. Det är just därför det håller i sig.',
+        'Vid sjukskrivningsärenden är analysen ofta det som gör beslutet begripligt: en sjukskrivning kan ge exakt samma kortsiktiga lättnad som beteendet man vill förändra – fast i större dos.'
+      ]
+    },
+
+    {
       id: 'salutogen',
       titel: 'Salutogen kommunikation',
       text: [
@@ -2102,6 +2122,8 @@ body.touch #pad{
       punkter: [
         'Vid lindrig ångest och lindrig depression: undvikande underhåller besvären. Sjukskrivning kan förstärka undvikandet.',
         'KBT, fysisk aktivitet, sömnåtgärder, alkoholgenomgång och arbetsanpassning är förstahandsdörrar att öppna.',
+        'Dosera insatsen efter tyngden. Vid lindrig till medelsvår problematik räcker ofta psykoedukation, korta insatser och iKBT med behandlarstöd – och de går att starta samma vecka. Långa seriebokningar ansikte mot ansikte finns sällan att få, och att lova dem skapar en väntetid som i sig är en risk.',
+        'Sömnen förtjänar ofta ett eget spår. Sömnbrist sänker tröskeln för ångest och ångest stör sömnen – kausaliteten går åt båda håll, så det räcker sällan att vänta ut den ena.',
         'Vid utmattningssyndrom med uttalad kognitiv påverkan kan sjukskrivning behövas – men då med aktiv plan och successiv upptrappning, inte enbart vila.',
         'Screena alltid för suicidtankar, allvarlig depression, psykos och missbruk. Röd flagga = läkare/akut samma dag.'
       ]
@@ -2207,6 +2229,7 @@ body.touch #pad{
     'bedda-e':       'BEDDA · Empati före bemötande',
     'bedda-d1':      'BEDDA · DFA-kedjan',
     'bedda-d2':      'BEDDA · Dialog om alternativ',
+    'sorkk':         'SORKK · situationsanalys',
     'bedda-a':       'BEDDA · Tydligt avslut',
     'salutogen':     'Salutogen kommunikation',
     'rodflagga':     'Röda flaggor först',
@@ -3128,7 +3151,7 @@ body.touch #pad{
       titel: 'Nybesök, torsdag 14.00',
       patient: 'anna',
       lage: 'rum',
-      minuter: 34,
+      minuter: 40,
       kampanj: 'anna',
       svarighet: 2,
       principer: ['bedda-d1', 'dfa-funktion', 'dfa-aktivitet', 'agens', 'evidens', 'bedda-d2'],
@@ -3210,12 +3233,12 @@ body.touch #pad{
           fraga: 'Anna frågar varför hon inte bara kan få vila några veckor. Vad gör du?',
           tips: 'Psykoedukation är inte att informera om regler. Det är att göra hennes eget mönster begripligt för henne själv.',
           val: [
-            { text: 'Rita upp hennes egen slinga: obehag på parkeringen → åker hem → lättnad → nästa dag är obehaget större. Fråga vad hon ser i den.',
-              tid: 6, ok: true, princip: 'agens',
-              humor: 'oppen', reaktion: 'Anna blir tyst. Sedan pekar hon på pilen.',
-              svar: 'Så det är därför det blir värre ju längre jag är hemma? Jag trodde jag var på väg att bli utbränd.',
-              fx: { agens: 20, allians: 10, tydlighet: 8 },
-              varfor: 'Hon upptäcker mekanismen själv i sitt eget material. Det ökar både begriplighet och tilltro till egen förmåga – och gör att en uteblíven sjukskrivning inte känns som ett avslag utan som en logisk följd.' },
+            { text: 'Göra en situationsanalys tillsammans: ta måndagen på parkeringen och gå igenom den led för led.',
+              tid: 5, ok: true, princip: 'agens',
+              humor: 'neutral', reaktion: 'Anna letar fram måndagen ur minnet.',
+              svar: 'Måndagen, då. Den var värst. Jag satt där i tjugo minuter.',
+              fx: { agens: 12, allians: 8, tydlighet: 8 },
+              varfor: 'Du går från att prata om ångest i allmänhet till ett enda tillfälle som går att undersöka. Hon upptäcker mekanismen själv i sitt eget material, och då blir en utebliven sjukskrivning en logisk följd i stället för ett avslag.' },
             { text: 'Förklara att forskningen visar att sjukskrivning vid lindrig ångest ofta försämrar förloppet.',
               tid: 3, ok: 'delvis', princip: 'evidens',
               humor: 'neutral', reaktion: 'Anna nickar artigt.',
@@ -3230,18 +3253,137 @@ body.touch #pad{
               varfor: 'Du förstärkte undvikandet med vårdens auktoritet. Lättnaden i rummet är äkta – och det är precis den som gör åtgärden skadlig i det här fallet.' }
           ] },
 
-        { typ: 'ordna',
-          banner: 'DFA-KEDJAN',
-          fraga: 'Sortera in Annas uppgifter på rätt plats i kedjan.',
-          tips: 'D = vad hon har. F = vad som är nedsatt. A = vad hon till följd av detta inte klarar av att göra i sitt arbete.',
-          tidFel: 2,
-          princip: 'bedda-d1',
-          delar: [
-            { text: 'F41.1 Generaliserat ångestsyndrom / F43 stressreaktion', etikett: 'DIAGNOS' },
-            { text: 'Uttalad förväntansångest med autonoma symtom, nedsatt koncentration, avbruten sömn från kl 04', etikett: 'FUNKTIONSNEDSÄTTNING' },
-            { text: 'Klarar inte att vistas på arbetsplatsen eller delta i möten; avbryter arbetsdagen vid entrén', etikett: 'AKTIVITETSBEGRÄNSNING' }
+        { typ: 'kedja',
+          banner: 'SORKK',
+          fraga: 'Gör situationsanalysen på måndagen vid parkeringen.',
+          tips: 'S är det yttre läget. O är vad hon bär med sig in i det. R är vad hon tänker, känner, gör. Sedan kommer konsekvenserna – först på minuter, sedan på månader.',
+          tidFel: 1,
+          princip: 'agens',
+          lank: [
+            { etikett: 'S – SITUATION',
+              fraga: 'Vad är situationen?',
+              val: [
+                { text: 'Måndag 07.50. Anna sitter i bilen på parkeringen. Kollegor går in genom entrén.', ratt: true },
+                { text: 'Hjärtklappning och illamående.', varfor: 'Det är kroppsdelen av responsen, inte situationen.' },
+                { text: 'Hon har haft ångest i tre månader.', varfor: 'Det hör till organismfaktorerna – vad hon bär med sig in i situationen.' },
+                { text: 'Hon startar bilen och kör hem.', varfor: 'Det är beteendedelen av responsen.' },
+                { text: 'På kvällen känner hon sig misslyckad.', varfor: 'Det är en konsekvens, och den kommer senare.' }
+              ],
+              forklaring: 'Situationen ska gå att filma: tid, plats, vad som händer runt omkring.' },
+
+            { etikett: 'O – ORGANISMFAKTORER',
+              fraga: 'Vad bär hon med sig in i situationen?',
+              val: [
+                { text: 'Sovit 3,5 timmar, vaken sedan kl 04. Ingen frukost. Tre månaders undvikande bakom sig.', ratt: true },
+                { text: 'Kollegorna står och pratar i entrén.', varfor: 'Det är yttre – det hör till situationen.' },
+                { text: 'Tanken "jag klarar inte det här".', varfor: 'Det är responsens tankedel.' },
+                { text: 'Lättnaden när hon svänger ut från parkeringen.', varfor: 'Det är den kortsiktiga konsekvensen.' },
+                { text: 'Hon vänder bilen och åker hem.', varfor: 'Det är responsens beteendedel.' }
+              ],
+              forklaring: 'Organismfaktorer är det inre tillstånd hon möter situationen med: sömn, kropp, tidigare inlärning. Här är sömnbristen inte en detalj – den sänker tröskeln för allt annat.' },
+
+            { etikett: 'R – RESPONS',
+              fraga: 'Vad gör, tänker och känner hon?',
+              val: [
+                { text: 'Tanke: "Jag klarar inte det här". Hjärtklappning, illamående. Hon startar bilen och kör hem.', ratt: true },
+                { text: 'Parkeringen utanför kontoret klockan 07.50.', varfor: 'Situationen.' },
+                { text: 'Ångesten är starkare nästa morgon.', varfor: 'Långsiktig konsekvens.' },
+                { text: 'Lättnad så fort hon svänger ut från parkeringen.', varfor: 'Kortsiktig konsekvens – den kommer efter responsen.' },
+                { text: 'Hon har sovit 3,5 timmar.', varfor: 'Organismfaktor.' }
+              ],
+              forklaring: 'Responsen har tre delar: tanke, kropp och beteende. Beteendet är det som konsekvenserna hänger på.' },
+
+            { etikett: 'K – KORT SIKT',
+              fraga: 'Vad händer direkt efteråt?',
+              val: [
+                { text: 'Obehaget släpper inom några minuter. Lättnad. Hon slipper morgonmötet.', ratt: true },
+                { text: 'Hon blir alltmer övertygad om att hon inte klarar arbetsplatsen.', varfor: 'Det byggs upp över tid – det hör till lång sikt.' },
+                { text: 'Hon startar bilen och kör hem.', varfor: 'Det är responsen, inte dess konsekvens.' },
+                { text: 'Hon vaknade kl 04.', varfor: 'Organismfaktor.' },
+                { text: 'Chefen vet fortfarande ingenting.', varfor: 'Sant, men det är en omständighet – inte den konsekvens som styr beteendet.' }
+              ],
+              forklaring: 'Här sitter hela nyckeln: lättnaden kommer inom minuter och belönar beteendet varje gång.' },
+
+            { etikett: 'K – LÅNG SIKT',
+              fraga: 'Vad händer på månaders sikt?',
+              val: [
+                { text: 'Undvikandet förstärks. Tröskeln höjs, fler dagar uteblir, tilltron till egen förmåga sjunker.', ratt: true },
+                { text: 'Lättnad direkt när hon vänder.', varfor: 'Det är den kortsiktiga konsekvensen – och just skillnaden i tid är poängen.' },
+                { text: 'Hjärtklappning och illamående.', varfor: 'Responsens kroppsdel.' },
+                { text: 'Hon vaknar klockan fyra.', varfor: 'Organismfaktor.' },
+                { text: 'Kollegorna går in genom entrén.', varfor: 'Situationen.' }
+              ] }
           ],
-          forklaring: 'Kedjan måste gå att följa hela vägen. Diagnosen ensam bär ingenting, funktionsnedsättningen ska vara observerad eller strukturerat beskriven, och aktivitetsbegränsningen ska handla om hennes faktiska arbetsuppgifter – inte om yrkestiteln.' },
+          forklaring: 'Analysen visar varför problemet växer: den kortsiktiga konsekvensen är stark, kommer direkt och belönar undvikandet, medan priset betalas långsamt. Det är också därför en sjukskrivning här är riskabel – den ger samma lättnad, fast i större dos och med vårdens signatur under.' },
+
+        { typ: 'val',
+          humor: 'trott',
+          text: 'Och så sover jag ju inte. Jag vaknar vid fyra och sen ligger jag bara där och tänker. På helgerna sover jag till elva för att ta igen det.',
+          fraga: 'Hur hanterar du sömnen?',
+          tips: 'Sömnbrist och ångest driver varandra åt båda håll. Frågan är om sömnen är ett symtom att vänta ut eller ett eget spår.',
+          val: [
+            { text: 'Ta sömnen som ett eget spår redan nu: kartlägg tiderna, fast uppstigningstid alla dagar, bort med sovmorgnar och tupplurar. Följ den parallellt med ångestarbetet.',
+              tid: 4, ok: true, princip: 'evidens',
+              humor: 'neutral', reaktion: 'Anna antecknar. "Även på helgen?"',
+              svar: 'Även på helgen? Det är ju då jag äntligen sover.',
+              fx: { underlag: 12, agens: 12, allians: 6 },
+              varfor: 'Sömnbrist sänker tröskeln för ångest, och ångest stör sömnen – kausaliteten går åt båda håll. Sovmorgnarna på helgen känns som återhämtning men förskjuter dygnet och gör måndagen värre. Sömnen behöver därför en egen, enkel plan från start, inte vänta på att ångesten ska ge med sig.' },
+            { text: 'Förklara att sömnen brukar lösa sig när ångesten behandlas, och lämna den så länge.',
+              tid: 2, ok: 'delvis', princip: 'evidens',
+              humor: 'neutral', reaktion: 'Anna nickar men ser inte övertygad ut.',
+              svar: 'Okej. Men det är ju det som är värst.',
+              fx: { underlag: -4 },
+              varfor: 'Ofta stämmer det – men här är dygnet redan förskjutet och sömnbristen underhåller både ångesten och den kognitiva svikten. Att vänta ut den kostar veckor i onödan, och Anna upplever dessutom att du inte tog det hon tycker är värst på allvar.' },
+            { text: 'Föreslå att hon får sömntabletter utskrivna så att hon kommer i fas.',
+              tid: 2, ok: false, princip: 'evidens',
+              humor: 'lattad', reaktion: 'Anna ser hoppfull ut.',
+              svar: 'Går det? Det vore skönt.',
+              fx: { agens: -12, sakerhet: -8 },
+              varfor: 'Inte förstahandsåtgärd vid den här bilden, inte din ordination, och risken för tillvänjning är reell. Framför allt lär det Anna att sömnen är något som ska fixas åt henne.' },
+            { text: 'Råda henne att sova längre på morgnarna för att ta igen sömnen.',
+              tid: 2, ok: false, princip: 'evidens',
+              humor: 'lattad', reaktion: 'Anna ser lättad ut.',
+              svar: 'Skönt. Då slipper jag ha dåligt samvete för det.',
+              fx: { agens: -14, underlag: -8 },
+              varfor: 'Det förskjuter dygnet ytterligare och är dessutom samma undvikandemönster en gång till, fast i sängen. Fast uppstigningstid är det som håller ihop dygnet.' }
+          ] },
+
+        { typ: 'kedja',
+          banner: 'DFA-KEDJAN',
+          fraga: 'Bygg DFA-kedjan för intyget.',
+          tips: 'D = vad hon har. F = vad som är nedsatt. A = vad hon till följd av detta inte klarar av att göra i sitt arbete.',
+          tidFel: 1,
+          princip: 'bedda-d1',
+          lank: [
+            { etikett: 'D – DIAGNOS',
+              fraga: 'Vilken rad är diagnosen?',
+              val: [
+                { text: 'F41.1 Generaliserat ångestsyndrom / F43 reaktion på svår stress', ratt: true },
+                { text: 'Uttalad förväntansångest med autonoma symtom', varfor: 'Det beskriver funktionen, inte diagnosen.' },
+                { text: 'Klarar inte att vistas på arbetsplatsen', varfor: 'Det är aktivitetsbegränsningen.' },
+                { text: 'Omorganisation på arbetsplatsen sedan i våras', varfor: 'En omständighet i livet. Den är verklig men den är inte en sjukdom.' },
+                { text: 'Nedsatt arbetsförmåga', varfor: 'Det är slutsatsen som kedjan ska leda fram till, inte dess första led.' }
+              ] },
+            { etikett: 'F – FUNKTIONSNEDSÄTTNING',
+              fraga: 'Vilken rad är funktionsnedsättningen?',
+              val: [
+                { text: 'Uttalad förväntansångest med autonoma symtom, nedsatt koncentration, avbruten sömn från kl 04', ratt: true },
+                { text: 'F41.1 Generaliserat ångestsyndrom', varfor: 'Diagnosen. Den bär ingenting på egen hand.' },
+                { text: 'Avbryter arbetsdagen vid entrén och åker hem', varfor: 'Det är vad hon inte klarar av att göra – aktivitetsbegränsningen.' },
+                { text: 'GAD-7: 14 poäng', varfor: 'En skattning kan komplettera, men den beskriver ingen funktion och kan inte bära ett intyg.' },
+                { text: 'Bedöms behöva sjukskrivning 50 procent', varfor: 'Ett förslag till åtgärd. Det hör inte hemma i beskrivningen av funktionen.' }
+              ] },
+            { etikett: 'A – AKTIVITETSBEGRÄNSNING',
+              fraga: 'Vilken rad är aktivitetsbegränsningen?',
+              val: [
+                { text: 'Klarar ej fysisk närvaro på arbetsplatsen eller möten med fler än två deltagare. Klarar textproduktion och redigering hemifrån.', ratt: true },
+                { text: 'Nedsatt koncentrationsförmåga', varfor: 'Det är funktionen. Aktivitetsledet ska säga vad den nedsättningen gör omöjligt att utföra.' },
+                { text: 'Patienten är arbetsoförmögen', varfor: 'En slutsats, inte en beskrivning – och den motsägs av att hon arbetar hemifrån.' },
+                { text: 'F43 reaktion på svår stress', varfor: 'Diagnosen igen.' },
+                { text: 'Har svårt att sova', varfor: 'Ett symtom. Det blir en aktivitetsbegränsning först när det sägs vad hon inte klarar till följd av det.' }
+              ] }
+          ],
+          forklaring: 'Lägg märke till att aktivitetsraden också säger vad Anna KAN. Utan den uppgiften läser Försäkringskassan bara "kan inte arbeta", och då finns varken deltid eller anpassning att bedöma.' },
 
         { typ: 'flera',
           banner: 'UTREDNINGEN',
@@ -3256,9 +3398,9 @@ body.touch #pad{
             { text: 'Klarar textproduktion och redigering hemifrån. Klarar ej fysisk närvaro på arbetsplatsen eller möten med fler än två deltagare.',
               ratt: true, princip: 'dfa-aktivitet', fx: { underlag: 12 },
               varfor: 'Aktivitetsbegränsning i konkreta arbetsuppgifter – och lika viktigt: vad som fortfarande fungerar. Det är det som gör deltid och anpassning möjlig att bedöma.' },
-            { text: 'Planerad åtgärd: KBT med exponering, 8 sessioner med start nästa vecka. Uppföljning av funktion inför ställningstagande till fortsatt intyg.',
+            { text: 'Planerad åtgärd: psykoedukation och situationsanalys genomförd vid besöket. iKBT med behandlarstöd startar denna vecka. Separat sömnåtgärd med fast uppstigningstid. Uppföljning om 1 vecka inför ställningstagande till fortsatt intyg.',
               ratt: true, princip: 'bedda-d2', fx: { underlag: 10, tydlighet: 8 },
-              varfor: 'Ett underlag utan plan är en beskrivning av ett problem. Läkaren behöver veta vad som ska hända och när funktionen ska omvärderas.' },
+              varfor: 'Ett underlag utan plan är en beskrivning av ett problem. Läkaren behöver veta vad som redan gjorts, vad som startar när, och vilket datum funktionen ska omvärderas.' },
             { text: 'Patienten är helt arbetsoförmögen.',
               ratt: false, princip: 'dfa-aktivitet', fx: { underlag: -12 },
               varfor: 'Det är en slutsats, inte en observation – och den motsägs dessutom av att hon arbetar hemifrån. Slutsatsen om arbetsförmåga är läkarens att dra, utifrån det du beskriver.' },
@@ -3272,27 +3414,37 @@ body.touch #pad{
 
         { typ: 'val',
           fraga: 'Vilken insats föreslår du?',
-          tips: 'Vad öppnar dörren i stället för sjukskrivning? Och vad gör att Anna klarar av att gå in genom entrén på måndag?',
+          tips: 'Vad öppnar dörren i stället för sjukskrivning – och vad kan faktiskt starta den här veckan, inte om två månader?',
           val: [
-            { text: 'KBT med exponering, start nästa vecka. Ett första beteendeexperiment redan i morgon: gå in genom entrén och stanna 10 minuter. Kontakt med chefen om anpassad start – Anna ringer själv, du hjälper henne formulera det.',
-              tid: 6, ok: true, princip: 'agens',
+            { text: 'Psykoedukation nu, med hennes egen situationsanalys som underlag. iKBT med behandlarstöd startar den här veckan. Ett beteendeexperiment redan i morgon: gå in genom entrén och stanna 10 minuter. Anna ringer själv sin chef om anpassad start – med ett datum för när den ska trappas av.',
+              tid: 5, ok: true, princip: 'agens',
               humor: 'oppen', reaktion: 'Anna skriver ner det i sin bok. Rösten är stadigare.',
               svar: 'Tio minuter. Det ska jag klara. Och jag ringer Karin imorgon förmiddag.',
               fx: { agens: 20, allians: 10, tydlighet: 12, underlag: 8 },
-              varfor: 'Behandling, ett konkret första steg och en arbetsgivarkontakt som Anna själv äger. Du hjälper henne utan att ta över – det är skillnaden mellan stöd och övertagande.' },
-            { text: 'KBT om åtta veckor när det finns en ledig plats, avvakta till dess.',
+              varfor: 'Insatsen startar den här veckan i stället för om två månader, och den är dimensionerad efter problemets tyngd: psykoedukation och iKBT med behandlarstöd räcker långt vid lindrig till medelsvår ångest. Det konkreta steget imorgon ger henne något att lyckas med innan nästa besök, och arbetsgivarkontakten äger hon själv.' },
+
+            { text: 'Boka åtta KBT-sessioner ansikte mot ansikte med start nästa vecka.',
+              tid: 3, ok: 'delvis', princip: 'evidens',
+              humor: 'neutral', reaktion: 'Anna ser nöjd ut. Du tittar i kalendern.',
+              svar: 'Åtta gånger? Då är jag nog frisk till sommaren.',
+              fx: { agens: 6, tydlighet: -6, underlag: -4 },
+              varfor: 'Innehållet är rätt men upplägget håller inte i verkligheten: åtta sammanhängande tider i följd finns sällan att boka, och de behövs sällan vid den här svårighetsgraden. Att lova något kalendern inte kan hålla skapar en ny besvikelse. iKBT med behandlarstöd eller några korta besök är förstahandsvalet – spara de långa serierna till dem som verkligen behöver dem.' },
+
+            { text: 'Sätta upp henne i kön för KBT och avvakta tills en plats blir ledig om åtta veckor.',
               tid: 2, ok: false, princip: 'evidens',
               humor: 'orolig', reaktion: 'Anna: "Åtta veckor?"',
               svar: 'Vad gör jag fram till dess då?',
               fx: { agens: -12, tydlighet: -8 },
-              varfor: 'Åtta veckors väntan på behandling är åtta veckors undvikande. Hela poängen med LESS är att insatsen kommer tidigt – annars har flödet ingen effekt.' },
+              varfor: 'Åtta veckors väntan på behandling är åtta veckor av fortsatt undvikande. Hela poängen med LESS är att något börjar hända direkt – annars har det snabbare flödet ingen effekt alls.' },
+
             { text: 'Sjukskrivning 100 % i fyra veckor, sedan utvärdering.',
               tid: 2, ok: false, princip: 'evidens',
               humor: 'lattad', reaktion: 'Anna ser lättad ut.',
               svar: 'Tack. Då kan jag samla mig.',
               fx: { agens: -20, underlag: -8 },
-              varfor: 'Fyra veckors frånvaro utan behandling gör entrén svårare, inte lättare. Om sjukskrivning ändå bedöms nödvändig ska den kombineras med behandling och en upptrappningsplan – aldrig stå ensam.' },
-            { text: 'Du föreslår att Anna sjukanmäler sig tills chefen ändrar organisationen.',
+              varfor: 'Fyra veckors frånvaro utan behandling gör entrén svårare, inte lättare – precis det som situationsanalysen just visade. Om sjukskrivning ändå bedöms nödvändig ska den kombineras med behandling och en upptrappningsplan, aldrig stå ensam.' },
+
+            { text: 'Föreslå att Anna sjukanmäler sig tills chefen ändrar organisationen.',
               tid: 2, ok: false, princip: 'ansvar',
               humor: 'neutral', reaktion: 'Anna: "Kan man göra så?"',
               svar: 'Så jag ska vara hemma tills de fixar det?',
@@ -3305,12 +3457,12 @@ body.touch #pad{
           fraga: 'Vad rekommenderar du i utredningen?',
           tips: 'Väg samman: funktionen, vad som fortfarande fungerar, behandlingen som startar och risken med frånvaro. Motivera oavsett vad du väljer.',
           val: [
-            { text: 'Ingen sjukskrivning. Behandling startar, anpassad återgång via arbetsgivaren, uppföljning om 1 vecka.',
+            { text: 'Ingen sjukskrivning. iKBT och sömnåtgärd startar denna vecka, anpassad återgång via arbetsgivaren med avtrappningsdatum, uppföljning om 1 vecka.',
               ok: true, princip: 'grad', tid: 2,
               kampanj: { nyckel: 'anna-forslag', varde: 'ingen' },
               fx: { underlag: 12, agens: 10 },
               utfall: 'Underlaget går till läkaren för ställningstagande. Anna har tid för uppföljning om sju dagar.',
-              varfor: 'Vid lindrig till medelsvår ångest med bevarad funktion i delar av arbetet är tidig behandling och bibehållen arbetsplatskontakt oftast bäst. Att hon klarar textproduktion hemifrån och saknar röda flaggor gör alternativet väl motiverat.' },
+              varfor: 'Vid lindrig till medelsvår ångest med bevarad funktion i delar av arbetet är tidig behandling och bibehållen arbetsplatskontakt oftast bäst. Att hon klarar textproduktion hemifrån och saknar röda flaggor gör alternativet väl motiverat – och insatsen är dimensionerad så att den faktiskt kan börja den här veckan.' },
             { text: 'Sjukskrivning 25 % i tre veckor som brygga, med behandling, upptrappningsplan och slutdatum.',
               ok: 'delvis', princip: 'grad', tid: 2,
               kampanj: { nyckel: 'anna-forslag', varde: '25' },
@@ -3583,17 +3735,42 @@ body.touch #pad{
               varfor: 'Fyra veckors fullständig frånvaro utan träning ger stelare rygg, sämre kondition och en tredje episod som blir en fjärde. Du valde det bekväma svaret i rummet.' }
           ] },
 
-        { typ: 'ordna',
+        { typ: 'kedja',
           banner: 'DFA-KEDJAN',
-          fraga: 'Sortera in Bengts uppgifter i kedjan.',
-          tidFel: 2,
+          fraga: 'Bygg DFA-kedjan för Bengts intyg.',
+          tips: 'Fynden du just tog fram är funktionen. Aktivitetsledet ska handla om moment på lagret – både de som inte går och de som går.',
+          tidFel: 1,
           princip: 'bedda-d1',
-          delar: [
-            { text: 'M54.5 Lumbago', etikett: 'DIAGNOS' },
-            { text: 'Nedsatt flexion i ländrygg (fingertopp–golv 45 cm), smärtinhibition vid lyft, negativ neurologi', etikett: 'FUNKTIONSNEDSÄTTNING' },
-            { text: 'Kan ej utföra pallyft 15–25 kg eller upprepad framåtböjning; klarar truckkörning och plockning', etikett: 'AKTIVITETSBEGRÄNSNING' }
+          lank: [
+            { etikett: 'D – DIAGNOS',
+              fraga: 'Vilken rad är diagnosen?',
+              val: [
+                { text: 'M54.5 Lumbago', ratt: true },
+                { text: 'Nedsatt flexion i ländrygg, fingertopp–golv 45 cm', varfor: 'Ett undersökningsfynd. Det hör till funktionen.' },
+                { text: 'Kan ej utföra pallyft 15–25 kg', varfor: 'Aktivitetsbegränsningen.' },
+                { text: 'Tungt lagerarbete med upprepade lyft', varfor: 'Exponeringen i arbetet. Viktig i sammanhanget, men den är inte en diagnos.' },
+                { text: 'Smärta VAS 8', varfor: 'En skattning av symtomet. Den varken diagnostiserar eller beskriver funktion.' }
+              ] },
+            { etikett: 'F – FUNKTIONSNEDSÄTTNING',
+              fraga: 'Vilken rad är funktionsnedsättningen?',
+              val: [
+                { text: 'Nedsatt flexion i ländrygg (fingertopp–golv 45 cm), smärtinhibition vid lyft, negativ neurologi', ratt: true },
+                { text: 'M54.5 Lumbago', varfor: 'Diagnosen.' },
+                { text: 'Klarar truckkörning och plockning', varfor: 'Kvarvarande förmåga i arbetsmoment – det hör till aktivitetsledet.' },
+                { text: 'Har ont i ryggen', varfor: 'Ett symtom patienten uppger. En funktionsnedsättning ska gå att undersöka eller beskriva strukturerat.' },
+                { text: 'Rekommenderas 50 procent i två veckor', varfor: 'Ett förslag till åtgärd, inte en beskrivning av funktionen.' }
+              ] },
+            { etikett: 'A – AKTIVITETSBEGRÄNSNING',
+              fraga: 'Vilken rad är aktivitetsbegränsningen?',
+              val: [
+                { text: 'Kan ej utföra pallyft 15–25 kg eller upprepad framåtböjning. Klarar truckkörning, plockning och administrativa moment.', ratt: true },
+                { text: 'Smärta vid framåtböjning', varfor: 'Funktionsledet. Aktivitetsledet ska säga vilka arbetsmoment det omöjliggör.' },
+                { text: 'Kan inte arbeta', varfor: 'En slutsats – och den motsägs av att truck och plock fungerar.' },
+                { text: 'Arbetsgivaren bör omplacera patienten', varfor: 'En rekommendation till tredje part. Den hör inte hemma i intyget alls.' },
+                { text: 'Två tidigare episoder av ryggskott', varfor: 'Anamnes. Den förklarar förloppet men beskriver inte vad han inte klarar nu.' }
+              ] }
           ],
-          forklaring: 'Lägg märke till att aktivitetsraden också säger vad Bengt KAN. Det är den uppgiften som gör deltid och anpassning möjlig att bedöma – utan den läser Försäkringskassan bara "kan inte arbeta".' },
+          forklaring: 'Lägg märke till att aktivitetsraden också säger vad Bengt KAN. Det är den uppgiften som gör partiell sjukskrivning och anpassning möjliga att bedöma – utan den läser Försäkringskassan bara "kan inte arbeta".' },
 
         { typ: 'flera',
           banner: 'UTREDNINGEN',
@@ -3915,17 +4092,42 @@ body.touch #pad{
               varfor: 'Vardagsrevidering görs tillsammans med patienten och handlar om att fördela om, inte om att stryka det som betyder mest. Ett omöjligt råd skapar bara skuld.' }
           ] },
 
-        { typ: 'ordna',
+        { typ: 'kedja',
           banner: 'DFA-KEDJAN',
-          fraga: 'Sortera in Carinas uppgifter i kedjan.',
-          tidFel: 2,
+          fraga: 'Bygg DFA-kedjan för Carina.',
+          tips: 'Mätvärdet på greppstyrkan är funktionen. Aktivitetsledet ska handla om moment i hennes arbetsdag, med tid eller antal.',
+          tidFel: 1,
           princip: 'bedda-d1',
-          delar: [
-            { text: 'M18.0 Tumbasartros bilateralt', etikett: 'DIAGNOS' },
-            { text: 'Nedsatt kraftgrepp höger (Jamar 12 kg mot 24 kg vänster), smärta vid tumopposition, morgonstelhet', etikett: 'FUNKTIONSNEDSÄTTNING' },
-            { text: 'Kan ej hantera ringpärmar eller använda standardmus mer än 20 min i följd; tangentbordsarbete fungerar med pauser', etikett: 'AKTIVITETSBEGRÄNSNING' }
+          lank: [
+            { etikett: 'D – DIAGNOS',
+              fraga: 'Vilken rad är diagnosen?',
+              val: [
+                { text: 'M18.0 Tumbasartros bilateralt', ratt: true },
+                { text: 'Nedsatt kraftgrepp höger, Jamar 12 kg mot 24 kg vänster', varfor: 'Ett mätvärde. Det hör till funktionen.' },
+                { text: 'Kan ej hantera ringpärmar', varfor: 'Aktivitetsbegränsningen.' },
+                { text: 'Tangentbordsarbete sju timmar om dagen', varfor: 'Exponeringen i arbetet, inte en diagnos.' },
+                { text: 'Vårdar sin mamma på helgerna', varfor: 'En belastning i vardagen. Viktig för planeringen, men inte en diagnos.' }
+              ] },
+            { etikett: 'F – FUNKTIONSNEDSÄTTNING',
+              fraga: 'Vilken rad är funktionsnedsättningen?',
+              val: [
+                { text: 'Nedsatt kraftgrepp höger (Jamar 12 kg mot 24 kg vänster), smärta vid tumopposition, morgonstelhet', ratt: true },
+                { text: 'M18.0 Tumbasartros', varfor: 'Diagnosen. Artros i sig säger inget om vad handen klarar.' },
+                { text: 'Byter hand med musen efter tjugo minuter', varfor: 'Ett kompensationsbeteende i en arbetsuppgift – aktivitetsledet.' },
+                { text: 'Det gör ont i tummarna', varfor: 'Ett symtom hon uppger. Funktionen ska vara undersökt eller strukturerat beskriven.' },
+                { text: 'Behöver ortos och vertikalmus', varfor: 'Åtgärder. De hör till planen, inte till funktionsbeskrivningen.' }
+              ] },
+            { etikett: 'A – AKTIVITETSBEGRÄNSNING',
+              fraga: 'Vilken rad är aktivitetsbegränsningen?',
+              val: [
+                { text: 'Kan ej hantera ringpärmar eller använda standardmus mer än 20 min i följd. Tangentbordsarbete fungerar med pauser.', ratt: true },
+                { text: 'Morgonstelhet i händerna', varfor: 'Funktionsledet.' },
+                { text: 'Klarar inte sitt arbete', varfor: 'En slutsats, och den stämmer inte – hon klarar en stor del av det.' },
+                { text: 'Artros är en kronisk sjukdom', varfor: 'Allmän kunskap om diagnosen. Den säger inget om Carina.' },
+                { text: 'Vill inte vara till besvär', varfor: 'En viktig observation för bemötandet, men inte en aktivitetsbegränsning.' }
+              ] }
           ],
-          forklaring: 'Notera skillnaden mellan "har ont i tummen" och en mätbar nedsättning med tidsangivelse i ett arbetsmoment. Det senare går att följa upp, det förra går bara att tycka om.' },
+          forklaring: 'Notera skillnaden mellan "har ont i tummen" och en mätbar nedsättning med tidsangivelse i ett arbetsmoment. Det senare går att följa upp om fyra veckor, det förra går bara att tycka om.' },
 
         { typ: 'beslut',
           banner: 'REKOMMENDATION',
@@ -4429,7 +4631,7 @@ body.touch #pad{
       titel: 'Uppföljning, två veckor senare',
       patient: 'anna',
       lage: 'rum',
-      minuter: 23,
+      minuter: 27,
       kampanj: 'anna',
       svarighet: 2,
       principer: ['ansvar', 'samtycke', 'plan', 'uppfoljning', 'salutogen'],
@@ -4472,6 +4674,30 @@ body.touch #pad{
               svar: 'Kanske det. Det kanske var för tidigt.',
               fx: { agens: -20, tydlighet: -12 },
               varfor: 'Vid session två av åtta, mitt i en pågående förbättring, är ett bakslag förväntat. Att erbjuda frånvaro just då belönar undvikandet i exakt det ögonblick behandlingen börjar verka.' }
+          ] },
+
+        { typ: 'val',
+          fraga: 'Hon åkte tidigare för att slippa folk i entrén. Hur ser du på det?',
+          tips: 'Det fungerade – och det är samtidigt samma mönster som gjorde henne sjuk. Båda sakerna är sanna på en gång.',
+          val: [
+            { text: 'Det var smart, och det fick dig in genom dörren. Samtidigt är det ju att gå runt det som är svårt. Vi behåller det ett par veckor, och sätter ett datum för att flytta tiden framåt i steg.',
+              tid: 4, ok: true, princip: 'evidens',
+              humor: 'neutral', reaktion: 'Anna funderar. "Så det är fusk?"',
+              svar: 'Så det är fusk på sätt och vis? Fast det funkade ju.',
+              fx: { agens: 16, tydlighet: 14, allians: 8 },
+              varfor: 'En anpassning som gör det första steget möjligt är rätt använd som brygga – men den är också ett undvikande, och undvikanden som får stå kvar växer. Att sätta ett avtrappningsdatum redan när anpassningen införs är skillnaden mellan en trappa och en ny platå.' },
+            { text: 'Bra hittat! Fortsätt så, det viktiga är att du kommer dit.',
+              tid: 2, ok: 'delvis', princip: 'evidens',
+              humor: 'lattad', reaktion: 'Anna ser nöjd ut.',
+              svar: 'Skönt. Då gör jag så tills vidare.',
+              fx: { allians: 6, agens: -8, tydlighet: -10 },
+              varfor: 'Uppmuntran är rätt, men "tills vidare" gör undvikandet permanent. Om ett halvår är den tidiga ankomsten en förutsättning i stället för ett steg, och att flytta den blir då en ny exponering att börja om med.' },
+            { text: 'Det där är ett undvikandebeteende. Det måste du sluta med, från och med imorgon.',
+              tid: 2, ok: false, princip: 'bedda-e',
+              humor: 'orolig', reaktion: 'Anna drar ihop axlarna.',
+              svar: 'Så det jag faktiskt klarade var fel också?',
+              fx: { allians: -14, agens: -12 },
+              varfor: 'Analysen stämmer, men tidpunkten och tonen är fel. Att rycka undan den enda anpassning som fick henne in genom dörren, mitt i en pågående förbättring, riskerar ett återfall – och beskedet landar som att det hon klarade inte räknades.' }
           ] },
 
         { typ: 'kontroll',
@@ -4518,9 +4744,9 @@ body.touch #pad{
           tidPer: 2,
           tips: 'En plan utan ansvarig och datum är en önskelista.',
           val: [
-            { text: 'Konkreta steg med namngiven ansvarig för varje steg', ratt: true, princip: 'plan',
+            { text: 'Konkreta steg med namngiven ansvarig, inklusive hur den anpassade starttiden ska trappas av', ratt: true, princip: 'plan',
               fx: { tydlighet: 12 },
-              varfor: 'Utan en namngiven ansvarig blir varje steg allas och därmed ingens.' },
+              varfor: 'Utan en namngiven ansvarig blir varje steg allas och därmed ingens. Och en anpassning utan avtrappningsplan blir kvar tills någon råkar ifrågasätta den.' },
             { text: 'Datum för varje delmål och för nästa avstämning', ratt: true, princip: 'plan',
               fx: { tydlighet: 12, underlag: 6 },
               varfor: 'Datumen är det som gör att planen kan följas upp i stället för att bara existera.' },
@@ -4906,6 +5132,15 @@ body.touch #pad{
 
   function kostText(min) { return '⏱' + min; }
 
+  /* Alternativens ordning blandas vid varje spelning. Annars lär man sig
+     positionen i stället för principen – och det rätta svaret hamnar lätt
+     först när man skriver innehållet. Sätt blanda: false på en beat vars
+     ordning bär betydelse (t.ex. en stigande skala). */
+  function blanda(lista, agare) {
+    if (agare && agare.blanda === false) return lista.slice();
+    return LESS.shuffle(lista);
+  }
+
   /* Liten markering i frågerutan om att handledartips finns bakom B. */
   function markeraTips() {
     var el = LESS.$('dialog-text');
@@ -4983,14 +5218,15 @@ body.touch #pad{
 
   function korVal(b, next) {
     if (b.humor) E.humor = b.humor;
+    var val = blanda(b.val, b);
     function meny() {
       ui.setDialog(b.fraga, null, 'fraga');
-      var items = b.val.map(function (o) {
+      var items = val.map(function (o) {
         return { text: o.text, cost: kostText(o.tid == null ? 1 : o.tid) };
       });
       valMeny(items, b, function (i) {
         ui.hideDialog();
-        hanteraVal(b.val[i], b, next);
+        hanteraVal(val[i], b, next);
       });
     }
     if (b.text) {
@@ -5022,13 +5258,14 @@ body.touch #pad{
   function korKontroll(b, next) {
     applyFx(b.fx);
     var forsta = true;
+    var val = blanda(b.val, b);
 
     function fraga() {
       ui.banner(b.banner || 'FAKTAKONTROLL');
       ui.setDialog(b.fraga, null, 'fraga');
-      var items = b.val.map(function (o) { return { text: o.text }; });
+      var items = val.map(function (o) { return { text: o.text }; });
       valMeny(items, b, function (i) {
-        var o = b.val[i];
+        var o = val[i];
         ui.hideDialog();
         if (o.ratt) {
           LESS.sfx('ok');
@@ -5058,11 +5295,12 @@ body.touch #pad{
   function korFlera(b, next) {
     applyFx(b.fx);
     var valda = [], antal = b.antal || 3, tidPer = b.tidPer == null ? 1 : b.tidPer;
+    var val = blanda(b.val, b);
 
     function meny(start) {
       ui.banner(b.banner || 'VÄLJ');
       ui.setDialog(b.fraga + '  (' + valda.length + '/' + antal + ')', null, 'fraga');
-      var items = b.val.map(function (o, i) {
+      var items = val.map(function (o, i) {
         return { text: (valda.indexOf(i) >= 0 ? '▣ ' : '▢ ') + o.text, cost: kostText(tidPer) };
       });
       items.push({ text: '▶ KLAR', disabled: valda.length !== antal });
@@ -5075,7 +5313,7 @@ body.touch #pad{
           ui.panel('HANDLEDAREN', '<p>' + LESS.esc(tt) + '</p>', function () { meny(start); });
         } : null
       }, function (i) {
-        if (i === b.val.length) { ui.hideDialog(); klar(); return; }
+        if (i === val.length) { ui.hideDialog(); klar(); return; }
         var pos = valda.indexOf(i);
         if (pos >= 0) { valda.splice(pos, 1); LESS.sfx('back'); }
         else if (valda.length < antal) { valda.push(i); LESS.sfx('ok'); }
@@ -5089,14 +5327,14 @@ body.touch #pad{
       kostaTid(antal * tidPer);
       var bra = 0;
       valda.forEach(function (i) {
-        var o = b.val[i];
+        var o = val[i];
         applyFx(o.fx);
         if (o.flagga) E.flaggor[o.flagga] = true;
         if (o.ratt) bra++;
         logga({ fraga: b.fraga, text: o.text, ok: !!o.ratt, varfor: o.varfor, princip: o.princip });
       });
       /* Rätt svar som inte valdes räknas som missade – de är också lärdomar. */
-      b.val.forEach(function (o, i) {
+      val.forEach(function (o, i) {
         if (o.ratt && valda.indexOf(i) < 0) {
           logga({ fraga: b.fraga, text: 'Valde inte: ' + o.text, ok: false, varfor: o.varfor, princip: o.princip });
         }
@@ -5110,40 +5348,61 @@ body.touch #pad{
     meny(0);
   }
 
-  function korOrdna(b, next) {
+  /* Kedjeövning: DFA eller SORKK byggs ett led i taget. Varje led har sin
+     egen lista med rimliga kandidater, så det går inte att sortera fram rätt
+     svar genom uteslutning – man måste veta vad ledet faktiskt betyder.   */
+  function korKedja(b, next) {
     applyFx(b.fx);
-    var kvar = LESS.shuffle(b.delar.map(function (d, i) { return i; }));
-    var steg = 0, felIStg = false, nagotFel = false;
+    var steg = 0, felIStg = false, loggat = false, antalFel = 0;
 
     function fraga() {
-      if (steg >= b.delar.length) {
-        logga({ fraga: b.fraga, text: nagotFel ? 'Kedjan byggdes med fel på vägen' : 'Kedjan byggdes korrekt',
-                ok: !nagotFel, varfor: b.forklaring, princip: b.princip });
+      if (steg >= b.lank.length) {
+        logga({
+          fraga: b.fraga,
+          text: antalFel === 0 ? 'Kedjan byggdes rätt hela vägen'
+                               : 'Kedjan byggdes med ' + antalFel + ' felplacerad' + (antalFel > 1 ? 'e' : 't') + ' led',
+          ok: antalFel === 0 ? true : (antalFel === 1 ? 'delvis' : false),
+          varfor: b.forklaring, princip: b.princip
+        });
         ui.banner(null);
         ui.say(b.forklaring, { name: 'HANDLEDAREN', kind: 'you' }, next);
         return;
       }
-      var mal = b.delar[steg];
-      ui.banner(b.banner || 'DFA-KEDJAN');
-      ui.setDialog('Vilken rad är ' + mal.etikett + '?', null, 'fraga');
-      var items = kvar.map(function (i) { return { text: b.delar[i].text }; });
-      valMeny(items, b, function (n) {
+
+      var l = b.lank[steg];
+      var val = blanda(l.val, l);
+      ui.banner((b.banner || 'KEDJAN') + ' · ' + l.etikett);
+      ui.setDialog(l.fraga, null, 'fraga');
+
+      valMeny(val.map(function (o) { return { text: o.text }; }), b, function (i) {
+        var o = val[i];
         ui.hideDialog();
-        var idx = kvar[n];
-        if (b.delar[idx].etikett === mal.etikett) {
-          LESS.sfx('ok');
-          kvar.splice(n, 1);
-          steg++; felIStg = false;
-          ui.cue('✔ ' + mal.etikett);
-          fraga();
-        } else {
-          LESS.sfx('wrong');
-          nagotFel = true;
-          if (!felIStg) { kostaTid(b.tidFel == null ? 2 : b.tidFel); felIStg = true; }
-          ui.cue('✘ Det är ' + b.delar[idx].etikett + '.');
-          if (E.tidUt) { steg = b.delar.length; fraga(); return; }
-          fraga();
+
+        if (!loggat) {
+          logga({ fraga: l.etikett, text: l.etikett + ': ' + o.text, ok: !!o.ratt, led: true,
+                  varfor: o.varfor || l.forklaring, princip: l.princip || b.princip });
+          loggat = true;
         }
+
+        if (o.ratt) {
+          LESS.sfx('ok');
+          ui.cue('✔ ' + l.etikett);
+          steg++; felIStg = false; loggat = false;
+          if (l.forklaring) ui.say(l.forklaring, { name: 'HANDLEDAREN', kind: 'you' }, fraga);
+          else fraga();
+          return;
+        }
+
+        LESS.sfx('wrong');
+        if (!felIStg) {
+          antalFel++;
+          kostaTid(b.tidFel == null ? 1 : b.tidFel);
+          felIStg = true;
+        }
+        if (E.tidUt) { steg++; felIStg = false; loggat = false; fraga(); return; }
+        ui.cue('✘ Inte det ledet.');
+        ui.say(o.varfor || 'Det hör hemma någon annanstans i kedjan.',
+               { name: 'HANDLEDAREN', kind: 'you' }, fraga);
       });
     }
     fraga();
@@ -5152,11 +5411,12 @@ body.touch #pad{
   function korBeslut(b, next) {
     ui.banner(b.banner || 'BESLUT');
     ui.setDialog(b.fraga, null, 'fraga');
-    var items = b.val.map(function (o) {
+    var val = blanda(b.val, b);
+    var items = val.map(function (o) {
       return { text: o.text, cost: o.tid ? kostText(o.tid) : null };
     });
     valMeny(items, b, function (i) {
-      var o = b.val[i], ok = loesOk(o);
+      var o = val[i], ok = loesOk(o);
       ui.hideDialog();
       ui.banner(null);
       kostaTid(o.tid == null ? 1 : o.tid);
@@ -5206,7 +5466,7 @@ body.touch #pad{
       case 'val':      korVal(b, nastaBeat); break;
       case 'kontroll': korKontroll(b, nastaBeat); break;
       case 'flera':    korFlera(b, nastaBeat); break;
-      case 'ordna':    korOrdna(b, nastaBeat); break;
+      case 'kedja':    korKedja(b, nastaBeat); break;
       case 'beslut':   korBeslut(b, nastaBeat); break;
       default:         nastaBeat();
     }
@@ -5405,6 +5665,9 @@ body.touch #pad{
     var visade = 0;
     res.logg.forEach(function (r) {
       if (r.beslut) return;
+      /* Kedjeled som satt rätt sammanfattas av kedjans egen rad – bara de
+         felplacerade leden är värda en egen rad här. */
+      if (r.led && r.ok === true) return;
       var mk = markering(r.ok);
       visade++;
       h += '<div class="d-row ' + mk[0] + '"><span class="mark">' + mk[1] + '</span>' +
@@ -5473,13 +5736,13 @@ body.touch #pad{
 
     function uppdateraFot() {
       if (botten()) {
-        fot.innerHTML = '<b>A</b> = fortsätt &nbsp;·&nbsp; ↑↓ = bläddra tillbaka';
+        fot.innerHTML = '<span><b>A</b> = fortsätt &nbsp;·&nbsp; ↑↓ = bläddra tillbaka</span>';
         fot.classList.remove('mer');
       } else {
         var sidor = Math.max(1, Math.ceil(body.scrollHeight / sidhojd()));
         var sida = Math.min(sidor, Math.floor(body.scrollTop / sidhojd()) + 1);
-        fot.innerHTML = '<span class="pil">▼</span> <b>A</b> = nästa sida (' + sida + '/' + sidor +
-                        ') &nbsp;·&nbsp; <b>B</b> = hoppa till slutet';
+        fot.innerHTML = '<span><span class="pil">▼</span>&nbsp; <b>A</b> = nästa sida (' + sida + '/' + sidor +
+                        ') &nbsp;·&nbsp; <b>B</b> = hoppa till slutet</span>';
         fot.classList.add('mer');
       }
     }

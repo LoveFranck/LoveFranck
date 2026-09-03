@@ -58,6 +58,9 @@
     var visade = 0;
     res.logg.forEach(function (r) {
       if (r.beslut) return;
+      /* Kedjeled som satt rätt sammanfattas av kedjans egen rad – bara de
+         felplacerade leden är värda en egen rad här. */
+      if (r.led && r.ok === true) return;
       var mk = markering(r.ok);
       visade++;
       h += '<div class="d-row ' + mk[0] + '"><span class="mark">' + mk[1] + '</span>' +
@@ -126,13 +129,13 @@
 
     function uppdateraFot() {
       if (botten()) {
-        fot.innerHTML = '<b>A</b> = fortsätt &nbsp;·&nbsp; ↑↓ = bläddra tillbaka';
+        fot.innerHTML = '<span><b>A</b> = fortsätt &nbsp;·&nbsp; ↑↓ = bläddra tillbaka</span>';
         fot.classList.remove('mer');
       } else {
         var sidor = Math.max(1, Math.ceil(body.scrollHeight / sidhojd()));
         var sida = Math.min(sidor, Math.floor(body.scrollTop / sidhojd()) + 1);
-        fot.innerHTML = '<span class="pil">▼</span> <b>A</b> = nästa sida (' + sida + '/' + sidor +
-                        ') &nbsp;·&nbsp; <b>B</b> = hoppa till slutet';
+        fot.innerHTML = '<span><span class="pil">▼</span>&nbsp; <b>A</b> = nästa sida (' + sida + '/' + sidor +
+                        ') &nbsp;·&nbsp; <b>B</b> = hoppa till slutet</span>';
         fot.classList.add('mer');
       }
     }

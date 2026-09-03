@@ -121,17 +121,42 @@
               varfor: 'Vardagsrevidering görs tillsammans med patienten och handlar om att fördela om, inte om att stryka det som betyder mest. Ett omöjligt råd skapar bara skuld.' }
           ] },
 
-        { typ: 'ordna',
+        { typ: 'kedja',
           banner: 'DFA-KEDJAN',
-          fraga: 'Sortera in Carinas uppgifter i kedjan.',
-          tidFel: 2,
+          fraga: 'Bygg DFA-kedjan för Carina.',
+          tips: 'Mätvärdet på greppstyrkan är funktionen. Aktivitetsledet ska handla om moment i hennes arbetsdag, med tid eller antal.',
+          tidFel: 1,
           princip: 'bedda-d1',
-          delar: [
-            { text: 'M18.0 Tumbasartros bilateralt', etikett: 'DIAGNOS' },
-            { text: 'Nedsatt kraftgrepp höger (Jamar 12 kg mot 24 kg vänster), smärta vid tumopposition, morgonstelhet', etikett: 'FUNKTIONSNEDSÄTTNING' },
-            { text: 'Kan ej hantera ringpärmar eller använda standardmus mer än 20 min i följd; tangentbordsarbete fungerar med pauser', etikett: 'AKTIVITETSBEGRÄNSNING' }
+          lank: [
+            { etikett: 'D – DIAGNOS',
+              fraga: 'Vilken rad är diagnosen?',
+              val: [
+                { text: 'M18.0 Tumbasartros bilateralt', ratt: true },
+                { text: 'Nedsatt kraftgrepp höger, Jamar 12 kg mot 24 kg vänster', varfor: 'Ett mätvärde. Det hör till funktionen.' },
+                { text: 'Kan ej hantera ringpärmar', varfor: 'Aktivitetsbegränsningen.' },
+                { text: 'Tangentbordsarbete sju timmar om dagen', varfor: 'Exponeringen i arbetet, inte en diagnos.' },
+                { text: 'Vårdar sin mamma på helgerna', varfor: 'En belastning i vardagen. Viktig för planeringen, men inte en diagnos.' }
+              ] },
+            { etikett: 'F – FUNKTIONSNEDSÄTTNING',
+              fraga: 'Vilken rad är funktionsnedsättningen?',
+              val: [
+                { text: 'Nedsatt kraftgrepp höger (Jamar 12 kg mot 24 kg vänster), smärta vid tumopposition, morgonstelhet', ratt: true },
+                { text: 'M18.0 Tumbasartros', varfor: 'Diagnosen. Artros i sig säger inget om vad handen klarar.' },
+                { text: 'Byter hand med musen efter tjugo minuter', varfor: 'Ett kompensationsbeteende i en arbetsuppgift – aktivitetsledet.' },
+                { text: 'Det gör ont i tummarna', varfor: 'Ett symtom hon uppger. Funktionen ska vara undersökt eller strukturerat beskriven.' },
+                { text: 'Behöver ortos och vertikalmus', varfor: 'Åtgärder. De hör till planen, inte till funktionsbeskrivningen.' }
+              ] },
+            { etikett: 'A – AKTIVITETSBEGRÄNSNING',
+              fraga: 'Vilken rad är aktivitetsbegränsningen?',
+              val: [
+                { text: 'Kan ej hantera ringpärmar eller använda standardmus mer än 20 min i följd. Tangentbordsarbete fungerar med pauser.', ratt: true },
+                { text: 'Morgonstelhet i händerna', varfor: 'Funktionsledet.' },
+                { text: 'Klarar inte sitt arbete', varfor: 'En slutsats, och den stämmer inte – hon klarar en stor del av det.' },
+                { text: 'Artros är en kronisk sjukdom', varfor: 'Allmän kunskap om diagnosen. Den säger inget om Carina.' },
+                { text: 'Vill inte vara till besvär', varfor: 'En viktig observation för bemötandet, men inte en aktivitetsbegränsning.' }
+              ] }
           ],
-          forklaring: 'Notera skillnaden mellan "har ont i tummen" och en mätbar nedsättning med tidsangivelse i ett arbetsmoment. Det senare går att följa upp, det förra går bara att tycka om.' },
+          forklaring: 'Notera skillnaden mellan "har ont i tummen" och en mätbar nedsättning med tidsangivelse i ett arbetsmoment. Det senare går att följa upp om fyra veckor, det förra går bara att tycka om.' },
 
         { typ: 'beslut',
           banner: 'REKOMMENDATION',

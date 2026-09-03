@@ -121,21 +121,42 @@ debriefen och hamnar i repetitionskön.
 
 Spelaren får fortsätta gissa tills det blir rätt. Bara första försöket loggas.
 
-### `ordna` – bygg DFA-kedjan
+### `kedja` – kedjeövning (DFA, SORKK)
+
+Bygger en kedja ett led i taget. Varje led har sin **egen lista med rimliga
+kandidater**, så det går inte att sortera fram rätt svar genom uteslutning – man
+måste veta vad ledet faktiskt betyder. Fyll gärna varje led med distraktorer
+hämtade från de *andra* leden; det är just förväxlingen mellan dem som ska tränas.
 
 ```js
-{ typ: 'ordna', banner: 'DFA-KEDJAN',
-  fraga: 'Sortera in uppgifterna i kedjan.',
-  tidFel: 2, princip: 'bedda-d1',
-  delar: [
-    { text: 'F41.1 Generaliserat ångestsyndrom', etikett: 'DIAGNOS' },
-    { text: 'Uttalad förväntansångest…',         etikett: 'FUNKTIONSNEDSÄTTNING' },
-    { text: 'Klarar inte att vistas på arbetsplatsen…', etikett: 'AKTIVITETSBEGRÄNSNING' }
+{ typ: 'kedja', banner: 'DFA-KEDJAN',
+  fraga: 'Bygg DFA-kedjan för intyget.',
+  tidFel: 1,                  // minuter per felplacerat led
+  princip: 'bedda-d1',
+  lank: [
+    { etikett: 'D – DIAGNOS',
+      fraga: 'Vilken rad är diagnosen?',
+      val: [
+        { text: 'F41.1 Generaliserat ångestsyndrom', ratt: true },
+        { text: 'Uttalad förväntansångest med autonoma symtom',
+          varfor: 'Det beskriver funktionen, inte diagnosen.' },
+        { text: 'Nedsatt arbetsförmåga',
+          varfor: 'Slutsatsen kedjan ska leda fram till, inte dess första led.' }
+      ],
+      forklaring: 'Valfri rad som visas när ledet satt rätt.' }
+    /* … ett objekt per led … */
   ],
-  forklaring: 'Kedjan måste gå att följa hela vägen…' }
+  forklaring: 'Sammanfattningen efter hela kedjan.' }
 ```
 
-Raderna blandas, spelaren får frågan om en etikett i taget.
+Fel led kostar `tidFel` minuter en gång per led och visar alternativets `varfor`
+som korrigering; man får försöka igen. Bara första försöket per led loggas.
+Kedjan får ett samlat betyg: alla rätt = ✔, ett fel = ~, fler = ✘. I
+återkopplingen visas bara de led som blev fel – de rätta täcks av kedjans
+sammanfattning.
+
+Använd typen för DFA-kedjan och för SORKK (situationsanalys). Båda tränar samma
+sak: att skilja mellan led som lätt förväxlas.
 
 ### `beslut` – avslutar mötet
 
@@ -154,6 +175,15 @@ Samma form som `val`, plus:
           standard: true },
   varforFel: 'Underlaget bakom förslaget håller inte…' }
 ```
+
+### Ordningen på alternativen
+
+Motorn **blandar alternativens ordning vid varje spelning**. Du behöver alltså
+inte tänka på var det rätta svaret hamnar när du skriver – och spelaren kan inte
+lära sig positionen i stället för principen.
+
+Bär ordningen betydelse (en stigande skala, en kronologi) stänger du av det per
+beat med `blanda: false`.
 
 ---
 

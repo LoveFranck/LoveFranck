@@ -126,17 +126,42 @@
               varfor: 'Fyra veckors fullständig frånvaro utan träning ger stelare rygg, sämre kondition och en tredje episod som blir en fjärde. Du valde det bekväma svaret i rummet.' }
           ] },
 
-        { typ: 'ordna',
+        { typ: 'kedja',
           banner: 'DFA-KEDJAN',
-          fraga: 'Sortera in Bengts uppgifter i kedjan.',
-          tidFel: 2,
+          fraga: 'Bygg DFA-kedjan för Bengts intyg.',
+          tips: 'Fynden du just tog fram är funktionen. Aktivitetsledet ska handla om moment på lagret – både de som inte går och de som går.',
+          tidFel: 1,
           princip: 'bedda-d1',
-          delar: [
-            { text: 'M54.5 Lumbago', etikett: 'DIAGNOS' },
-            { text: 'Nedsatt flexion i ländrygg (fingertopp–golv 45 cm), smärtinhibition vid lyft, negativ neurologi', etikett: 'FUNKTIONSNEDSÄTTNING' },
-            { text: 'Kan ej utföra pallyft 15–25 kg eller upprepad framåtböjning; klarar truckkörning och plockning', etikett: 'AKTIVITETSBEGRÄNSNING' }
+          lank: [
+            { etikett: 'D – DIAGNOS',
+              fraga: 'Vilken rad är diagnosen?',
+              val: [
+                { text: 'M54.5 Lumbago', ratt: true },
+                { text: 'Nedsatt flexion i ländrygg, fingertopp–golv 45 cm', varfor: 'Ett undersökningsfynd. Det hör till funktionen.' },
+                { text: 'Kan ej utföra pallyft 15–25 kg', varfor: 'Aktivitetsbegränsningen.' },
+                { text: 'Tungt lagerarbete med upprepade lyft', varfor: 'Exponeringen i arbetet. Viktig i sammanhanget, men den är inte en diagnos.' },
+                { text: 'Smärta VAS 8', varfor: 'En skattning av symtomet. Den varken diagnostiserar eller beskriver funktion.' }
+              ] },
+            { etikett: 'F – FUNKTIONSNEDSÄTTNING',
+              fraga: 'Vilken rad är funktionsnedsättningen?',
+              val: [
+                { text: 'Nedsatt flexion i ländrygg (fingertopp–golv 45 cm), smärtinhibition vid lyft, negativ neurologi', ratt: true },
+                { text: 'M54.5 Lumbago', varfor: 'Diagnosen.' },
+                { text: 'Klarar truckkörning och plockning', varfor: 'Kvarvarande förmåga i arbetsmoment – det hör till aktivitetsledet.' },
+                { text: 'Har ont i ryggen', varfor: 'Ett symtom patienten uppger. En funktionsnedsättning ska gå att undersöka eller beskriva strukturerat.' },
+                { text: 'Rekommenderas 50 procent i två veckor', varfor: 'Ett förslag till åtgärd, inte en beskrivning av funktionen.' }
+              ] },
+            { etikett: 'A – AKTIVITETSBEGRÄNSNING',
+              fraga: 'Vilken rad är aktivitetsbegränsningen?',
+              val: [
+                { text: 'Kan ej utföra pallyft 15–25 kg eller upprepad framåtböjning. Klarar truckkörning, plockning och administrativa moment.', ratt: true },
+                { text: 'Smärta vid framåtböjning', varfor: 'Funktionsledet. Aktivitetsledet ska säga vilka arbetsmoment det omöjliggör.' },
+                { text: 'Kan inte arbeta', varfor: 'En slutsats – och den motsägs av att truck och plock fungerar.' },
+                { text: 'Arbetsgivaren bör omplacera patienten', varfor: 'En rekommendation till tredje part. Den hör inte hemma i intyget alls.' },
+                { text: 'Två tidigare episoder av ryggskott', varfor: 'Anamnes. Den förklarar förloppet men beskriver inte vad han inte klarar nu.' }
+              ] }
           ],
-          forklaring: 'Lägg märke till att aktivitetsraden också säger vad Bengt KAN. Det är den uppgiften som gör deltid och anpassning möjlig att bedöma – utan den läser Försäkringskassan bara "kan inte arbeta".' },
+          forklaring: 'Lägg märke till att aktivitetsraden också säger vad Bengt KAN. Det är den uppgiften som gör partiell sjukskrivning och anpassning möjliga att bedöma – utan den läser Försäkringskassan bara "kan inte arbeta".' },
 
         { typ: 'flera',
           banner: 'UTREDNINGEN',

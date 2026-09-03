@@ -107,6 +107,26 @@ själv. Ove säger vart du ska gå och vilken knapp du ska trycka på. Han säge
 aldrig vad du ska svara patienten. Att göra navigationen gratis och bedömningen
 svår är hela poängen: all kognitiv belastning ska ligga på det som ska läras.
 
+### 5c. Kedjeövningar i stället för sorteringsuppgifter
+
+DFA-kedjan och SORKK är spelets två kedjeövningar. Båda är byggda så att varje
+led har sin **egen** lista med rimliga kandidater, hämtade från de andra leden:
+diagnosen ligger bland funktionsbeskrivningar, den kortsiktiga konsekvensen
+bland de långsiktiga. Att sortera tre givna rader i rätt ordning går att lösa
+genom uteslutning; att peka ut rätt rad bland fem trovärdiga kräver att man vet
+vad ledet betyder.
+
+Det är också där de flesta intyg havererar i verkligheten: inte för att någon
+saknar orden, utan för att en slutsats hamnar på funktionsraden och ett symtom
+på aktivitetsraden.
+
+### 5d. Alternativen blandas varje gång
+
+Motorn slumpar ordningen på svarsalternativen vid varje spelning. Utan det lär
+sig spelaren snabbt att det översta alternativet brukar vara rätt – vilket är
+ett mönster i innehållet, inte i verkligheten – och övningsläget tappar sitt
+värde vid andra genomspelningen.
+
 ### 6. Handledartipsen tonas bort
 
 Första gången i en roll ligger ett tips bakom B-knappen på varje beslut. När du

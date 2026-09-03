@@ -118,6 +118,11 @@ Kortversionen – hela resonemanget finns i [`docs/PEDAGOGIK.md`](docs/PEDAGOGIK
 * **Repetitionskö.** Missade principer kommer tillbaka i övningsläget tills de
   suttit två gånger i rad.
 * **Handledartipsen tonas bort** när du klarat en roll med guld två gånger.
+* **Kedjeövningar.** DFA-kedjan och SORKK (situationsanalys) byggs ett led i
+  taget, där varje led har sin egen lista med trovärdiga kandidater hämtade från
+  de andra leden. Ingen uteslutningsmetod hjälper.
+* **Alternativens ordning blandas varje spelning**, så att man lär sig principen
+  och inte positionen.
 * **Fällorna är avsiktligt behagliga.** Flera fel val gör patienten *nöjd* på
   direkten. Det är hela poängen.
 

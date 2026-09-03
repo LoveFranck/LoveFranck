@@ -60,6 +60,26 @@
     },
 
     {
+      id: 'sorkk',
+      titel: 'SORKK – situationsanalysen',
+      text: [
+        'Ett sätt att ta ett enda tillfälle och se varför beteendet återkommer. Fem led, i den här ordningen.'
+      ],
+      lista: [
+        ['S – Situation', 'Det yttre läget, så konkret att det skulle gå att filma: tid, plats, vad som händer runt omkring.'],
+        ['O – Organismfaktorer', 'Vad personen bär med sig in i situationen: sömn, kroppsligt tillstånd, tidigare inlärning, förväntningar.'],
+        ['R – Respons', 'Tanke, känsla, kroppsreaktion och beteende. Beteendet är det som konsekvenserna hänger på.'],
+        ['K – Kortsiktig konsekvens', 'Vad som händer inom minuter. Här sitter oftast förklaringen: lättnad kommer snabbt och belönar beteendet varje gång.'],
+        ['K – Långsiktig konsekvens', 'Vad som byggs upp över veckor och månader. Priset betalas långsamt och märks därför inte i stunden.']
+      ],
+      punkter: [
+        'Analysen görs tillsammans med patienten, i hennes eget material. Poängen är att hon ska se mönstret, inte att du ska.',
+        'Undvikande känns nästan alltid rätt i stunden. Det är just därför det håller i sig.',
+        'Vid sjukskrivningsärenden är analysen ofta det som gör beslutet begripligt: en sjukskrivning kan ge exakt samma kortsiktiga lättnad som beteendet man vill förändra – fast i större dos.'
+      ]
+    },
+
+    {
       id: 'salutogen',
       titel: 'Salutogen kommunikation',
       text: [
@@ -114,6 +134,8 @@
       punkter: [
         'Vid lindrig ångest och lindrig depression: undvikande underhåller besvären. Sjukskrivning kan förstärka undvikandet.',
         'KBT, fysisk aktivitet, sömnåtgärder, alkoholgenomgång och arbetsanpassning är förstahandsdörrar att öppna.',
+        'Dosera insatsen efter tyngden. Vid lindrig till medelsvår problematik räcker ofta psykoedukation, korta insatser och iKBT med behandlarstöd – och de går att starta samma vecka. Långa seriebokningar ansikte mot ansikte finns sällan att få, och att lova dem skapar en väntetid som i sig är en risk.',
+        'Sömnen förtjänar ofta ett eget spår. Sömnbrist sänker tröskeln för ångest och ångest stör sömnen – kausaliteten går åt båda håll, så det räcker sällan att vänta ut den ena.',
         'Vid utmattningssyndrom med uttalad kognitiv påverkan kan sjukskrivning behövas – men då med aktiv plan och successiv upptrappning, inte enbart vila.',
         'Screena alltid för suicidtankar, allvarlig depression, psykos och missbruk. Röd flagga = läkare/akut samma dag.'
       ]
@@ -219,6 +241,7 @@
     'bedda-e':       'BEDDA · Empati före bemötande',
     'bedda-d1':      'BEDDA · DFA-kedjan',
     'bedda-d2':      'BEDDA · Dialog om alternativ',
+    'sorkk':         'SORKK · situationsanalys',
     'bedda-a':       'BEDDA · Tydligt avslut',
     'salutogen':     'Salutogen kommunikation',
     'rodflagga':     'Röda flaggor först',
