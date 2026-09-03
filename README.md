@@ -179,26 +179,50 @@ ställena plus `PROFIL` i `content/people.js`.
 Logotypen tillhör Forsåker vårdcentral. Om spelet återanvänds av någon annan
 verksamhet ska märket bytas ut.
 
-## Psykologisk rådgivare (agent)
+## Professionsrådgivare (agenter)
 
-`.claude/agents/psykologisk-radgivare.md` definierar en specialiserad agent som
-granskar och utvecklar det kliniska och pedagogiska innehållet. Den läser in
-`docs/PEDAGOGIK.md`, `docs/INNEHALL.md` och principregistret innan den uttalar
-sig, och arbetar utifrån inlärningsteori, modern exponeringsteori,
-behandlingsdosering i svensk primärvård, sömn och försäkringsmedicin.
+`.claude/agents/` innehåller sex specialiserade agenter som granskar och
+utvecklar innehållet — en per profession i spelet. Alla följer samma
+granskningsprotokoll i [`docs/GRANSKNING.md`](docs/GRANSKNING.md) och har var sin
+facklig tyngdpunkt.
 
-Anropa den från Claude Code:
+| Agent | Granskar främst | Tyngdpunkt |
+|---|---|---|
+| `sjukskoterska-radgivare` | `cases-ssk.js` | Triage på distans, röda flaggor, vårdnivå, yrkesansvar |
+| `psykologisk-radgivare` | `cases-psykolog.js` | Inlärningsteori, beteendeanalys, modern exponeringsteori, sömn |
+| `fysioterapeut-radgivare` | `cases-fysio.js` | Rörelseorganen, belastning, progressiv träning, gula och röda flaggor |
+| `arbetsterapeut-radgivare` | `cases-arbetsterapeut.js` | Aktivitetsbegreppet, handfunktion, hjälpmedel, kognitivt stöd |
+| `lakare-radgivare` | `cases-lakare.js` + allt medicinskt | Försäkringsmedicin, intyget som handling, signeringsansvaret |
+| `rehabkoordinator-radgivare` | `cases-rehabkoordinator.js` | Koordineringsuppdraget, rehabplan, samtycke, rehabkedjan |
+
+Anropa dem från Claude Code:
 
 ```
-Använd psykologisk-radgivare för att granska content/cases-fysio.js
-Använd psykologisk-radgivare för att skriva ett nytt psykologfall om paniksyndrom
+Använd fysioterapeut-radgivare för att granska content/cases-fysio.js
+Använd lakare-radgivare för att stresstesta signeringsansvaret i lak-anna
+Använd arbetsterapeut-radgivare för att skriva ett nytt fall om handledsbesvär
 ```
 
-Den har en fast granskningschecklista: håller facit, är åtgärden genomförbar i
-verkligheten, är distraktorerna trovärdiga, finns den behagliga fällan, är
-nyanserna märkta `'delvis'`, lär fallet ut "aldrig sjukskriva", går röda flaggor
-före flödet, och hämtar varje kedjeled sina distraktorer från de andra leden.
-Den tar aldrig bort `EJ KLINISKT GRANSKAT` – det gör verksamheten.
+Alla kan **juridiken** som rör deras roll — PSL, HSL, patientlagen, PDL, OSL,
+socialförsäkringsbalken, arbetsmiljölagen och Socialstyrelsens föreskrifter om
+intyg — och alla är instruerade att slå upp aktuell lydelse i stället för att
+gissa.
+
+### Verklighetsförankring
+
+Det som skiljer dem från en lärobok är att de också ska väga in den informella
+kunskapen från branschen: underbemanning, hyrpersonal, bruten kontinuitet,
+väntetider, och skillnaden mellan vad riktlinjerna säger *bör* göras och vad som
+faktiskt *görs*. Ett facit som förutsätter resurser som inte finns lär ut fel
+sak — och gör spelet otrovärdigt för den som jobbar där på riktigt.
+
+Varje agent får svara **"jag vet inte om detta förekommer i primärvården"**. Det
+räknas som ett fynd och skrivs in i [`docs/OPPNA-FRAGOR.md`](docs/OPPNA-FRAGOR.md),
+där redan flaggade osäkerheter samlas — till exempel om arbetsterapeuter
+verkligen gör arbetsplatsbedömningar i primärvården.
+
+Ingen av dem får ta bort `EJ KLINISKT GRANSKAT` ur en fallfil. Det gör
+verksamheten.
 
 ## Ansvar och granskning
 
@@ -211,7 +235,8 @@ behöver:
    om vad som är rätt och fel.
 2. **Regeluppgifter verifieras** mot Försäkringskassans aktuella regelverk.
    Karensregler, intygsdagar och tidsgränser ändras.
-3. **`LESS`-akronymen fyllas i.** Handboken (`content/glossary.js`, posten
+3. **De öppna frågorna i [`docs/OPPNA-FRAGOR.md`](docs/OPPNA-FRAGOR.md) avgöras.**
+4. **`LESS`-akronymen fyllas i.** Handboken (`content/glossary.js`, posten
    `less`) innehåller en markerad `todo` där bokstävernas betydelse ska stå.
 
 Varje fallfil inleds med en `EJ KLINISKT GRANSKAT`-flagga. Ta bort den när
