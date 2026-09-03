@@ -18,7 +18,7 @@
       minuter: 18,
       kampanj: 'anna',
       svarighet: 2,
-      principer: ['signering', 'bedda-d1', 'dfa-aktivitet', 'grad'],
+      principer: ['signering', 'bedda-d1', 'dfa-aktivitet', 'rodflagga', 'grad'],
       journal: [
         ['Ärende', 'Anna Ek, 34 år. Försäkringsmedicinsk utredning av leg. psykolog Karin Lund.'],
         ['Diagnos', 'F41.1 Generaliserat ångestsyndrom (psykologens bedömning)'],
@@ -30,7 +30,7 @@
         ['Åtgärd', 'KBT med exponering påbörjad. Uppföljning inbokad om en vecka.']
       ],
       intro: [
-        'Femton minuter mellan två besök. Psykologens utredning ligger uppe på skärmen.',
+        'En lucka mellan två besök. Psykologens utredning ligger uppe på skärmen.',
         'Det är ditt namn som ska stå under beslutet.'
       ],
       introExtra: [
@@ -274,7 +274,7 @@
       minuter: 16,
       svarighet: 3,
       endastDrill: true,
-      principer: ['signering', 'bedda-d1', 'dfa-aktivitet'],
+      principer: ['signering', 'bedda-d1', 'dfa-funktion', 'dfa-aktivitet', 'plan'],
       journal: [
         ['Ärende', 'Jonas Ek, 38 år, IT-support. Försäkringsmedicinskt underlag från kollega på mottagningen.'],
         ['Diagnos', 'F43.8A Utmattningssyndrom'],
