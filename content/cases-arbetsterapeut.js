@@ -18,7 +18,7 @@
       minuter: 25,
       kampanj: 'carina',
       svarighet: 2,
-      principer: ['vardagsrev', 'hjalpmedel', 'dfa-aktivitet', 'salutogen', 'agens'],
+      principer: ['vardagsrev', 'hjalpmedel', 'dfa-aktivitet', 'salutogen', 'agens', 'ansvar'],
       journal: [
         ['Remiss', 'Triagerad av sjuksköterska. Handfunktion och arbetsförmåga.'],
         ['Diagnos', 'Tumbasartros bilateralt, värst höger (känd sedan 2 år)'],
