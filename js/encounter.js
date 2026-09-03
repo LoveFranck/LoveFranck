@@ -486,6 +486,7 @@
 
     var klar = E.done;
     LESS.ui.globalKeys.journal = null;
+    LESS.ui.globalKeys.kontroller = null;
     E = null;
     LESS.debrief.visa(resultat, klar);
   }
@@ -515,6 +516,7 @@
     LESS.setScene(scene);
     LESS.ui.globalKeys.journal = visaJournal;
     LESS.ui.globalKeys.handbok = LESS.handbokPanel;
+    LESS.ui.globalKeys.kontroller = function () { ui.panel('KONTROLLER', LESS.kontrollHtml(), null); };
 
     ui.hud(person().namn, E.kvar, E.minuter);
 

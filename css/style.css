@@ -239,6 +239,39 @@ body{
 #panel-body .kv b{ min-width:76px; font-weight:normal; color:#606050; }
 .panel-foot{ font-size:9px; color:#606050; padding-top:4px; border-top:1px dotted #b0b090; margin-top:4px; }
 
+/* ---------- Tangentbordsbild i kontrollrutan ---------- */
+
+.kbd{
+  display:flex; flex-direction:column; gap:3px;
+  margin:6px 0 7px;
+}
+.kbd .rad{ display:flex; gap:3px; }
+.kbd .rad.in1{ padding-left:7px; }
+.kbd .rad.in2{ padding-left:14px; }
+.kbd.piltgt{ align-items:center; }
+
+.tgt{
+  display:flex; align-items:center; justify-content:center;
+  width:17px; height:17px;
+  border:2px solid var(--ink); border-radius:3px;
+  background:#e6e6d2; color:#5a5a4c;
+  font-size:9px; line-height:1;
+  box-shadow:0 2px 0 #b4b49c;
+}
+.tgt.tom{ border-color:transparent; background:none; box-shadow:none; }
+.tgt.ga{ background:var(--gold); color:var(--ink); box-shadow:0 2px 0 #a06c10; }
+.tgt.kA{ background:var(--mark-mint); color:var(--mark); box-shadow:0 2px 0 var(--mark); font-weight:bold; }
+.tgt.kB{ background:var(--silver); color:var(--ink); box-shadow:0 2px 0 #6a7488; font-weight:bold; }
+
+#panel-body p.leg{ font-size:9px; color:#5a5a4c; margin:-2px 0 6px; }
+.chip{
+  display:inline-block; width:8px; height:8px; margin-right:1px;
+  border:1px solid var(--ink); vertical-align:-1px;
+}
+.chip.ga{ background:var(--gold); }
+.chip.kA{ background:var(--mark-mint); }
+.chip.kB{ background:var(--silver); }
+
 /* ---------- Debrief ---------- */
 
 #debrief{ position:absolute; inset:0; background:var(--paper); display:flex; flex-direction:column; }

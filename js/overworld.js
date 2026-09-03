@@ -303,22 +303,35 @@
   function oveIntro() {
     var d = LESS.state.data;
     paus();
-    var rader = [
+    var del1 = [
       'Där är du ju. Ove heter jag, handledare här på Forsåker.',
       'Vi jobbar efter LESS: ett sjukskrivningsärende går inte automatiskt till läkare. Sjuksköterskan bedömer först, och bokar psykolog eller fysioterapeut när det passar bättre.',
       'Idag följer du tre ärenden hela vägen. Du byter roll längs vägen – jag säger till var du ska.',
-      'Du går med piltangenterna eller WASD. A är Z, Enter eller mellanslag. B är X.',
+      'Innan vi börjar: spelet styrs som en gammal Game Boy. Ett styrkors och två knappar.',
+      'Du går med piltangenterna nere till höger på tangentbordet. W, A, S och D fungerar också.',
+      'A-knappen är Z och B-knappen är X. De ligger bredvid varandra längst ner till vänster – lägg ringfingret på Z och långfingret på X, så sitter det efter en stund.',
+      'A är den du använder mest: prata, bekräfta och läsa vidare. B tar dig tillbaka och visar mina tips. Kika på bilden här.'
+    ];
+    var del2 = [
+      'Trycker du K när som helst kommer bilden tillbaka. J visar journalen, H handboken.',
       'Först ut: Anna Ek har skrivit i chatten. Du ska in i TRIAGE, uppe till vänster i korridoren. Ställ dig framför datorn och tryck A.',
       'Jag går före och ställer mig utanför dörren. Prata med mig när du vill, jag säger om var du ska.'
     ];
-    ui.sayAll(rader.map(function (t) {
-      return { text: t, speaker: { name: LESS.handledare.namn, kind: 'you' } };
-    }), function () {
-      d.kampanj.introVisad = true;
-      introKor = false;
-      LESS.state.spara();
-      LESS.sfx('door');
-      ater();
+    function som(rader) {
+      return rader.map(function (t) {
+        return { text: t, speaker: { name: LESS.handledare.namn, kind: 'you' } };
+      });
+    }
+    ui.sayAll(som(del1), function () {
+      ui.panel('KONTROLLER', kontrollHtml(), function () {
+        ui.sayAll(som(del2), function () {
+          d.kampanj.introVisad = true;
+          introKor = false;
+          LESS.state.spara();
+          LESS.sfx('door');
+          ater();
+        });
+      });
     });
   }
 
@@ -389,6 +402,51 @@
     if (s.kind === 'utgang')  { utgang(); return; }
     if (s.role) startRoll(s.role);
   }
+
+  /* Kontrollöversikt med en liten bild av tangentbordet.
+     "A är Z" hjälper ingen som inte vet var Z sitter – därför visas
+     knapparnas plats, inte bara deras namn. */
+  function kontrollHtml() {
+    function t(txt, kl) {
+      return '<span class="tgt' + (kl ? ' ' + kl : '') + '">' + LESS.esc(txt) + '</span>';
+    }
+    var h = '';
+    h += '<p>Spelet styrs som en Game Boy: ett styrkors och två knappar.</p>';
+
+    h += '<h3>Var knapparna sitter</h3>';
+    h += '<div class="kbd">' +
+         '<div class="rad">' + t('Q') + t('W', 'ga') + t('E') + t('R') + t('T') + '</div>' +
+         '<div class="rad in1">' + t('A', 'ga') + t('S', 'ga') + t('D', 'ga') + t('F') + t('G') + '</div>' +
+         '<div class="rad in2">' + t('Z', 'kA') + t('X', 'kB') + t('C') + t('V') + '</div>' +
+         '</div>';
+    h += '<p class="leg"><span class="chip ga"></span> gå &nbsp; ' +
+         '<span class="chip kA"></span> A-knappen (Z) &nbsp; ' +
+         '<span class="chip kB"></span> B-knappen (X)</p>';
+    h += '<p><b>Z</b> och <b>X</b> ligger bredvid varandra längst ner till vänster på tangentbordet, ' +
+         'precis som A och B på en Game Boy. Vila vänsterhandens ringfinger på Z och långfingret på X.</p>';
+
+    h += '<div class="kbd piltgt">' +
+         '<div class="rad">' + t('', 'tom') + t('↑', 'ga') + t('', 'tom') + '</div>' +
+         '<div class="rad">' + t('←', 'ga') + t('↓', 'ga') + t('→', 'ga') + '</div>' +
+         '</div>';
+    h += '<p>Piltangenterna sitter längst ner till höger. Använd höger hand där och vänster hand på Z och X.</p>';
+
+    h += '<h3>Vad knapparna gör</h3>';
+    h += '<div class="kv"><b>Gå</b><span>Piltangenter eller W A S D</span></div>';
+    h += '<div class="kv"><b>A-knappen</b><span>Z · prata, bekräfta, läsa vidare. Även Enter och mellanslag.</span></div>';
+    h += '<div class="kv"><b>B-knappen</b><span>X · tillbaka, handledarens tips. Även backsteg.</span></div>';
+    h += '<div class="kv"><b>J</b><span>Journal under möten, anslagstavla i huset</span></div>';
+    h += '<div class="kv"><b>H</b><span>Handboken</span></div>';
+    h += '<div class="kv"><b>K</b><span>Den här rutan</span></div>';
+    h += '<div class="kv"><b>Esc</b><span>Meny</span></div>';
+    h += '<div class="kv"><b>M</b><span>Ljud på eller av</span></div>';
+
+    h += '<h3>På pekskärm</h3>';
+    h += '<p>Styrkorset ligger under skärmen till vänster, A och B till höger. ' +
+         'A är den nedre av de två runda knapparna. Raden längst ner har JOURNAL, HANDBOK och MENY.</p>';
+    return h;
+  }
+  LESS.kontrollHtml = kontrollHtml;
 
   function handbokHtml() {
     var html = '';
@@ -582,6 +640,7 @@
           : 'Följ tre patienter hela vägen genom LESS-flödet.' },
       { text: 'Anslagstavlan (progression)' },
       { text: 'Handboken' },
+      { text: 'Kontroller' },
       { text: LESS.audio.enabled ? 'Ljud: PÅ' : 'Ljud: AV' },
       { text: d.installningar.tips ? 'Handledartips: PÅ' : 'Handledartips: AV',
         hint: 'Tipsen tonas ändå bort automatiskt när en roll sitter.' },
@@ -597,9 +656,10 @@
           : 'Övningsläge. Gå in i vilket rum du vill.', null, ater);
       } else if (i === 1) { ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); }
       else if (i === 2) { ui.panel('HANDBOKEN', handbokHtml(), ater); }
-      else if (i === 3) { LESS.audio.toggle(); d.installningar.ljud = LESS.audio.enabled; LESS.state.spara(); receptionsMeny(); }
-      else if (i === 4) { d.installningar.tips = !d.installningar.tips; LESS.state.spara(); receptionsMeny(); }
-      else if (i === 5) {
+      else if (i === 3) { ui.panel('KONTROLLER', kontrollHtml(), ater); }
+      else if (i === 4) { LESS.audio.toggle(); d.installningar.ljud = LESS.audio.enabled; LESS.state.spara(); receptionsMeny(); }
+      else if (i === 5) { d.installningar.tips = !d.installningar.tips; LESS.state.spara(); receptionsMeny(); }
+      else if (i === 6) {
         ui.say('Vill du radera all progression och börja om?', null, function () {
           ui.menu([{ text: 'Nej, avbryt' }, { text: 'Ja, radera allt' }], {}, function (j) {
             if (j === 1) { LESS.state.nollstall(); location.reload(); }
@@ -640,6 +700,7 @@
 
     LESS.ui.globalKeys.journal = function () { paus(); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); };
     LESS.ui.globalKeys.handbok = function () { paus(); ui.panel('HANDBOKEN', handbokHtml(), ater); };
+    LESS.ui.globalKeys.kontroller = function () { paus(); ui.panel('KONTROLLER', kontrollHtml(), ater); };
 
     /* Handledaren möter upp första gången man kommer in i huset. */
     if (LESS.state.data.lage === 'kampanj' && !LESS.state.data.kampanj.introVisad && !introKor) {

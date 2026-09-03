@@ -14,6 +14,7 @@
     x: 'b', X: 'b', Backspace: 'b',
     j: 'journal', J: 'journal',
     h: 'handbok', H: 'handbok',
+    k: 'kontroller', K: 'kontroller',
     Escape: 'meny',
     m: 'ljud', M: 'ljud'
   };
@@ -44,7 +45,7 @@
 
   function fire(k) {
     /* Journal och handbok går att öppna var som helst, utom ovanpå en panel */
-    if (!panelOppen && (k === 'journal' || k === 'handbok') &&
+    if (!panelOppen && (k === 'journal' || k === 'handbok' || k === 'kontroller') &&
         ui.globalKeys && typeof ui.globalKeys[k] === 'function') {
       ui.globalKeys[k]();
       return;
@@ -298,14 +299,17 @@
     panel: function (title, html, cb) {
       $('panel-title').textContent = title;
       $('panel-body').innerHTML = html;
-      $('panel-body').scrollTop = 0;
+      /* Visa först, nollställ sedan: scrollTop biter inte på ett element med
+         display:none, och webbläsaren återställer då förra positionen. */
       LESS.show($('panel'), true);
+      $('panel-body').scrollTop = 0;
       panelOppen = true;
       var body = $('panel-body');
       var h = input.push(function (k) {
         if (k === 'down') body.scrollTop += 22;
         else if (k === 'up') body.scrollTop -= 22;
-        else if (k === 'b' || k === 'a' || k === 'journal' || k === 'handbok' || k === 'meny') {
+        else if (k === 'b' || k === 'a' || k === 'journal' || k === 'handbok' ||
+                 k === 'kontroller' || k === 'meny') {
           LESS.sfx('back');
           input.pop(h);
           panelOppen = false;

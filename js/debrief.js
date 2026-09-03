@@ -113,8 +113,9 @@
          'Försäkringskassans regelverk och lokala rutiner.</div>';
 
     $('debrief-body').innerHTML = h;
-    $('debrief-box').scrollTop = 0;
+    /* Visa först, nollställ sedan – annars ärver rutan förra mötets scroll. */
     LESS.show($('debrief'), true);
+    $('debrief-box').scrollTop = 0;
     LESS.sfx(res.betyg === 'omtag' ? 'fail' : 'done');
 
     var body = $('debrief-box');

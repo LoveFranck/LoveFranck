@@ -41,10 +41,17 @@ server. Bygg om den efter ändringar med `node tools/build-single.js`.
 | X, backsteg | **B** – tillbaka, handledartips |
 | J | Journal (i möte) / anslagstavla (i huset) |
 | H | Handboken |
+| K | Kontroller – bild av var knapparna sitter |
 | Esc | Meny |
 | M | Ljud på/av |
 
-På pekskärm visas en styrkors-panel under skärmen.
+På pekskärm visas en styrkors-panel under skärmen; kontrollrutan nås via MENY.
+
+Vet man inte var Z och X sitter hjälper det inte att få veta att A är Z. Därför
+finns en kontrollruta med en liten bild av tangentbordet, där W A S D, Z och X
+är utmärkta i var sin färg. Handledare Ove öppnar den åt dig under
+introduktionen, och den nås sedan när som helst med **K**, från huvudmenyn och
+från menyn i receptionen.
 
 ---
 

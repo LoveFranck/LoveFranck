@@ -68,6 +68,7 @@
       hint: 'Följ Anna, Bengt och Carina genom hela flödet. Du byter roll längs vägen.' });
     items.push({ text: 'Övningsläge – en roll i taget',
       hint: 'Välj rum fritt och mata på med fall. Repetitionskön styr urvalet.' });
+    items.push({ text: 'Kontroller', hint: 'Var knapparna sitter på tangentbordet.' });
     items.push({ text: 'Handboken', hint: 'LESS, BEDDA, DFA-kedjan, triage, juridik.' });
     items.push({ text: 'Om spelet' });
 
@@ -85,6 +86,7 @@
         } else { d.lage = 'kampanj'; LESS.state.spara(); startVarld(); }
       }
       else if (txt.indexOf('Övningsläge') === 0) { d.lage = 'drill'; LESS.state.spara(); startVarld(); }
+      else if (txt === 'Kontroller') { ui.panel('KONTROLLER', LESS.kontrollHtml(), huvudmeny); }
       else if (txt === 'Handboken') { ui.panel('HANDBOKEN', LESS.handbokHtml(), huvudmeny); }
       else { omSpelet(); }
     });
@@ -102,6 +104,7 @@
          '<li>X eller backsteg – B (tillbaka)</li>' +
          '<li>J – journal / anslagstavla</li>' +
          '<li>H – handboken</li>' +
+         '<li>K – kontroller</li>' +
          '<li>Esc – meny</li>' +
          '<li>M – ljud på/av</li>' +
          '</ul>';
