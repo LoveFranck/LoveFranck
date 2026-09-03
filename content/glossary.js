@@ -251,6 +251,7 @@
     'bedda-a':       'BEDDA · Tydligt avslut',
     'salutogen':     'Salutogen kommunikation',
     'rodflagga':     'Röda flaggor först',
+    'somatik':       'Den somatiska frågan måste tilldelas någon',
     'triage-f':      'F-diagnos i botten → psykolog',
     'triage-m':      'M-diagnos i botten → fysioterapeut',
     'triage-akt':    'Aktivitet och handfunktion → arbetsterapeut',

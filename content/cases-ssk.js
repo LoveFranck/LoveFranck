@@ -18,7 +18,7 @@
       minuter: 16,
       kampanj: 'anna',
       svarighet: 1,
-      principer: ['bedda-e', 'rodflagga', 'dorr', 'triage-f', 'bedda-a'],
+      principer: ['bedda-e', 'rodflagga', 'somatik', 'dorr', 'triage-f', 'bedda-a'],
       journal: [
         ['Kontaktorsak', 'Egen begäran om sjukskrivning via chatt'],
         ['Tidigare', 'Inga tidigare kontakter för psykisk ohälsa'],
@@ -101,7 +101,7 @@
             { text: 'Vad har du provat själv, och vad har hjälpt även lite grand?', ratt: true, princip: 'salutogen',
               fx: { agens: 10, allians: 6, underlag: 4 },
               varfor: 'Salutogen fråga: den letar efter undantag och resurser, och den placerar Anna som någon som redan gör saker.' },
-            { text: 'Har du någon kroppslig sjukdom, tar du några läkemedel, och hur ser alkoholvanorna ut?', ratt: true, princip: 'rodflagga',
+            { text: 'Har du någon kroppslig sjukdom, tar du några läkemedel, och hur ser alkoholvanorna ut?', ratt: true, princip: 'somatik',
               fx: { sakerhet: 10, underlag: 6 },
               varfor: 'Tre korta frågor som du får ställa och som ingen annan i kedjan kommer att ställa. Trötthet, bruten sömn och koncentrationssvikt är inte bara ångestsymtom – de är också de vanligaste symtomen vid tyreoideasjukdom, anemi, B12-brist, sömnapné och riskbruk av alkohol. Du ska inte utreda det, och du får inte diagnostisera det. Du ska veta om något av det redan är känt, och se till att frågan hamnar hos någon.' },
             { text: 'Har du berättat för din chef hur du mår?', ratt: false, princip: 'bedda-d2',
@@ -152,7 +152,7 @@
           banner: 'DEN FRÅGA INGEN ÄGER',
           fraga: 'Du är på väg att triagera Anna förbi läkaren. Trötthet, sömn bruten sedan i maj och koncentrationssvikt har också en kroppslig differentialdiagnostik. Vad gör du med den?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'somatik',
           val: [
             { text: 'Journalför att somatisk bedömning återstår, och skriver in i bokningen att den ska tas när läkaren tar ställning.', ratt: true },
             { text: 'Inget särskilt – psykologen får ta det som hör till kroppen.', ratt: false,
