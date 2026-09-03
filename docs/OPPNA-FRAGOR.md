@@ -103,7 +103,118 @@ bedömningen dokumenteras för att hålla vid en granskning?
 **Vem avgör:** `sjukskoterska-radgivare` tillsammans med `lakare-radgivare`, och
 i slutänden verksamhetens medicinskt ansvariga.
 
-**Status:** öppen.
+### Sjuksköterskerådgivarens del av svaret (2026-09-03)
+
+**Kortversionen: mandatet finns, men inte för den formulering modellen använder
+i dag.** Beskrivningen i `content/glossary.js` — att sjuksköterskan *"gör en
+första bedömning av om en F-diagnos eller M-diagnos rimligen ligger i botten"* —
+är en diagnostisk formulering, och den bär inte. Samma beslut går att fatta,
+med samma utfall, om det formuleras negativt och funktionellt. Det är inte
+ordklyveri: det är skillnaden mellan ett beslut som går att försvara och ett som
+inte gör det.
+
+**1. Det sjuksköterskan får besluta.** Bedömning av vårdnivå och brådskegrad är
+sjuksköterskans självständiga yrkesutövning och görs redan varje dag i
+telefon- och chattriagen: att bedöma, ge råd, hänvisa, boka och avsluta ärenden.
+Kravet i 6 kap. 1 § patientsäkerhetslagen (2010:659) — att arbeta i
+överensstämmelse med vetenskap och beprövad erfarenhet — gäller henne direkt och
+personligen, inte via läkaren. Att hänvisa vidare är alltså ett beslut hon
+fattar själv och ansvarar för själv, inte en icke-handling.
+
+**2. Det hon inte får besluta.** Hon får inte ställa diagnos, och hon får inte
+utesluta somatisk sjukdom. Att säga "det här är en F43" och att säga "inget
+kroppsligt förklarar det här" är två sidor av samma otillåtna beslut. Hon får
+inte heller ta ställning till ett intyg, varken beviljande eller nekande — det
+är ett medicinskt ställningstagande som förutsätter läkarintyg enligt 27 kap.
+25 § socialförsäkringsbalken.
+
+**3. Den formulering som håller.** Bedömningen ska skrivas som ett
+uteslutningsbeslut och ett vårdnivåbeslut, inte som en diagnoshypotes:
+
+> *"Inga uppgifter som talar för behov av läkarbedömning idag: [de frågor som
+> ställts, med patientens svar]. Besvären enligt patientens egen beskrivning i
+> huvudsak [psykiska / från rörelseorganen]. Bokas till [profession] för
+> bedömning och försäkringsmedicinsk utredning. Somatisk bedömning ej gjord —
+> överlämnas till läkare i samband med utredningen. Patienten informerad om att
+> intygsfrågan avgörs av läkare."*
+
+Skillnaden mot "trolig F-diagnos": den första säger vad sjuksköterskan har
+iakttagit och beslutat, den andra säger vad patienten har. Bara den första
+ligger inom hennes kompetens — och de leder till exakt samma bokning.
+
+**4. Fyra situationer där hon aldrig triagerar förbi läkaren.**
+
+- Röd flagga, eller osäkerhet om det finns en röd flagga. Redan tränat i
+  `ssk-hasse`.
+- Läkemedelsfrågan: patienten har, vill ha eller håller på att sätta ut sömnmedel
+  eller lugnande.
+- Ett pågående sjukfall där intyget ska förlängas eller ändras. Utredningen kan
+  bokas, men beskedet om intyget är läkarens. Tränat i `ssk-iris`.
+- Patienten begär läkarbedömning och står kvar vid det efter att ha fått
+  information om alternativet. Patientlagen ger ingen rätt att välja profession
+  — 8 kap. 1 § om ny medicinsk bedömning gäller livshotande eller särskilt
+  allvarlig sjukdom och är sällan tillämplig här — men 3 kap. 2 § kräver att
+  patienten informeras om möjligheten att välja behandlingsalternativ, och ett
+  vidhållet önskemål som avvisas ska dokumenteras med skälet. I praktiken är det
+  också där modellen tappar patienter till akuten och till digitala vårdgivare.
+
+**5. Dokumentationen.** Patientdatalagen (2008:355) 3 kap. 6 § kräver, om
+uppgifterna finns, väsentliga uppgifter om bakgrunden till vården, uppgift om
+anledningen till mer betydande åtgärder, väsentliga uppgifter om vidtagna och
+planerade åtgärder, samt uppgift om den information som lämnats till patienten
+och om de ställningstaganden som gjorts i fråga om val av behandlingsalternativ.
+Ett triagebeslut som styr bort en patient från läkarbedömning är ett sådant
+ställningstagande. Fem rader räcker, och de fyra första är vanligen redan
+skrivna:
+
+1. Vad patienten begärde, med hennes egna ord.
+2. Vilka frågor som ställts för att utesluta akut vårdnivå — **och svaren**, inte
+   slutsatsen. "Kissar som vanligt, ingen domning i grenen" går att ompröva;
+   "inga röda flaggor" gör det inte.
+3. Ställningstagandet och dess skäl: varför denna vårdnivå och inte läkare.
+4. Vad som återstår obesvarat och **för vem**. Det är den rad som saknas i dag,
+   och det är den som gör att den somatiska frågan tilldelas någon i stället för
+   att falla mellan stolarna.
+5. Vilken information patienten fått: vad som är bokat, vad besöket är till för,
+   och att intygsfrågan avgörs av läkare.
+
+Att profession och signatur framgår är inget administrativt påhäng här: nästa
+läsare måste kunna se att uteslutningen är gjord av en sjuksköterska, så att den
+inte förväxlas med en läkarbedömning som redan är gjord.
+
+**6. Rådgivarens invändning mot modellen, som den ser ut nu.** Med den negativa
+formuleringen och de fem raderna håller konstruktionen juridiskt. Men den flyttar
+ett ansvar till sjuksköterskan som hon i dag inte har, och den gör det på den
+tunnaste möjliga informationen — text, utan röst, utan kropp, i en kö som ska
+betas av. Två saker måste därför följa med modellen, annars är den inte
+genomförbar utan att bli farlig:
+
+- **Ett skrivet mandat.** Verksamhetschefen och den medicinskt ansvariga läkaren
+  ska ha beslutat, skriftligt, att sjuksköterskan får fatta det här beslutet och
+  under vilka villkor. Utan det bär den enskilda sjuksköterskan personligen ett
+  ansvar som organisationen har lagt på henne muntligt.
+- **En låg tröskel tillbaka.** Det ska vara gratis och oproblematiskt att boka
+  läkare vid tveksamhet. En modell vars poäng är att avlasta läkaren skapar ett
+  tryck åt ett håll, och det trycket landar på den som sitter i chattkön.
+
+**Behöver läkarrådgivarens ögon:**
+
+- Är den negativa formuleringen i punkt 3 tillräcklig för att läkaren senare ska
+  kunna stå bakom intyget, eller behöver läkaren i jourupplägget ändå upprepa
+  röda flagg-frågorna själv?
+- Vem äger den somatiska frågan formellt mellan triagen och jourläkarbesöket?
+  Rådgivaren har skrivit in i `ssk-anna` att sjuksköterskan journalför den som
+  obesvarad och skickar den vidare. Räcker det, eller ska prover beställas redan
+  i triagen? Se `content/fragor.js`, frågan `ssk-bestalla-prover`.
+- Ska den fjärde situationen i punkt 4 — patienten som vidhåller att hon vill
+  träffa läkare — vara ett automatiskt läkarärende, eller ett ärende som
+  sjuksköterskan får avsluta med dokumenterat skäl?
+
+**Status:** sjuksköterskerådgivarens del skriven; väntar på `lakare-radgivare`
+och därefter på verksamhetens medicinskt ansvariga. Formuleringen i
+`content/glossary.js`, posten `less` (*"om en F-diagnos eller M-diagnos rimligen
+ligger i botten"*), bör skrivas om enligt punkt 3 när frågan är avgjord —
+rådgivaren har inte rört glossaryfilen.
 
 ---
 

@@ -15,7 +15,7 @@
       titel: 'Chattärende 08:12',
       patient: 'anna',
       lage: 'chatt',
-      minuter: 14,
+      minuter: 16,
       kampanj: 'anna',
       svarighet: 1,
       principer: ['bedda-e', 'rodflagga', 'dorr', 'triage-f', 'bedda-a'],
@@ -23,6 +23,7 @@
         ['Kontaktorsak', 'Egen begäran om sjukskrivning via chatt'],
         ['Tidigare', 'Inga tidigare kontakter för psykisk ohälsa'],
         ['Läkemedel', 'Inga'],
+        ['Somatiskt', 'Ingen känd kroppslig sjukdom noterad. Inga prover tagna sedan 2019.'],
         ['Noterat', 'Omorganisation på arbetsplatsen sedan i våras']
       ],
       intro: [
@@ -86,20 +87,26 @@
 
         { typ: 'flera',
           banner: 'KARTLÄGGNING',
-          fraga: 'Du hinner ställa tre frågor innan du triagerar. Välj tre.',
-          tips: 'Du behöver tre saker: kunna utesluta akut risk, veta hur funktionen ser ut i vardagen, och veta vad som redan prövats. Skalor och diagnosgissningar ger dig ingen av dem.',
-          antal: 3,
+          fraga: 'Du hinner ställa fyra frågor innan du triagerar. Välj fyra.',
+          tips: 'Du behöver fyra saker: kunna utesluta akut risk, veta hur funktionen ser ut i vardagen, veta vad som redan prövats – och veta om något kroppsligt kan förklara bilden. Den sista är den ingen annan i kedjan kommer att ställa. Skalor och diagnosgissningar ger dig ingenting.',
+          antal: 4,
           tidPer: 1,
           val: [
             { text: 'Har du haft tankar på att inte vilja leva?', ratt: true, princip: 'rodflagga',
               flagga: 'suicid-fragad', fx: { sakerhet: 12, underlag: 6 },
-              varfor: 'Icke förhandlingsbart. Utan den frågan kan du inte veta vilken vårdnivå ärendet hör hemma på.' },
+              varfor: 'Icke förhandlingsbart. Utan den frågan kan du inte veta vilken vårdnivå ärendet hör hemma på. I skrift gäller två saker till: ställ den ensam och inte i ett block med andra frågor, och lämna den aldrig obesvarad. Kommer ett ja, ett kanske eller inget svar alls är chatten slut – då ringer du upp.' },
             { text: 'Hur ser en vanlig morgon och en vanlig arbetsdag ut just nu?', ratt: true, princip: 'dfa-aktivitet',
               fx: { underlag: 10, allians: 4 },
               varfor: 'Funktion i konkreta situationer är det som senare bär DFA-kedjan. "Ångest" är en känsla, "kommer inte ut genom dörren" är en aktivitetsbegränsning.' },
             { text: 'Vad har du provat själv, och vad har hjälpt även lite grand?', ratt: true, princip: 'salutogen',
               fx: { agens: 10, allians: 6, underlag: 4 },
               varfor: 'Salutogen fråga: den letar efter undantag och resurser, och den placerar Anna som någon som redan gör saker.' },
+            { text: 'Har du någon kroppslig sjukdom, tar du några läkemedel, och hur ser alkoholvanorna ut?', ratt: true, princip: 'rodflagga',
+              fx: { sakerhet: 10, underlag: 6 },
+              varfor: 'Tre korta frågor som du får ställa och som ingen annan i kedjan kommer att ställa. Trötthet, bruten sömn och koncentrationssvikt är inte bara ångestsymtom – de är också de vanligaste symtomen vid tyreoideasjukdom, anemi, B12-brist, sömnapné och riskbruk av alkohol. Du ska inte utreda det, och du får inte diagnostisera det. Du ska veta om något av det redan är känt, och se till att frågan hamnar hos någon.' },
+            { text: 'Har du berättat för din chef hur du mår?', ratt: false, princip: 'bedda-d2',
+              fx: { underlag: -2 },
+              varfor: 'Arbetsplatsen är viktig och frågan kommer att behöva ställas – men av den som ska planera återgången, inte av den som ska avgöra vart ärendet går idag. Här kostar den en av dina fyra platser, och du får svaret ändå i nästa replik.' },
             { text: 'Hur mycket ångest har du på en skala 1 till 10?', ratt: false, princip: 'dfa-aktivitet',
               fx: { underlag: -2 },
               varfor: 'En siffra utan sammanhang. Skattningen säger ingenting om vad hon klarar av att göra, och det är förmågan som styr både vårdnivå och ett eventuellt intyg.' },
@@ -139,7 +146,23 @@
             { text: 'Ja, alla sjukskrivningsärenden ska till läkare.', ratt: false },
             { text: 'Ja, hon undviker sin arbetsplats.', ratt: false }
           ],
-          forklaring: 'Duration är inte en röd flagga, och undvikande är själva problemet – inte ett tecken på fara. Att alla sjukskrivningsärenden ska till läkare är precis det gamla flödet som LESS ersätter. Anna kan tas om hand planerat, av rätt kompetens.' },
+          forklaring: 'Duration är inte en röd flagga, och undvikande är själva problemet – inte ett tecken på fara. Att alla sjukskrivningsärenden ska till läkare är precis det gamla flödet som LESS ersätter. Anna kan tas om hand planerat, av rätt kompetens. Men märk skillnaden: "ingen röd flagga" betyder att ärendet kan planeras, inte att det kroppsliga är avfärdat. Det är två olika frågor, och nästa beat gäller den andra.' },
+
+        { typ: 'kontroll',
+          banner: 'DEN FRÅGA INGEN ÄGER',
+          fraga: 'Du är på väg att triagera Anna förbi läkaren. Trötthet, sömn bruten sedan i maj och koncentrationssvikt har också en kroppslig differentialdiagnostik. Vad gör du med den?',
+          tidFel: 2,
+          princip: 'rodflagga',
+          val: [
+            { text: 'Journalför att somatisk bedömning återstår, och skriver in i bokningen att den ska tas när läkaren tar ställning.', ratt: true },
+            { text: 'Inget särskilt – psykologen får ta det som hör till kroppen.', ratt: false,
+              varfor: 'En psykolog får varken ordinera prover eller tolka dem, och kommer inte att fråga om tyreoideasymtom. Lämnar du frågan där lämnar du den åt ingen.' },
+            { text: 'Inget särskilt – bilden är tydlig, med debut i omorganisationen och tre månaders förlopp.', ratt: false,
+              varfor: 'En bra psykologisk förklaring gör inte den kroppsliga mindre möjlig. Hypotyreos debuterar också i maj, och hos den som samtidigt har det tungt på jobbet.' },
+            { text: 'Bokar om till läkarbedömning idag i stället.', ratt: false,
+              varfor: 'Frågan är inte akut och byter inte vårdnivå. Att göra om varje obesvarad fråga till en akuttid är det gamla flödet med en ny motivering.' }
+          ],
+          forklaring: 'Du ska inte göra den somatiska utredningen – du får inte och du hinner inte. Men i det gamla flödet tog läkaren den på köpet vid första besöket, och när du triagerar förbi läkaren försvinner den om du inte skriver ned den. En obesvarad fråga som ingen är utpekad att svara på är den lucka LESS-flödet skapar strukturellt. Det som håller vid en granskning är tre rader i journalen: vad du frågat och vad hon svarat, varför psykolog och inte läkare, och vad som återstår obesvarat och för vem. Kan du dessutom beställa blodstatus och TSH enligt mottagningens rutin är det bättre än så – då finns svaren när läkaren tar ställning på torsdag.' },
 
         { typ: 'val',
           humor: 'orolig',
@@ -203,14 +226,14 @@
         { typ: 'beslut',
           banner: 'TRIAGERING',
           fraga: 'Vart går ärendet?',
-          tips: 'F-diagnos i botten, inga röda flaggor, sjukskrivningsfråga. LESS-flödet har ett tydligt svar.',
+          tips: 'F-diagnos i botten, inga röda flaggor, sjukskrivningsfråga. LESS-flödet har ett tydligt svar. Men skriv beslutet i journalen som ett vårdnivåbeslut, inte som en diagnos: du har bedömt att läkarbedömning inte behövs idag och att psykolog är den kompetens som bäst kan börja – inte att Anna har en F-diagnos. Det senare får du inte avgöra, och du behöver inte göra det för att boka rätt.',
           val: [
             { text: 'Psykolog – försäkringsmedicinsk utredning och tidig insats',
               ok: true, princip: 'triage-f', tid: 1,
               kampanj: { nyckel: 'anna-triage', varde: 'psykolog' },
               fx: { underlag: 10, tydlighet: 6 },
               utfall: 'Anna får tid hos psykologen på torsdag, tre dagar efter chatten.',
-              varfor: 'Rätt enligt LESS: trolig F-diagnos, ingen röd flagga, sjukskrivningsfråga. Psykologen gör den försäkringsmedicinska utredningen och läkaren tar ställning till den. Patienten möter behandlande kompetens direkt i stället för att stå i akutkön.' },
+              varfor: 'Rätt enligt LESS: trolig F-diagnos, ingen röd flagga, sjukskrivningsfråga. Psykologen gör den försäkringsmedicinska utredningen och läkaren tar ställning till den. Patienten möter behandlande kompetens direkt i stället för att stå i akutkön. Skicka med den obesvarade kroppsliga frågan i bokningen – psykologen kan inte lösa den, men läkaren som kommer in på torsdag kan, om hon vet att den finns.' },
             { text: 'Läkare – akuttid idag',
               ok: false, princip: 'triage-f', tid: 1,
               kampanj: { nyckel: 'anna-triage', varde: 'lakare' },
@@ -250,7 +273,7 @@
       titel: 'Chattärende 09:40',
       patient: 'bengt',
       lage: 'chatt',
-      minuter: 14,
+      minuter: 15,
       kampanj: 'bengt',
       svarighet: 2,
       principer: ['rodflagga', 'triage-m', 'salutogen', 'dorr'],
@@ -299,7 +322,7 @@
           val: [
             { text: 'Kissar och bajsar du som vanligt? Domningar i grenen?', ratt: true, princip: 'rodflagga',
               flagga: 'cauda-fragad', fx: { sakerhet: 14, underlag: 6 },
-              varfor: 'Blås- och tarmpåverkan med ridbyxeanestesi är cauda equina-misstanke och en akutfråga – den frågan får aldrig hoppas över i ett ryggärende.' },
+              varfor: 'Blås- och tarmpåverkan med ridbyxeanestesi är cauda equina-misstanke och en akutfråga – den frågan får aldrig hoppas över i ett ryggärende. Notera samtidigt att den står som två frågor i samma mening. I chatt är det ett problem i sig, och det kommer tillbaka om en stund.' },
             { text: 'Har du feber, oförklarad viktnedgång eller värk som väcker dig på natten?', ratt: true, princip: 'rodflagga',
               fx: { sakerhet: 12, underlag: 6 },
               varfor: 'Allmänsymtom pekar mot infektion eller malignitet och byter vårdnivå direkt.' },
@@ -311,13 +334,31 @@
               varfor: 'Smärtintensitet styr varken vårdnivå eller sjukskrivningsgrad. Det gör aktivitetsbegränsningen i förhållande till arbetsuppgifterna.' },
             { text: 'Har du provat värmekudde?', ratt: false,
               varfor: 'Egenvårdsfråga som kan komma senare, men den sorterar inte ärendet.' },
-            { text: 'Hur mycket tjänar du?', ratt: false,
-              fx: { allians: -6 },
-              varfor: 'Irrelevant för bedömningen och riskerar att signalera misstro.' }
+            { text: 'Har arbetsgivaren erbjudit några lättare uppgifter?', ratt: false,
+              varfor: 'Rätt fråga, fel plats i ordningen. Den hör till planeringen efter att vårdnivån är avgjord, och här kostar den en av tre platser som skulle ha använts för att utesluta något akut.' }
           ] },
 
         { typ: 'replik', humor: 'neutral',
-          text: 'Nej inget sånt. Kissar som vanligt, ingen feber, ingen viktnedgång. Full kraft i benen. Det gör bara djävligt ont när jag böjer mig framåt, och det strålar ner i vänster skinka.' },
+          text: 'Nej inget sånt. Det gör bara djävligt ont när jag böjer mig framåt, och det strålar ner i vänster skinka.' },
+
+        { typ: 'kontroll',
+          banner: 'I SKRIFT',
+          fraga: 'Bengt svarade "nej inget sånt" på ett block med flera frågor. Räcker det?',
+          tidFel: 2,
+          princip: 'rodflagga',
+          val: [
+            { text: 'Nej. Jag ställer frågan om blås- och tarmfunktion en gång till, ensam, och journalför svaret med hans egna ord.', ratt: true },
+            { text: 'Ja. Han har svarat nej på alltihop.', ratt: false,
+              varfor: 'Du vet inte vilken av frågorna han läste. Ett samlat nej på ett samlat block är det billigaste sättet att missa en cauda equina.' },
+            { text: 'Ja, och jag skriver "inga röda flaggor" i journalen.', ratt: false,
+              varfor: 'Nu står din slutsats i journalen men inte hans svar. Slutsatsen går inte att ompröva – svaret gör det.' },
+            { text: 'Nej. Jag bokar läkarbedömning i stället, det är säkrast.', ratt: false,
+              varfor: 'Inte fel, men dyrt. Ett otydligt svar löses billigast genom att fråga en gång till, inte genom att flytta hela ärendet.' }
+          ],
+          forklaring: 'Det här är chattens egen risk. I telefon hör du tvekan och kan följa upp i samma andetag; i skrift ser du bara ordet "nej", och du vet inte om han läste alla tre frågorna eller bara den första. Den fråga som får avgöra om ett ryggärende är akut ska därför stå ensam, och svaret ska journalföras som han sa det – "kissar och bajsar som vanligt, ingen domning i grenen" – inte som din sammanfattning. Det kostar dig trettio sekunder och det är den enda rad som håller om ärendet granskas.' },
+
+        { typ: 'replik', humor: 'neutral',
+          text: 'Aha, förlåt, jag läste nog för snabbt. Kissar och bajsar som vanligt, ingen domning i grenen. Ingen feber, ingen viktnedgång. Full kraft i benen, jag kan stå på tå på båda.' },
 
         { typ: 'val',
           fraga: 'Bengt är fortfarande inställd på fyra veckors sjukskrivning. Vad gör du?',
@@ -408,7 +449,7 @@
       minuter: 9,
       kampanj: 'carina',
       svarighet: 3,
-      principer: ['triage-akt', 'salutogen', 'bedda-a', 'hjalpmedel'],
+      principer: ['triage-akt', 'salutogen', 'bedda-a', 'hjalpmedel', 'bedda-b', 'rodflagga'],
       journal: [
         ['Kontaktorsak', 'Smärta i tummar och handleder, svårt att arbeta'],
         ['Yrke', 'Ekonomiassistent, tangentbord ca 7 tim/dag'],
@@ -444,6 +485,22 @@
               fx: { allians: -8, agens: -14 },
               varfor: 'Sant men sjukdomsförstärkande. Prognosen för artros påverkas inte, men prognosen för Carinas arbetsförmåga påverkas kraftigt av vad hon tror att som går att göra.' }
           ] },
+
+        { typ: 'kontroll',
+          banner: 'STÄMMER DIAGNOSEN MED BILDEN?',
+          fraga: 'Journalen säger tumbasartros. Carina säger tummar OCH handleder, båda sidor. Vad frågar du innan du sorterar ärendet?',
+          tidFel: 2,
+          princip: 'bedda-b',
+          val: [
+            { text: 'Om hon är stel på morgonen och i så fall hur länge, om lederna är svullna, och om fler leder är med.', ratt: true },
+            { text: 'Ingenting – diagnosen är redan ställd av läkare.', ratt: false,
+              varfor: 'En diagnos i journalen beskriver det som var känt då. Den säger ingenting om att den fortfarande förklarar hela bilden.' },
+            { text: 'Hur ont hon har på en skala 1 till 10.', ratt: false,
+              varfor: 'Smärtintensitet skiljer inte artros från en inflammatorisk ledsjukdom, och den styr varken vårdnivå eller grad.' },
+            { text: 'Om hon vill ha sjukskrivning eller inte.', ratt: false,
+              varfor: 'Du frågar efter åtgärden innan du vet vad du åtgärdar. Och hos någon som inte vill vara till besvär blir svaret alltid nej.' }
+          ],
+          forklaring: 'Långvarig morgonstelhet, svullna leder och symmetriskt engagemang i fler leder talar för en inflammatorisk ledsjukdom och inte för artros – och det byter både vårdnivå och tempo. En känd diagnos i journalen är den starkaste förankring som finns: den förklarar en del av bilden och får resten att sluta granskas. Carina svarar att hon är stel ungefär en kvart på morgnarna, att inget är svullet och att det bara är händerna. Då står artrosen kvar – och nu står det också i journalen varför den gör det.' },
 
         { typ: 'kontroll',
           banner: 'LESS-FLÖDET',
@@ -541,7 +598,7 @@
           fraga: 'Vilka tre uppgifter behöver du innan du kan sortera ärendet?',
           antal: 3,
           tidPer: 1,
-          tips: 'Ålder, tidigare cancer och duration finns redan i journalen. Vad saknas för att kunna utesluta något allvarligt?',
+          tips: 'Ålder, tidigare cancer och duration finns redan i journalen. Vad saknas – och vilken uppgift i journalen är inte färdigfrågad?',
           val: [
             { text: 'Har du gått ner i vikt utan att försöka?', ratt: true, princip: 'rodflagga',
               fx: { sakerhet: 14 },
@@ -613,7 +670,7 @@
       minuter: 8,
       svarighet: 3,
       endastDrill: true,
-      principer: ['triage-f', 'dorr', 'evidens', 'forvantan'],
+      principer: ['triage-f', 'dorr', 'evidens', 'forvantan', 'rodflagga'],
       journal: [
         ['Kontaktorsak', 'Begär förlängd sjukskrivning'],
         ['Pågående', 'Sjukskriven 100 % i 2 veckor, utfärdat av jourläkare'],
@@ -649,6 +706,22 @@
               fx: { allians: -14, agens: -8 },
               varfor: 'Kunskapen är rätt, leveransen gör den obrukbar. Utan empati först hör Iris en anklagelse.' }
           ] },
+
+        { typ: 'kontroll',
+          banner: 'FÖRSÄMRING',
+          fraga: 'Iris har blivit sämre under sjukskrivningen och går inte längre ut. Vad måste du fråga om innan du planerar ärendet?',
+          tidFel: 2,
+          princip: 'rodflagga',
+          val: [
+            { text: 'Om nedstämdhet och tankar på att inte vilja leva, och om alkohol eller lugnande läkemedel.', ratt: true },
+            { text: 'Hur många panikattacker hon har i veckan.', ratt: false,
+              varfor: 'En frekvenssiffra beskriver det du redan vet. Den säger ingenting om det som gör ärendet akut eller inte.' },
+            { text: 'Ingenting – hon bedömdes ju av läkare för två veckor sedan.', ratt: false,
+              varfor: 'Bedömningen gällde läget då. Det är just försämringen sedan dess som är skälet att fråga om.' },
+            { text: 'Om hon vill ha 50 eller 100 procent den här gången.', ratt: false,
+              varfor: 'Förutsätter en förlängning som ingen har bedömt, och gör graden till en förhandling innan någon vet vad som ska behandlas.' }
+          ],
+          forklaring: 'Två veckor hemma med växande undvikande är precis den situation där en depression lägger sig ovanpå paniksyndromet, och där alkohol och lugnande blir de snabbaste lösningar som finns i lägenheten. Att en läkare bedömde henne för två veckor sedan säger ingenting om läget idag. Iris svarar att hon är nedstämd men inte har tankar på att ta sitt liv, och att hon inte tar något mot ångesten. Ärendet kan planeras – och nu står det i journalen varför.' },
 
         { typ: 'kontroll',
           banner: 'LESS-FLÖDET',
