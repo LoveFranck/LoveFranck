@@ -475,3 +475,19 @@ body.touch #pad{
   #cue{ animation:none; }
   #fade{ transition:none; }
 }
+
+/* ---------- Signatur på planschen ---------- */
+
+.fraga.signatur .ft i{ color:#8a9a96; font-style:normal; }
+.fraga.signatur .ft b{ color:var(--mark); }
+
+.signfalt{ margin:6px 0 4px; }
+.signfalt input{
+  width:100%; box-sizing:border-box;
+  font:inherit; font-size:10px; letter-spacing:1px;
+  color:var(--ink); background:var(--paper);
+  border:2px solid var(--mark); border-radius:2px;
+  padding:5px 6px;
+}
+.signfalt input:focus{ outline:none; border-color:var(--mark-mint); background:#fff; }
+.signfalt input::placeholder{ color:#a8b4b0; }

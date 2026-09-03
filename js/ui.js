@@ -54,7 +54,16 @@
     if (fn) fn(k);
   }
 
+  /* Textfält (t.ex. signaturen på planschen) måste få behålla tangenterna.
+     Utan det här äter spelets styrning upp a, s, d, w, z, x, h, j, k och m. */
+  function skriverText() {
+    var a = document.activeElement;
+    return !!a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+  }
+  LESS.skriverText = skriverText;
+
   global.addEventListener('keydown', function (e) {
+    if (skriverText()) return;
     var k = KEYMAP[e.key];
     if (!k) return;
     e.preventDefault();
@@ -72,6 +81,12 @@
   global.addEventListener('keyup', function (e) {
     var k = KEYMAP[e.key];
     if (k) held[k] = 0;
+  });
+
+  /* Släpp alla riktningar när fokus hoppar in i ett textfält, annars fortsätter
+     spelfiguren gå medan man skriver. */
+  global.addEventListener('focusin', function () {
+    if (skriverText()) Object.keys(held).forEach(function (k) { held[k] = 0; });
   });
 
   global.addEventListener('blur', function () {

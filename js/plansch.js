@@ -30,6 +30,25 @@
     } catch (e) { return 'd-anonym'; }
   }
 
+  /* ---------------- signatur ----------------
+     Den som skattar får skriva sitt namn. Poängen är spårbarhet framåt: när
+     svaren senare går igenom och innehållet ändras ska det gå att se vem som
+     stod bakom siffran och fråga vidare. Frivilligt – tomt namn är giltigt. */
+
+  function mittNamn() {
+    var n = LESS.state.data.namn;
+    if (n) return n;
+    try { return global.localStorage.getItem('less-namn') || ''; } catch (e) { return ''; }
+  }
+
+  function sparaNamn(n) {
+    n = (n || '').trim().slice(0, 60);
+    LESS.state.data.namn = n;
+    LESS.state.spara();
+    try { global.localStorage.setItem('less-namn', n); } catch (e) { /* tyst */ }
+    return n;
+  }
+
   function kopplaDb() {
     if (dbKlar) return Promise.resolve(db);
     if (!global.claude || typeof global.claude.use !== 'function') {
@@ -51,6 +70,7 @@
         varde: varde,
         radgivare: f.skattning == null ? null : f.skattning,
         deltagare: deltagarId(),
+        signatur: mittNamn() || null,
         tid: new Date().toISOString()
       }).then(null, function () { /* lokalt sparat räcker */ });
     } catch (e) { /* tyst */ }
@@ -101,9 +121,14 @@
   function visa(roll, klar) {
     var fragor = (LESS.fragor && LESS.fragor[roll]) || [];
     var andra = andraCache[roll] || {};
-    var rader = fragor.length + 2;          /* + exportrad + tillbaka */
     var sel = 0;
     var handler = null;
+
+    /* Signaturen ligger överst: den som skattar ska se direkt vem svaren
+       kommer att stå på, och kunna ändra det innan hen sätter en siffra. */
+    var poster = [{ typ: 'signatur' }]
+      .concat(fragor.map(function (f) { return { typ: 'fraga', f: f }; }))
+      .concat([{ typ: 'export' }, { typ: 'stang' }]);
 
     function rita() {
       var h = '';
@@ -113,13 +138,31 @@
         ? '● Svaren delas automatiskt. Kollegor på andra datorer kan skatta samma frågor.'
         : '○ Svaren sparas bara i den här webbläsaren. Välj “Visa mina svar att skicka in” när du är klar.') + '</p>';
 
-      if (!fragor.length) {
-        h += '<p>Inga frågor uppsatta för den här rollen ännu.</p>';
-      }
-
-      fragor.forEach(function (f, i) {
-        var min = LESS.state.minSkattning(f.id);
-        h += '<div class="fraga' + (i === sel ? ' sel' : '') + '" id="frg' + i + '">' +
+      poster.forEach(function (post, i) {
+        var vald = i === sel ? ' sel' : '';
+        if (post.typ === 'signatur') {
+          var n = mittNamn();
+          h += '<div class="fraga knapp signatur' + vald + '" id="frg' + i + '">' +
+               '<span class="cur">▶</span>' +
+               '<span class="ft">Signatur: ' + (n ? '<b>' + LESS.esc(n) + '</b>' : '<i>ej ifylld</i>') + '</span>' +
+               '<span class="rad"><span class="ank">' +
+               (n ? 'Dina skattningar skickas med ditt namn.'
+                  : 'Frivilligt. Med namn går det att fråga dig vidare om siffran.') +
+               '</span></span></div>';
+          return;
+        }
+        if (post.typ === 'export') {
+          h += '<div class="fraga knapp' + vald + '" id="frg' + i + '">' +
+               '<span class="cur">▶</span><span class="ft">Visa mina svar att skicka in</span></div>';
+          return;
+        }
+        if (post.typ === 'stang') {
+          h += '<div class="fraga knapp' + vald + '" id="frg' + i + '">' +
+               '<span class="cur">▶</span><span class="ft">Tillbaka</span></div>';
+          return;
+        }
+        var f = post.f, min = LESS.state.minSkattning(f.id);
+        h += '<div class="fraga' + vald + '" id="frg' + i + '">' +
              '<span class="cur">▶</span>' +
              '<span class="ft">' + LESS.esc(f.fraga) + '</span>' +
              '<span class="rad"><b>rådgivaren</b>' + stapel(f.skattning, 'radg') +
@@ -135,10 +178,7 @@
              '</div>';
       });
 
-      h += '<div class="fraga knapp' + (sel === fragor.length ? ' sel' : '') + '" id="frg' + fragor.length + '">' +
-           '<span class="cur">▶</span><span class="ft">Visa mina svar att skicka in</span></div>';
-      h += '<div class="fraga knapp' + (sel === fragor.length + 1 ? ' sel' : '') + '" id="frg' + (fragor.length + 1) + '">' +
-           '<span class="cur">▶</span><span class="ft">Tillbaka</span></div>';
+      if (!fragor.length) h += '<p>Inga frågor uppsatta för den här rollen ännu.</p>';
 
       ui.visaPanel('FRÅGOR · ' + rollNamn(roll), h, '↑↓ = välj  ·  A = skatta  ·  B = tillbaka');
       ui.panelSynlig($('frg' + sel));
@@ -161,22 +201,71 @@
         });
       });
       handler = LESS.input.push(function (k) {
-        if (k === 'down') { sel = (sel + 1) % rader; LESS.sfx('move'); rita(); }
-        else if (k === 'up') { sel = (sel - 1 + rader) % rader; LESS.sfx('move'); rita(); }
+        var n = poster.length;
+        if (k === 'down') { sel = (sel + 1) % n; LESS.sfx('move'); rita(); }
+        else if (k === 'up') { sel = (sel - 1 + n) % n; LESS.sfx('move'); rita(); }
         else if (k === 'a') {
           LESS.sfx('ok');
-          if (sel < fragor.length) {
-            LESS.input.pop(handler);
-            skatta(roll, fragor[sel], oppna);
-          } else if (sel === fragor.length) {
-            LESS.input.pop(handler);
-            exportera(roll, oppna);
-          } else stang();
+          var post = poster[sel];
+          if (post.typ === 'fraga') { LESS.input.pop(handler); skatta(roll, post.f, oppna); }
+          else if (post.typ === 'signatur') { LESS.input.pop(handler); signera(roll, oppna); }
+          else if (post.typ === 'export') { LESS.input.pop(handler); exportera(roll, oppna); }
+          else stang();
         }
         else if (k === 'b') { LESS.sfx('back'); stang(); }
       });
     }
     oppna();
+  }
+
+  /* ---------------- signaturvyn ----------------
+     Ett riktigt textfält, inte en teckenväljare: den som står i sitt eget
+     arbetsrum har ett tangentbord framför sig. Medan fältet har fokus tar
+     ui.js bort spelets tangentbindningar, annars äter styrningen bokstäverna. */
+
+  function signera(roll, klar) {
+    var handler = null, falt = null;
+
+    var h = '';
+    h += '<p class="planschintro">Skriv ditt namn om du vill att svaren ska gå att följa upp. ' +
+         'Det följer med varje skattning du gör härifrån och framåt.</p>';
+    h += '<p class="planschintro">Vill du vara anonym lämnar du fältet tomt. ' +
+         'Skattningen räknas lika mycket ändå.</p>';
+    h += '<div class="signfalt"><input id="signinput" type="text" maxlength="60" ' +
+         'autocomplete="off" spellcheck="false" placeholder="Förnamn Efternamn"></div>';
+    h += '<p class="planschbak">Enter sparar. Esc avbryter.</p>';
+    ui.visaPanel('SIGNATUR · ' + rollNamn(roll), h, 'Enter = spara  ·  Esc = avbryt');
+
+    falt = $('signinput');
+    falt.value = mittNamn();
+    falt.focus();
+    falt.select();
+
+    function stang(sparat) {
+      falt.removeEventListener('keydown', tangent);
+      falt.blur();
+      LESS.input.pop(handler);
+      LESS.sfx(sparat ? 'done' : 'back');
+      if (klar) klar();
+    }
+
+    /* stopPropagation är inte kosmetik: utan den bubblar samma Enter vidare
+       till spelets tangentlyssnare, som tolkar den som A – och öppnar rutan
+       igen i samma ögonblick som den stängts. */
+    function tangent(e) {
+      if (e.key !== 'Enter' && e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.key === 'Enter') { sparaNamn(falt.value); stang(true); }
+      else stang(false);
+    }
+    falt.addEventListener('keydown', tangent);
+
+    /* Reserv för pekskärm och för den som ändå trycker A eller B. */
+    handler = LESS.input.push(function (k) {
+      if (k === 'a') { sparaNamn(falt.value); stang(true); }
+      else if (k === 'b' || k === 'meny') stang(false);
+    });
   }
 
   /* ---------------- skattningsvyn ---------------- */
@@ -250,7 +339,8 @@
   function rapport(roll) {
     var fragor = (LESS.fragor && LESS.fragor[roll]) || [];
     var rader = ['LESS – Vårdcentralen · skattningar', rollNamn(roll),
-                 new Date().toISOString().slice(0, 10), ''];
+                 new Date().toISOString().slice(0, 10),
+                 'signatur: ' + (mittNamn() || '– ej ifylld –'), ''];
     var n = 0;
     fragor.forEach(function (f) {
       var min = LESS.state.minSkattning(f.id);
