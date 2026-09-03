@@ -257,6 +257,7 @@
     'dfa-aktivitet': 'Aktivitetsbegränsning i arbetsuppgifter',
     'grad':          'Rätt grad och längd på sjukskrivningen',
     'signering':     'Signera bara det du kan försvara',
+    'beslutsstod':   'Beslutsstödet är vägledning, inte ett tak',
     'ansvar':        'Ta inte över patientens eller arbetsgivarens ansvar',
     'samtycke':      'Samtycke före kontakt med tredje part',
     'plan':          'Rehabplan med ansvarig och datum',

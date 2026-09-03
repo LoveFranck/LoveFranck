@@ -14,47 +14,80 @@ och vad som händer med innehållet beroende på svaret.
 
 ---
 
-## 1. Arbetsplatsbedömning av arbetsterapeut i primärvården
+## 1. Arbetsplatsbedömning av arbetsterapeut i primärvården — AVGJORD
 
 **Var:** `content/cases-arbetsterapeut.js`, fallet `arb-carina`. Det bästa
-beslutsalternativet innehåller i dag formuleringen *"arbetsplatsbedömning
-bokad"*.
+beslutsalternativet innehöll formuleringen *"arbetsplatsbedömning bokad"*.
 
 **Frågan:** Förekommer arbetsplatsbesök eller arbetsplatsbedömning inom
-primärvårdens arbetsterapiuppdrag? Utvecklaren har aldrig sett det göras och
-misstänker att det i praktiken är företagshälsovårdens eller den specialiserade
-rehabiliteringens område. Skiljer det sig mellan regioner och vårdval?
+primärvårdens arbetsterapiuppdrag?
 
-**Vem avgör:** `arbetsterapeut-radgivare`.
+**Slutsats (`arbetsterapeut-radgivare`, 2026-09-03): utvecklarens misstanke
+stämmer.** Arbetsplatsbesök hos arbetsgivaren är i praktiken
+företagshälsovårdens och den specialiserade rehabiliteringens område, inte
+primärvårdsarbetsterapeutens. Tre skäl:
 
-**Konsekvens:**
-- *Förekommer det* – behåll formuleringen, men lägg till hur den bokas och av
-  vem, så att den inte framstår som självklar.
-- *Förekommer det inte* – byt till den realistiska motsvarigheten. Sannolikt en
-  skriftlig beskrivning av funktion och begränsningar som Carina själv tar med
-  till sin chef, i linje med spelets princip om att inte ta över patientens
-  ansvar. Uppdatera även `varfor`-texten.
+1. **Ansvaret ligger inte hos vården.** Arbetsanpassning på arbetsplatsen är
+   arbetsgivarens ansvar enligt arbetsmiljölagstiftningen. Den som köper in
+   kompetens dit är arbetsgivaren, via företagshälsovården. Vården beskriver
+   begränsningen; arbetsgivaren beslutar om anpassningen.
+2. **Uppdraget avgränsar bort det.** Regionala uppdragsbeskrivningar för
+   arbetsterapi i primärvård begränsar sig till bedömning, behandling och
+   hjälpmedel på primärvårdsnivå. Region Uppsalas rutin *Arbetsterapi i
+   primärvård inom Nära vård och hälsa* (DocPlusSTYR-26466, v3, godkänd
+   2025-07-03) skriver rakt ut att arbetsförmågebedömningar inte ingår i
+   uppdraget, och att insatserna inte ens utförs i patientens eget hem. Då är
+   arbetsplatsen ännu längre bort.
+3. **Grundbehandlingen innehåller det inte.** Nationellt vårdprogram för
+   tumbasartros har som grundbehandling: bedömning hos arbetsterapeut eller
+   fysioterapeut, information och ergonomisk rådgivning, ortos, handträning.
+   Inget arbetsplatsbesök.
 
-**Status:** öppen.
+**Men det förekommer.** I arbetsinriktade rehabteam och multimodal
+rehabilitering i primärvård, och där metodstödet ADA+ (ArbetsplatsDialog för
+Arbetsåtergång) används — då oftast av rehabkoordinator, ibland en
+rehabkoordinator som är arbetsterapeut. Det är enstaka mottagningar, inte
+vardag. Hur vanligt det är skattas av verklig personal i
+`content/fragor.js`, frågan `at-arbetsplatsbedomning` (rådgivarens skattning: 10
+av 100, säkerhet medel).
+
+**Åtgärdat i fallfilen.** Den realistiska motsvarigheten är skriven, inte
+besökt: en skriftlig sammanfattning av aktivitetsbegränsningarna och vad de
+kräver av arbetsplatsen, som patienten själv tar med till sin chef. Det är
+billigt, ligger i arbetsterapeutens kompetens, och kräver ingen
+sekretessprövning eftersom patienten bär informationen själv. `varfor`-texten är
+omskriven så att den lär ut ansvarsfördelningen i stället för att dölja den.
+
+**Kvarstår att skatta:** hur ofta ett sådant skriftligt underlag faktiskt skrivs.
+`content/fragor.js`, frågan `at-skriftligt-underlag-arbetsgivare`.
+
+**Status:** avgjord, ändringen införd.
 
 ---
 
-## 2. Bedömningsinstrument i facit
+## 2. Bedömningsinstrument i facit — AVGJORD
 
-**Var:** ännu inga instrument namngivna i fallen, men frågan uppstår så snart
-någon vill skärpa arbetsterapeutfallen.
+**Var:** `content/cases-arbetsterapeut.js`. Efter granskningen är Jamar
+(handdynamometer) det enda namngivna mätinstrumentet, i DFA-kedjan i
+`arb-carina`.
 
-**Frågan:** Vilka arbetsterapeutiska bedömningsinstrument används faktiskt i
-primärvård? ADL-taxonomin och COPM är vanliga, men de arbetsinriktade
-instrumenten hör kanske mest hemma i specialiserad rehabilitering.
+**Slutsats (`arbetsterapeut-radgivare`, 2026-09-03):**
 
-**Vem avgör:** `arbetsterapeut-radgivare`.
+- **Kan namnges i facit:** ADL-taxonomin och COPM är kända och används i
+  primärvård. Handstatus med Jamar och pinchmätning hör till handrehabilitering
+  och är rimligt att förutsätta där handrehabilitering finns i uppdraget.
+- **Ska inte namnges:** DOA (Dialog om arbetsförmåga), AWP (Assessment of Work
+  Performance) och AWC (Assessment of Work Characteristics). De är
+  arbetsinriktade instrument som hör hemma i specialiserad rehabilitering,
+  företagshälsovård och forskning. Att sätta dem i ett facit skulle göra fallet
+  otrovärdigt för den som jobbar på en vårdcentral — och skulle dessutom lära ut
+  ett arbetssätt spelaren inte kan ta med sig hem.
 
-**Konsekvens:** Namnge bara instrument som en normalbemannad vårdcentral
-verkligen använder. Ett facit som hänvisar till ett instrument ingen har hört
-talas om gör hela fallet otrovärdigt.
+**Regel framåt:** namnge hellre vad som mäts än vilket instrument som används.
+"Nedsatt kraftgrepp höger, 12 kg mot 24 kg" fungerar oavsett vilken utrustning
+mottagningen har.
 
-**Status:** öppen.
+**Status:** avgjord.
 
 ---
 
