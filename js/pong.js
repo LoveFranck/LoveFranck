@@ -17,7 +17,7 @@
 
   var W = 160, H = 144;
   var PLAN_Y = 24;                 /* spelplanens överkant (under poängraden) */
-  var PLAN_H = H - PLAN_Y - 6;
+  var PLAN_H = H - PLAN_Y - 12;   /* nedersta remsan är fotraden */
   var PADDEL_H = 24, PADDEL_B = 3;
   var MAL = 5;                     /* först till fem bollar */
 
@@ -214,6 +214,12 @@
         var s = 'TRYCK A';
         skriv(c, s, (W - bredd(s)) / 2, PLAN_Y + PLAN_H / 2 - 3, '#f8f8f0');
       }
+
+      /* Nedersta remsan: hur man styr och hur man kommer härifrån. Utan den
+         sitter man fast i ett rum ingen berättat att man skulle hitta. */
+      var fot = 'PILAR = RACKET   B = SLUTA';
+      skriv(c, fot, (W - bredd(fot)) / 2, H - 7, '#4a4a44');
+
       if (G.text) {
         var by = PLAN_Y + PLAN_H / 2 - 13;
         R(c, 10, by, W - 20, 26, '#20201c');
