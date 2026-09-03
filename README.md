@@ -248,6 +248,16 @@ sina skattningar där; spelet läser samma fil.
 
 Spelet känner av vilket läge det är i och säger det överst på planschen.
 
+**Signatur.** Överst på planschen finns en rad där den som skattar kan skriva
+sitt namn. Namnet följer med varje skattning – in i den delade databasen, in i
+textrapporten – så att det går att fråga vidare om en siffra. Frivilligt: tomt
+namn är en giltig skattning, och den räknas lika mycket.
+
+**Genomgången.** Varannan dag går en schemalagd Claude-körning igenom vad som
+kommit in, jämför med agenternas gissningar och föreslår vad avvikelserna borde
+leda till i innehållet. Den frågar innan något ändras. Minnet mellan
+genomgångarna ligger i [`docs/SVAR.md`](docs/SVAR.md).
+
 ### Verklighetsförankring
 
 Det som skiljer dem från en lärobok är att de också ska väga in den informella
@@ -281,6 +291,15 @@ behöver:
 
 Varje fallfil inleds med en `EJ KLINISKT GRANSKAT`-flagga. Ta bort den när
 innehållet är genomgånget.
+
+## Skyddsrummet
+
+Vårdcentralen har ett rum som inte står i menyerna och som inte syns på kartan
+förrän man klivit in i det. Det finns för att spelet ska tåla att man går
+omkring i det utan uppdrag – och för att den som hittar det ska ha hittat något
+själv, inte fått det utpekat.
+
+Ledtråden är att korridoren tar slut på ett sätt som inte ser ut som en vägg.
 
 ## Idéer som sparats till senare
 

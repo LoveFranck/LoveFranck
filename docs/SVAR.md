@@ -1,6 +1,6 @@
 # Inkomna skattningar – arbetsminne
 
-Den här filen är minnet mellan genomgångarna. Var tredje dag går en
+Den här filen är minnet mellan genomgångarna. Varannan dag går en
 Claude-körning igenom planschernas svar, jämför dem med rådgivarnas gissningar
 i `content/fragor.js` och skriver ner vad som kommit in. Filen är alltså både
 logg och beslutsunderlag: nästa körning läser den för att veta vad som redan
@@ -61,6 +61,21 @@ med planscherna. Riktmärken, inte regler:
 
 Ett enda svar är en persons erfarenhet, inte verksamhetens. Under tre svar på
 en fråga föreslås ingen ändring – då noteras det bara.
+
+## Den återkommande körningen
+
+En schemalagd Claude-körning (`trig_015uG3dfp35jpDYi3ZgAMhUn`, namn *Genomgång av
+planschernas skattningar*) startar en ny session kl. 08:23 varannan dag och gör
+stegen ovan. Den skriver bara till dig när det faktiskt kommit in något nytt –
+en tyst körning betyder att ingen svarat sedan sist.
+
+Körningen får uppdatera loggen i den här filen på egen hand, eftersom loggen
+bara beskriver vad som kommit in. Allt som ändrar spelets innehåll ska först
+godkännas av dig. Får den inget svar hamnar förslaget under *Öppna frågor* och
+tas upp igen nästa gång.
+
+Vill du ändra takten, pausa eller ta bort den: säg till, eller gör det själv i
+rutinlistan på claude.ai.
 
 ## Öppna frågor som väntar på besked
 
