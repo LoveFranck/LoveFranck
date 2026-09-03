@@ -63,18 +63,20 @@
       id: 'sorkk',
       titel: 'SORKK – situationsanalysen',
       text: [
-        'Ett sätt att ta ett enda tillfälle och se varför beteendet återkommer. Fem led, i den här ordningen.'
+        'Ett sätt att ta ett enda tillfälle och se varför beteendet återkommer. Leden görs i den här ordningen, och görs tillsammans med patienten.'
       ],
       lista: [
         ['S – Situation', 'Det yttre läget, så konkret att det skulle gå att filma: tid, plats, vad som händer runt omkring.'],
-        ['O – Organismfaktorer', 'Vad personen bär med sig in i situationen: sömn, kroppsligt tillstånd, tidigare inlärning, förväntningar.'],
-        ['R – Respons', 'Tanke, känsla, kroppsreaktion och beteende. Beteendet är det som konsekvenserna hänger på.'],
+        ['O – Organismfaktorer', 'Vad som händer inuti personen i situationen. Dela upp det i tre: tanke, kroppslig förnimmelse och beteendeimpuls.'],
+        ['R – Respons', 'Det beteende som faktiskt utförs.'],
         ['K – Kortsiktig konsekvens', 'Vad som händer inom minuter. Här sitter oftast förklaringen: lättnad kommer snabbt och belönar beteendet varje gång.'],
         ['K – Långsiktig konsekvens', 'Vad som byggs upp över veckor och månader. Priset betalas långsamt och märks därför inte i stunden.']
       ],
       punkter: [
-        'Analysen görs tillsammans med patienten, i hennes eget material. Poängen är att hon ska se mönstret, inte att du ska.',
-        'Undvikande känns nästan alltid rätt i stunden. Det är just därför det håller i sig.',
+        'Blanda inte ihop organismfaktorer med etablerande omständigheter. Sömnbrist, utebliven frukost, lång tids undvikande och pågående belastning skapar inte beteendet – de gör det mycket mer sannolikt. De hör hemma i bakgrunden, inte i O.',
+        'Beteendeimpulsen och responsen har ofta samma innehåll. Skillnaden är att impulsen är en dragning och responsen ett utfört beteende. När patienten inte ser undvikandets funktion upplevs de som samma sak: inte som ett val, utan som den enda lösningen.',
+        'Att skilja impuls från respons i analysen är därför ofta första gången patienten ser att det fanns ett ögonblick där något annat var möjligt.',
+        'Analysen görs i patientens eget material. Poängen är att hen ska se mönstret, inte att du ska.',
         'Vid sjukskrivningsärenden är analysen ofta det som gör beslutet begripligt: en sjukskrivning kan ge exakt samma kortsiktiga lättnad som beteendet man vill förändra – fast i större dos.'
       ]
     },

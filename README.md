@@ -179,6 +179,27 @@ ställena plus `PROFIL` i `content/people.js`.
 Logotypen tillhör Forsåker vårdcentral. Om spelet återanvänds av någon annan
 verksamhet ska märket bytas ut.
 
+## Psykologisk rådgivare (agent)
+
+`.claude/agents/psykologisk-radgivare.md` definierar en specialiserad agent som
+granskar och utvecklar det kliniska och pedagogiska innehållet. Den läser in
+`docs/PEDAGOGIK.md`, `docs/INNEHALL.md` och principregistret innan den uttalar
+sig, och arbetar utifrån inlärningsteori, modern exponeringsteori,
+behandlingsdosering i svensk primärvård, sömn och försäkringsmedicin.
+
+Anropa den från Claude Code:
+
+```
+Använd psykologisk-radgivare för att granska content/cases-fysio.js
+Använd psykologisk-radgivare för att skriva ett nytt psykologfall om paniksyndrom
+```
+
+Den har en fast granskningschecklista: håller facit, är åtgärden genomförbar i
+verkligheten, är distraktorerna trovärdiga, finns den behagliga fällan, är
+nyanserna märkta `'delvis'`, lär fallet ut "aldrig sjukskriva", går röda flaggor
+före flödet, och hämtar varje kedjeled sina distraktorer från de andra leden.
+Den tar aldrig bort `EJ KLINISKT GRANSKAT` – det gör verksamheten.
+
 ## Ansvar och granskning
 
 Texterna är skrivna för spelet utifrån allmänt kända försäkringsmedicinska

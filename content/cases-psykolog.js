@@ -15,7 +15,7 @@
       titel: 'Nybesök, torsdag 14.00',
       patient: 'anna',
       lage: 'rum',
-      minuter: 40,
+      minuter: 44,
       kampanj: 'anna',
       svarighet: 2,
       principer: ['bedda-d1', 'dfa-funktion', 'dfa-aktivitet', 'agens', 'evidens', 'bedda-d2'],
@@ -120,51 +120,95 @@
         { typ: 'kedja',
           banner: 'SORKK',
           fraga: 'Gör situationsanalysen på måndagen vid parkeringen.',
-          tips: 'S är det yttre läget. O är vad hon bär med sig in i det. R är vad hon tänker, känner, gör. Sedan kommer konsekvenserna – först på minuter, sedan på månader.',
+          tips: 'S är det yttre läget. O är vad som händer inuti henne där och då – tanke, kroppslig förnimmelse och beteendeimpuls, var för sig. R är vad hon faktiskt gör. Sedan konsekvenserna, först på minuter och sedan på månader.',
           tidFel: 1,
-          princip: 'agens',
+          princip: 'sorkk',
           lank: [
             { etikett: 'S – SITUATION',
               fraga: 'Vad är situationen?',
               val: [
                 { text: 'Måndag 07.50. Anna sitter i bilen på parkeringen. Kollegor går in genom entrén.', ratt: true },
-                { text: 'Hjärtklappning och illamående.', varfor: 'Det är kroppsdelen av responsen, inte situationen.' },
-                { text: 'Hon har haft ångest i tre månader.', varfor: 'Det hör till organismfaktorerna – vad hon bär med sig in i situationen.' },
-                { text: 'Hon startar bilen och kör hem.', varfor: 'Det är beteendedelen av responsen.' },
-                { text: 'På kvällen känner hon sig misslyckad.', varfor: 'Det är en konsekvens, och den kommer senare.' }
+                { text: 'Hon har sovit 3,5 timmar och inte ätit frukost.',
+                  varfor: 'En etablerande omständighet: den gör beteendet mycket mer sannolikt, men den är inte situationen och inte heller något hon upplever i den.' },
+                { text: 'Tanken "jag klarar inte det här idag".',
+                  varfor: 'Det är tankedelen av organismfaktorerna.' },
+                { text: 'Hon startar bilen och kör hem.',
+                  varfor: 'Det är responsen.' },
+                { text: 'Lättnaden när hon svänger ut från parkeringen.',
+                  varfor: 'Den kortsiktiga konsekvensen.' }
               ],
               forklaring: 'Situationen ska gå att filma: tid, plats, vad som händer runt omkring.' },
 
-            { etikett: 'O – ORGANISMFAKTORER',
-              fraga: 'Vad bär hon med sig in i situationen?',
+            { etikett: 'O – TANKE',
+              fraga: 'Vilken tanke dyker upp i situationen?',
               val: [
-                { text: 'Sovit 3,5 timmar, vaken sedan kl 04. Ingen frukost. Tre månaders undvikande bakom sig.', ratt: true },
-                { text: 'Kollegorna står och pratar i entrén.', varfor: 'Det är yttre – det hör till situationen.' },
-                { text: 'Tanken "jag klarar inte det här".', varfor: 'Det är responsens tankedel.' },
-                { text: 'Lättnaden när hon svänger ut från parkeringen.', varfor: 'Det är den kortsiktiga konsekvensen.' },
-                { text: 'Hon vänder bilen och åker hem.', varfor: 'Det är responsens beteendedel.' }
+                { text: '"Jag är så trött. Jag klarar inte det här idag."', ratt: true },
+                { text: 'Måndag 07.50 på parkeringen utanför kontoret.',
+                  varfor: 'Situationen.' },
+                { text: 'Hög puls och värmekänsla.',
+                  varfor: 'Kroppsdelen av organismfaktorerna – nästa led.' },
+                { text: 'Impulsen att bara komma därifrån.',
+                  varfor: 'Beteendeimpulsen – ledet efter det.' },
+                { text: 'Hon har undvikit arbetsplatsen i tre månader.',
+                  varfor: 'Inlärningshistoria, alltså en etablerande omständighet. Den förklarar varför tanken är så snabb, men den är inte tanken.' }
+              ] },
+
+            { etikett: 'O – KROPPSLIG FÖRNIMMELSE',
+              fraga: 'Vad känner hon i kroppen?',
+              val: [
+                { text: 'Hög puls, värmekänsla, spänd mage, ytlig andning.', ratt: true },
+                { text: '"Jag klarar inte det här idag."',
+                  varfor: 'Tanken.' },
+                { text: 'Vill bara härifrån.',
+                  varfor: 'Beteendeimpulsen.' },
+                { text: 'Sömnbristen efter natten.',
+                  varfor: 'En etablerande omständighet. Den sänker tröskeln för allt det andra, men den uppstår inte i situationen.' },
+                { text: 'Hon kör hem.',
+                  varfor: 'Responsen.' }
+              ] },
+
+            { etikett: 'O – BETEENDEIMPULS',
+              fraga: 'Vad drar hon sig till att göra?',
+              val: [
+                { text: 'Flyktimpuls: bara härifrån, hem.', ratt: true },
+                { text: 'Hjärtat slår hårt och hon blir varm.',
+                  varfor: 'Den kroppsliga förnimmelsen.' },
+                { text: '"Jag klarar inte det här idag."',
+                  varfor: 'Tanken.' },
+                { text: 'Hon startar bilen, kör hem och sjukanmäler sig i appen.',
+                  varfor: 'Det är vad hon faktiskt gör – responsen. Impulsen är dragningen strax innan.' },
+                { text: 'Obehaget släpper efter några minuter.',
+                  varfor: 'Den kortsiktiga konsekvensen.' }
               ],
-              forklaring: 'Organismfaktorer är det inre tillstånd hon möter situationen med: sömn, kropp, tidigare inlärning. Här är sömnbristen inte en detalj – den sänker tröskeln för allt annat.' },
+              forklaring: 'Impulsen är en dragning, inte en handling. Att den får ett eget led gör det möjligt att se att det fanns ett ögonblick där något annat var möjligt.' },
 
             { etikett: 'R – RESPONS',
-              fraga: 'Vad gör, tänker och känner hon?',
+              fraga: 'Vad gör hon?',
               val: [
-                { text: 'Tanke: "Jag klarar inte det här". Hjärtklappning, illamående. Hon startar bilen och kör hem.', ratt: true },
-                { text: 'Parkeringen utanför kontoret klockan 07.50.', varfor: 'Situationen.' },
-                { text: 'Ångesten är starkare nästa morgon.', varfor: 'Långsiktig konsekvens.' },
-                { text: 'Lättnad så fort hon svänger ut från parkeringen.', varfor: 'Kortsiktig konsekvens – den kommer efter responsen.' },
-                { text: 'Hon har sovit 3,5 timmar.', varfor: 'Organismfaktor.' }
+                { text: 'Hon startar bilen, kör hem och sjukanmäler sig i appen.', ratt: true },
+                { text: 'Flyktimpulsen: bara härifrån.',
+                  varfor: 'Impulsen. Innehållet är detsamma, men responsen är det utförda beteendet.' },
+                { text: 'Kollegorna går in genom entrén.',
+                  varfor: 'Situationen.' },
+                { text: 'På kvällen känner hon sig misslyckad.',
+                  varfor: 'En konsekvens, och den kommer senare.' },
+                { text: 'Hon har sovit 3,5 timmar.',
+                  varfor: 'Etablerande omständighet.' }
               ],
-              forklaring: 'Responsen har tre delar: tanke, kropp och beteende. Beteendet är det som konsekvenserna hänger på.' },
+              forklaring: 'Impuls och respons har ofta samma innehåll. Skillnaden är att impulsen är en dragning och responsen ett utfört beteende. För Anna framstår de som samma sak – hon ser inte hemresan som ett undvikande utan som den enda lösningen. Att skilja dem åt i analysen är ofta första gången patienten ser att det fanns ett val.' },
 
             { etikett: 'K – KORT SIKT',
               fraga: 'Vad händer direkt efteråt?',
               val: [
                 { text: 'Obehaget släpper inom några minuter. Lättnad. Hon slipper morgonmötet.', ratt: true },
-                { text: 'Hon blir alltmer övertygad om att hon inte klarar arbetsplatsen.', varfor: 'Det byggs upp över tid – det hör till lång sikt.' },
-                { text: 'Hon startar bilen och kör hem.', varfor: 'Det är responsen, inte dess konsekvens.' },
-                { text: 'Hon vaknade kl 04.', varfor: 'Organismfaktor.' },
-                { text: 'Chefen vet fortfarande ingenting.', varfor: 'Sant, men det är en omständighet – inte den konsekvens som styr beteendet.' }
+                { text: 'Hon blir alltmer övertygad om att hon inte klarar arbetsplatsen.',
+                  varfor: 'Det byggs upp över tid – lång sikt.' },
+                { text: 'Hon startar bilen och kör hem.',
+                  varfor: 'Responsen, inte dess konsekvens.' },
+                { text: 'Flyktimpulsen.',
+                  varfor: 'Organismfaktor. Den kommer före beteendet, inte efter.' },
+                { text: 'Chefen vet fortfarande ingenting.',
+                  varfor: 'Sant, men det är en omständighet – inte den konsekvens som styr beteendet.' }
               ],
               forklaring: 'Här sitter hela nyckeln: lättnaden kommer inom minuter och belönar beteendet varje gång.' },
 
@@ -172,13 +216,17 @@
               fraga: 'Vad händer på månaders sikt?',
               val: [
                 { text: 'Undvikandet förstärks. Tröskeln höjs, fler dagar uteblir, tilltron till egen förmåga sjunker.', ratt: true },
-                { text: 'Lättnad direkt när hon vänder.', varfor: 'Det är den kortsiktiga konsekvensen – och just skillnaden i tid är poängen.' },
-                { text: 'Hjärtklappning och illamående.', varfor: 'Responsens kroppsdel.' },
-                { text: 'Hon vaknar klockan fyra.', varfor: 'Organismfaktor.' },
-                { text: 'Kollegorna går in genom entrén.', varfor: 'Situationen.' }
+                { text: 'Lättnad direkt när hon vänder.',
+                  varfor: 'Den kortsiktiga konsekvensen – och just skillnaden i tid är poängen.' },
+                { text: 'Hög puls och värmekänsla.',
+                  varfor: 'Kroppslig förnimmelse.' },
+                { text: 'Hon vaknar klockan fyra.',
+                  varfor: 'Etablerande omständighet.' },
+                { text: 'Kollegorna går in genom entrén.',
+                  varfor: 'Situationen.' }
               ] }
           ],
-          forklaring: 'Analysen visar varför problemet växer: den kortsiktiga konsekvensen är stark, kommer direkt och belönar undvikandet, medan priset betalas långsamt. Det är också därför en sjukskrivning här är riskabel – den ger samma lättnad, fast i större dos och med vårdens signatur under.' },
+          forklaring: 'Två saker att ta med sig. Organismfaktorerna är vad som händer inuti Anna i situationen – tanke, kropp och impuls – medan sömnbristen och den uteblivna frukosten är etablerande omständigheter: de skapar inte beteendet men gör det betydligt mer sannolikt. Och den kortsiktiga konsekvensen är stark, kommer direkt och belönar undvikandet, medan priset betalas långsamt. Det är också därför en sjukskrivning här är riskabel: den ger samma lättnad, i större dos och med vårdens signatur under.' },
 
         { typ: 'val',
           humor: 'trott',
