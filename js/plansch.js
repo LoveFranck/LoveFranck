@@ -224,47 +224,19 @@
      ui.js bort spelets tangentbindningar, annars äter styrningen bokstäverna. */
 
   function signera(roll, klar) {
-    var handler = null, falt = null;
-
     var h = '';
     h += '<p class="planschintro">Skriv ditt namn om du vill att svaren ska gå att följa upp. ' +
          'Det följer med varje skattning du gör härifrån och framåt.</p>';
     h += '<p class="planschintro">Vill du vara anonym lämnar du fältet tomt. ' +
          'Skattningen räknas lika mycket ändå.</p>';
-    h += '<div class="signfalt"><input id="signinput" type="text" maxlength="60" ' +
-         'autocomplete="off" spellcheck="false" placeholder="Förnamn Efternamn"></div>';
-    h += '<p class="planschbak">Enter sparar. Esc avbryter.</p>';
-    ui.visaPanel('SIGNATUR · ' + rollNamn(roll), h, 'Enter = spara  ·  Esc = avbryt');
-
-    falt = $('signinput');
-    falt.value = mittNamn();
-    falt.focus();
-    falt.select();
-
-    function stang(sparat) {
-      falt.removeEventListener('keydown', tangent);
-      falt.blur();
-      LESS.input.pop(handler);
-      LESS.sfx(sparat ? 'done' : 'back');
+    ui.textInmatning({
+      titel: 'SIGNATUR · ' + rollNamn(roll),
+      html: h,
+      varde: mittNamn(),
+      platshallare: 'Förnamn Efternamn'
+    }, function (varde) {
+      if (varde !== null) sparaNamn(varde);
       if (klar) klar();
-    }
-
-    /* stopPropagation är inte kosmetik: utan den bubblar samma Enter vidare
-       till spelets tangentlyssnare, som tolkar den som A – och öppnar rutan
-       igen i samma ögonblick som den stängts. */
-    function tangent(e) {
-      if (e.key !== 'Enter' && e.key !== 'Escape') return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (e.key === 'Enter') { sparaNamn(falt.value); stang(true); }
-      else stang(false);
-    }
-    falt.addEventListener('keydown', tangent);
-
-    /* Reserv för pekskärm och för den som ändå trycker A eller B. */
-    handler = LESS.input.push(function (k) {
-      if (k === 'a') { sparaNamn(falt.value); stang(true); }
-      else if (k === 'b' || k === 'meny') stang(false);
     });
   }
 
@@ -387,5 +359,15 @@
   }
 
   LESS.plansch = { visa: visa, rapport: rapport };
+
+  /* Den delade lagringen är samma för planschen och för topplistan i
+     skyddsrummet: artefaktens databas när den finns, annars webbläsaren. */
+  LESS.delad = {
+    db: kopplaDb,
+    aktuell: function () { return db; },
+    deltagarId: deltagarId,
+    namn: mittNamn,
+    sparaNamn: sparaNamn
+  };
 
 })(window);

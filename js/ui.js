@@ -328,6 +328,46 @@
       var b = $('panel-body');
       if (b) b.scrollTop += delta;
     },
+    /* Ett riktigt textfält i en panel – signaturen på planschen och namnet
+       på topplistan använder samma ruta. Tangentbordet går till fältet så
+       länge det har fokus (se skriverText ovan), och Enter stoppas från att
+       bubbla vidare: annars läser spelet samma tryck som A och öppnar rutan
+       igen i samma ögonblick som den stängts. */
+    textInmatning: function (opts, klar) {
+      var h = (opts.html || '') +
+        '<div class="signfalt"><input id="txtfalt" type="text" maxlength="' + (opts.max || 60) + '" ' +
+        'autocomplete="off" spellcheck="false" placeholder="' +
+        LESS.esc(opts.platshallare || '') + '"></div>' +
+        '<p class="planschbak">Enter sparar. Esc avbryter.</p>';
+      ui.visaPanel(opts.titel || '', h, opts.fot || 'Enter = spara  ·  Esc = avbryt');
+      var falt = $('txtfalt');
+      falt.value = opts.varde || '';
+      falt.focus();
+      falt.select();
+
+      var handler = null;
+      function stang(sparat) {
+        var v = falt.value;
+        falt.removeEventListener('keydown', tangent);
+        falt.blur();
+        input.pop(handler);
+        LESS.sfx(sparat ? 'done' : 'back');
+        klar(sparat ? v : null);
+      }
+      function tangent(e) {
+        if (e.key !== 'Enter' && e.key !== 'Escape') return;
+        e.preventDefault();
+        e.stopPropagation();
+        stang(e.key === 'Enter');
+      }
+      falt.addEventListener('keydown', tangent);
+      /* Reserv för pekskärm och för den som ändå trycker A eller B. */
+      handler = input.push(function (k) {
+        if (k === 'a') stang(true);
+        else if (k === 'b' || k === 'meny') stang(false);
+      });
+    },
+
     panelSynlig: function (el) {
       var b = $('panel-body');
       if (b && el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });

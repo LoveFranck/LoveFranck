@@ -48,25 +48,50 @@
     }
     var o = oveRuta();
     if (o.x === nx && o.y === ny) { P.steg = (P.steg + 1) % 2; return; }
+    for (i = 0; i < statister.length; i++) {
+      if (statister[i].tx === nx && statister[i].ty === ny) { P.steg = (P.steg + 1) % 2; return; }
+    }
     P.frx = P.px; P.fry = P.py;
     P.tx = nx; P.ty = ny;
     P.gar = true; P.t0 = performance.now();
   }
 
-  function uppdatera(nu) {
-    if (!P.gar) return;
-    var k = (nu - P.t0) / GANGTID;
+  /* Ett steg för vilken figur som helst – spelaren och statisterna i
+     filmsekvenserna lyder samma tween. Returnerar true den bildruta då
+     steget blev klart. */
+  function stega(f, nu) {
+    if (!f.gar) return false;
+    var k = (nu - f.t0) / GANGTID;
     if (k >= 1) {
-      P.px = P.tx * TS; P.py = P.ty * TS;
-      P.gar = false;
-      P.steg = (P.steg + 1) % 2;
-      var d = LESS.input.dir() || P.buffert;
-      P.buffert = null;
-      if (d && aktiv) forsokGa(d);
+      f.px = f.tx * TS; f.py = f.ty * TS;
+      f.gar = false;
+      f.steg = (f.steg + 1) % 2;
+      return true;
+    }
+    f.px = f.frx + (f.tx * TS - f.frx) * k;
+    f.py = f.fry + (f.ty * TS - f.fry) * k;
+    return false;
+  }
+
+  function borjaSteg(f, nx, ny, nu) {
+    var dx = nx - f.tx, dy = ny - f.ty;
+    if (dx || dy) f.dir = dx > 0 ? 'right' : (dx < 0 ? 'left' : (dy > 0 ? 'down' : 'up'));
+    if (Math.abs(dx) + Math.abs(dy) > 1) {
+      /* längre än en ruta går inte att gå – ställ figuren där i stället för
+         att låta den glida genom en vägg */
+      f.tx = nx; f.ty = ny; f.px = nx * TS; f.py = ny * TS; f.gar = false;
       return;
     }
-    P.px = P.frx + (P.tx * TS - P.frx) * k;
-    P.py = P.fry + (P.ty * TS - P.fry) * k;
+    f.frx = f.px; f.fry = f.py;
+    f.tx = nx; f.ty = ny;
+    f.gar = true; f.t0 = nu;
+  }
+
+  function uppdatera(nu) {
+    if (!stega(P, nu)) return;
+    var d = LESS.input.dir() || P.buffert;
+    P.buffert = null;
+    if (d && aktiv) forsokGa(d);
   }
 
   /* ---------------- kamera & rendering ---------------- */
@@ -108,6 +133,10 @@
       var o = oveRuta();
       figurer.push({ px: o.x * TS, py: o.y * TS,
         spr: LESS.charSprite('ove', LESS.handledare.sprite, oveRiktning(o), 0) });
+      statister.forEach(function (st) {
+        figurer.push({ px: st.px, py: st.py,
+          spr: LESS.charSprite('statist-' + st.id, st.sprite, st.dir, st.steg) });
+      });
       var rollDef = (LESS.roller[LESS.state.data.spelare.roll] || LESS.roller.ssk).sprite;
       figurer.push({
         px: P.px, py: P.py,
@@ -119,7 +148,12 @@
       });
 
       /* markör över målrummet i kampanjläget – inte nere i skyddsrummet */
-      var mal = P.ty < 22 ? malStation() : null;
+      var mal = null;
+      if (P.ty < 22 && !sekvens) {
+        mal = (patientFigur && vantarPaHamtning(kampanjSteg()))
+          ? { x: patientFigur.tx, y: patientFigur.ty }
+          : malStation();
+      }
       if (mal) {
         var mx = mal.x * TS - cam.x + 4, my = mal.y * TS - cam.y - 10 + Math.round(Math.sin(t / 220) * 2);
         var iBild = mx > 0 && mx < VY_W - 8 && my > 0 && my < VY_H - 8;
@@ -191,8 +225,14 @@
         o = (pers ? pers.namn.split(' ')[0].toUpperCase() : '') +
             ' · steg ' + (LESS.state.data.kampanj.steg + 1) + '/' + k.arende.steg.length +
             ' → ' + (r ? r.rum : '');
-        /* Väl inne i rummet byts vägvisningen mot vad man faktiskt ska göra. */
-        if (r && rumNamn() === r.rum) {
+        if (vantarPaHamtning(k)) {
+          /* Fysiskt besök: patienten sitter i väntrummet och ska hämtas. */
+          o = (pers ? pers.namn.split(' ')[0].toUpperCase() : '') +
+              ' · steg ' + (LESS.state.data.kampanj.steg + 1) + '/' + k.arende.steg.length +
+              ' → VÄNTRUMMET';
+          if (rumNamn() === 'VÄNTRUM') o = '▶ Gå fram till patienten och tryck A';
+        } else if (r && rumNamn() === r.rum) {
+          /* Väl inne i rummet byts vägvisningen mot vad man faktiskt ska göra. */
           o = (r.rum === 'TRIAGE' || r.rum === 'LÄKARRUM')
             ? '▶ Gå till datorn och tryck A'
             : '▶ Gå till skrivbordet och tryck A';
@@ -286,8 +326,15 @@
 
     rad.push('Nu är du ' + (r ? r.namn.toLowerCase() : '') + '. ' +
              (pers ? pers.namn : 'Patienten') + ' väntar.');
-    rad.push('Du ska in i ' + (r ? r.rum : '') + '.' + (mal ? ' ' + vagbeskrivning(mal) : ''));
-    rad.push(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.');
+    if (vantarPaHamtning(k)) {
+      rad.push('Det här är ett fysiskt besök. ' + (pers ? pers.namn.split(' ')[0] : 'Hon') +
+               ' sitter i väntrummet – gå dit och hämta henne själv.');
+      rad.push('Ställ dig framför henne och tryck A, så går ni in tillsammans. ' +
+               'Att gå in bredvid patienten är inte artighet, det är där besöket börjar.');
+    } else {
+      rad.push('Du ska in i ' + (r ? r.rum : '') + '.' + (mal ? ' ' + vagbeskrivning(mal) : ''));
+      rad.push(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.');
+    }
     rad.push('Kör du fast kommer du tillbaka hit. Jag står alltid utanför rätt dörr.');
     return rad;
   }
@@ -342,6 +389,7 @@
     if (d.lage !== 'kampanj') return;
     var k = kampanjSteg(), mal = malStation();
     if (!k || !mal) return;
+    if (vantarPaHamtning(k)) return;
     var nyckel = d.kampanj.arende + ':' + d.kampanj.steg;
     if (d.kampanj.rumstips === nyckel) return;
     var r = LESS.roller[k.fall.roll];
@@ -351,6 +399,279 @@
     paus();
     LESS.sfx('alert');
     ui.say(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.', null, ater);
+  }
+
+  /* ================= filmsekvenser =================
+     Scriptade sekvenser där spelaren inte styr. Samma grepp som när Pokémon
+     tar över styrningen för att ett event ska hända: man trycker A på rätt
+     ställe, och sedan går figurerna dit de ska av sig själva.
+
+     Två sekvenser finns. Den ena hämtar patienten i väntrummet vid det
+     fysiska besöket. Den andra hämtar jourläkaren när den försäkrings-
+     medicinska utredningen är klar – och den slutar med att den man styr
+     har bytt yrke.                                                          */
+
+  var statister = [];        /* figurer som bara finns under en sekvens */
+  var sekvens = null;
+
+  function nyStatist(id, sprite, x, y, dir) {
+    var f = { id: id, sprite: sprite || LESS.roller.ssk.sprite,
+              tx: x, ty: y, px: x * TS, py: y * TS,
+              dir: dir || 'down', gar: false, steg: 0, frx: x * TS, fry: y * TS, t0: 0 };
+    statister.push(f);
+    return f;
+  }
+
+  function taBortStatist(f) {
+    var i = statister.indexOf(f);
+    if (i >= 0) statister.splice(i, 1);
+  }
+
+  /* Bredden-först över gångbara rutor. Kartan är 32x35, så en full sökning
+     kostar ingenting och slipper alla specialfall en handskriven väg får. */
+  function vagTill(fran, till, sjalv, ignoreraFigurer) {
+    var W = M.W, H = M.H, i, k;
+    var upptagen = {};
+    if (!ignoreraFigurer) {
+      LESS.npcs.forEach(function (n) { upptagen[n.x + n.y * W] = 1; });
+      var o = oveRuta();
+      upptagen[o.x + o.y * W] = 1;
+      statister.forEach(function (f) { if (f !== sjalv) upptagen[f.tx + f.ty * W] = 1; });
+      if (P && P !== sjalv) upptagen[P.tx + P.ty * W] = 1;
+    }
+    var kom = new Int32Array(W * H);
+    for (i = 0; i < kom.length; i++) kom[i] = -2;
+    var start = fran.x + fran.y * W, mal = till.x + till.y * W;
+    var ko = [start];
+    kom[start] = -1;
+    var D = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+    for (i = 0; i < ko.length; i++) {
+      var cur = ko[i];
+      if (cur === mal) break;
+      var cx = cur % W, cy = (cur / W) | 0;
+      for (k = 0; k < 4; k++) {
+        var nx = cx + D[k][0], ny = cy + D[k][1];
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+        var ni = nx + ny * W;
+        if (kom[ni] !== -2) continue;
+        if (!M.walkable(nx, ny)) continue;
+        if (upptagen[ni] && ni !== mal) continue;
+        kom[ni] = cur; ko.push(ni);
+      }
+    }
+    if (kom[mal] === -2) {
+      /* Blockerad av en figur – försök igen utan hänsyn till dem hellre än
+         att låta sekvensen stanna mitt i. */
+      return ignoreraFigurer ? null : vagTill(fran, till, sjalv, true);
+    }
+    var vag = [], c = mal;
+    while (c !== -1) { vag.push({ x: c % W, y: (c / W) | 0 }); c = kom[c]; }
+    vag.reverse();
+    vag.shift();
+    return vag;
+  }
+
+  /* Stegtyper:
+       {typ:'ga',     vem, till:{x,y}, foljs:[figur,...]}
+       {typ:'vand',   vem, dir}
+       {typ:'vanta',  ms}
+       {typ:'replik', rader:[{text,speaker}]}
+       {typ:'kor',    fn(nasta)}
+     'vem' är en statist eller strängen 'spelare'.                          */
+  function korSekvens(steg, klar) {
+    paus();
+    sekvens = { steg: steg, i: -1, akt: null, klar: klar };
+    nastaSekvenssteg();
+  }
+
+  function figurAv(vem) { return vem === 'spelare' ? P : vem; }
+
+  function nastaSekvenssteg() {
+    if (!sekvens) return;
+    sekvens.i += 1;
+    sekvens.akt = null;
+    var s = sekvens.steg[sekvens.i];
+    if (!s) {
+      var k = sekvens.klar;
+      sekvens = null;
+      if (k) k();
+      return;
+    }
+    if (s.typ === 'ga') {
+      var f = figurAv(s.vem);
+      var vag = vagTill({ x: f.tx, y: f.ty }, s.till, f);
+      if (!vag || !vag.length) { nastaSekvenssteg(); return; }
+      sekvens.akt = { typ: 'ga', vag: vag, steg: 0,
+                      kedja: [f].concat((s.foljs || []).map(figurAv)) };
+      return;
+    }
+    if (s.typ === 'vand') { figurAv(s.vem).dir = s.dir; nastaSekvenssteg(); return; }
+    if (s.typ === 'vanta') { sekvens.akt = { typ: 'vanta', till: performance.now() + s.ms }; return; }
+    if (s.typ === 'replik') { ui.sayAll(s.rader, nastaSekvenssteg); return; }
+    if (s.typ === 'kor') { s.fn(nastaSekvenssteg); return; }
+    nastaSekvenssteg();
+  }
+
+  function tickSekvens(nu) {
+    var a = sekvens && sekvens.akt;
+    if (!a) return;
+    if (a.typ === 'vanta') {
+      if (nu >= a.till) { sekvens.akt = null; nastaSekvenssteg(); }
+      return;
+    }
+    if (a.typ !== 'ga') return;
+
+    var i, gar = false;
+    for (i = 0; i < a.kedja.length; i++) { stega(a.kedja[i], nu); if (a.kedja[i].gar) gar = true; }
+    if (gar) return;
+
+    if (a.steg >= a.vag.length) { sekvens.akt = null; nastaSekvenssteg(); return; }
+
+    /* Hela kedjan flyttar samtidigt: var och en till rutan framför sig, och
+       ledaren till nästa ruta på vägen. Det ger den klassiska följa-John. */
+    var mal = a.vag[a.steg];
+    for (i = a.kedja.length - 1; i > 0; i--) {
+      borjaSteg(a.kedja[i], a.kedja[i - 1].tx, a.kedja[i - 1].ty, nu);
+    }
+    borjaSteg(a.kedja[0], mal.x, mal.y, nu);
+    a.steg += 1;
+  }
+
+  /* ---------------- kampanjens patient ----------------
+     Vid det fysiska besöket sitter patienten i väntrummet tills någon
+     hämtar henne. Figuren lever kvar mellan stegen i ett ärende: när
+     utredningen är klar sitter hon fortfarande i rummet, och det är dit
+     jourläkaren hämtas.                                                    */
+
+  var BANKEN = { x: 3, y: 16 };          /* bänken i väntrummet */
+  var patientFigur = null;
+
+  function vantarPaHamtning(k) {
+    var d = LESS.state.data;
+    if (d.lage !== 'kampanj' || !k || !k.fall || k.fall.lage !== 'rum') return false;
+    return d.kampanj.hamtad !== k.arende.id + ':' + d.kampanj.steg;
+  }
+
+  function synkaKampanjfigurer() {
+    var d = LESS.state.data;
+    var k = d.lage === 'kampanj' ? kampanjSteg() : null;
+    var pahplats = k && k.fall && (k.fall.lage === 'rum' || k.fall.lage === 'trepart');
+    if (!pahplats) {
+      if (patientFigur) { taBortStatist(patientFigur); patientFigur = null; }
+      return;
+    }
+    var pid = k.arende.patient;
+    if (patientFigur && patientFigur.person !== pid) { taBortStatist(patientFigur); patientFigur = null; }
+    if (!patientFigur) {
+      patientFigur = nyStatist('patient-' + pid, LESS.patientSprite(pid), BANKEN.x, BANKEN.y, 'down');
+      patientFigur.person = pid;
+      patientFigur.namn = (LESS.personer[pid] || {}).namn || 'PATIENT';
+    }
+    if (vantarPaHamtning(k)) {
+      patientFigur.tx = BANKEN.x; patientFigur.ty = BANKEN.y;
+      patientFigur.px = BANKEN.x * TS; patientFigur.py = BANKEN.y * TS;
+      patientFigur.dir = 'down'; patientFigur.gar = false;
+    }
+  }
+
+  function fornamn(pid) { return ((LESS.personer[pid] || {}).namn || 'Patienten').split(' ')[0]; }
+
+  /* Sekvens 1: hämta patienten i väntrummet och gå in tillsammans. */
+  function hamtaPatienten() {
+    var k = kampanjSteg();
+    var st = malStation();
+    if (!k || !st || !patientFigur) return;
+    var d = LESS.state.data;
+    var pers = LESS.personer[k.arende.patient] || {};
+    var r = LESS.roller[k.fall.roll] || {};
+    var mig = { name: r.namn || 'DU', kind: 'you' };
+    var hon = { name: (pers.namn || 'PATIENT').toUpperCase(), kind: 'you' };
+    var pat = patientFigur;
+
+    LESS.sfx('ok');
+    korSekvens([
+      { typ: 'replik', rader: [
+        { text: (pers.namn || 'Hej') + '?', speaker: mig },
+        { text: 'Ja. Det är jag.', speaker: hon },
+        { text: 'Välkommen. Kom med, så går vi in.', speaker: mig }
+      ] },
+      { typ: 'vand', vem: pat, dir: 'down' },
+      { typ: 'vanta', ms: 180 },
+      { typ: 'ga', vem: 'spelare', till: { x: st.x, y: st.y + 1 }, foljs: [pat] },
+      { typ: 'ga', vem: pat, till: { x: st.x + 1, y: st.y + 1 } },
+      { typ: 'vand', vem: 'spelare', dir: 'up' },
+      { typ: 'vand', vem: pat, dir: 'left' },
+      { typ: 'kor', fn: function (nasta) {
+          d.kampanj.hamtad = k.arende.id + ':' + d.kampanj.steg;
+          LESS.state.spara();
+          LESS.sfx('door');
+          nasta();
+        } },
+      { typ: 'vanta', ms: 320 }
+    ], function () {
+      korFall(k.fall, { kampanj: true }, function () { efterKampanj(k); });
+    });
+  }
+
+  /* Sekvens 2: utredningen är klar – hämta jourläkaren, och byt roll.
+     Spiralövergången mitt i är där man slutar vara psykolog eller
+     fysioterapeut och börjar vara den som signerar.                        */
+
+  var LAKARDORREN = { x: 27, y: 11 };    /* korridoren utanför läkarrummet */
+
+  function hamtaLakaren(k) {
+    var d = LESS.state.data;
+    var utredare = LESS.roller[d.spelare.roll] || LESS.roller.psykolog;
+    var lak = LESS.roller.lakare;
+    var rummet = { x: P.tx, y: P.ty }, riktning = P.dir;
+    var doktor = nyStatist('lakare-hamtad', lak.sprite, 27, 7, 'down');
+    var mig = { name: utredare.namn, kind: 'you' };
+    var han = { name: lak.namn, kind: 'you' };
+
+    ui.transition(function () { LESS.setScene(scene); }, function () {
+      korSekvens([
+        { typ: 'replik', rader: [
+          { text: 'Utredningen är klar. ' + fornamn(k.arende.patient) +
+                  ' sitter kvar – nu hämtar du jourläkaren.', speaker: null }
+        ] },
+        { typ: 'ga', vem: 'spelare', till: LAKARDORREN },
+        { typ: 'vand', vem: 'spelare', dir: 'up' },
+        { typ: 'ga', vem: doktor, till: { x: 27, y: 10 } },
+        { typ: 'vand', vem: doktor, dir: 'down' },
+        { typ: 'replik', rader: [
+          { text: 'Jag har en utredning klar. Har du tio minuter?', speaker: mig },
+          { text: 'Det är därför jag sitter här. Berätta på vägen.', speaker: han }
+        ] },
+        { typ: 'ga', vem: 'spelare', till: rummet, foljs: [doktor] },
+        { typ: 'ga', vem: doktor, till: { x: rummet.x - 1, y: rummet.y } },
+        { typ: 'vand', vem: 'spelare', dir: riktning },
+        { typ: 'vand', vem: doktor, dir: riktning },
+        { typ: 'kor', fn: function (nasta) {
+            LESS.sfx('alert');
+            LESS.swirl(function () {
+              /* Bakom spiralen byter de plats och yrke. Den man styr är
+                 nu den som ska signera – utredaren står kvar bredvid. */
+              var px = P.tx, py = P.ty, ddir = P.dir;
+              P.tx = doktor.tx; P.ty = doktor.ty;
+              P.px = P.tx * TS; P.py = P.ty * TS; P.frx = P.px; P.fry = P.py;
+              doktor.tx = px; doktor.ty = py;
+              doktor.px = px * TS; doktor.py = py * TS;
+              doktor.id = 'kollega-' + utredare.id;
+              doktor.sprite = utredare.sprite;
+              doktor.dir = ddir;
+              P.dir = ddir;
+              d.spelare.roll = 'lakare';
+              LESS.state.spara();
+            }, nasta);
+          } },
+        { typ: 'replik', rader: (k.steg.mellanspel || ['Nu är du jourläkaren.'])
+            .map(function (t) { return { text: t, speaker: null }; }) },
+        { typ: 'vanta', ms: 200 }
+      ], function () {
+        taBortStatist(doktor);
+        korFall(k.fall, { kampanj: true }, function () { efterKampanj(k); });
+      });
+    });
   }
 
   /* ---------------- interaktion ---------------- */
@@ -366,6 +687,11 @@
     var o = oveRuta();
     if (o.x === f.x && o.y === f.y) { prataOve(); return; }
 
+    if (patientFigur && patientFigur.tx === f.x && patientFigur.ty === f.y) {
+      if (vantarPaHamtning(kampanjSteg())) { hamtaPatienten(); return; }
+      prataNpc({ namn: patientFigur.namn, repliker: ['Jag väntar här.'] });
+      return;
+    }
     for (i = 0; i < LESS.npcs.length; i++) {
       if (LESS.npcs[i].x === f.x && LESS.npcs[i].y === f.y) { prataNpc(LESS.npcs[i]); return; }
     }
@@ -384,6 +710,7 @@
   function ater() {
     aktiv = true;
     LESS.setScene(scene);
+    synkaKampanjfigurer();
     uppdateraVarldsrad();
     LESS.show($('worldbar'), true);
   }
@@ -408,6 +735,7 @@
     if (s.kind === 'utgang')  { utgang(); return; }
     if (s.kind === 'skynke')  { skynke(s); return; }
     if (s.kind === 'pingis')  { pingisbordet(); return; }
+    if (s.kind === 'topplista') { paus(); LESS.sfx('ok'); LESS.topplista.visa(ater); return; }
     if (s.role) startRoll(s.role);
   }
 
@@ -639,6 +967,8 @@
         visaEpilog(k.arende);
       } else {
         LESS.state.spara();
+        var nasta = kampanjSteg();
+        if (nasta && nasta.fall && nasta.fall.lage === 'trepart') { hamtaLakaren(nasta); return; }
         mellanspel();
       }
     }
@@ -760,6 +1090,7 @@
     if (!P || nyPosition) P = nyPlayer();
     LESS.setScene(scene);
     aktiv = true;
+    synkaKampanjfigurer();
     uppdateraVarldsrad();
 
     if (handler) LESS.input.pop(handler);
@@ -793,6 +1124,7 @@
     leave: leave,
     uppdatera: function (t) { if (aktiv) uppdatera(t); },
     tick: function (t) {
+      if (sekvens) { tickSekvens(t); return; }
       if (!aktiv) return;
       uppdatera(t);
       if (!P.gar) {

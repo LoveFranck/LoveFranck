@@ -32,9 +32,9 @@
         ['Åtgärd', 'Psykoedukation och situationsanalys genomförd. iKBT startar denna vecka.']
       ],
       intro: [
-        'Torsdag förmiddag. Du är jourläkare: inga egna bokade patienter, du finns till för de försäkringsmedicinska utredningarna.',
-        'Det knackar. Psykolog Karin är klar med Anna och vill föredra ärendet.',
-        'Anna sitter kvar i rummet. Hon går härifrån idag med ett besked.'
+        'Du är jourläkaren: inga egna bokade patienter, du finns till för de försäkringsmedicinska utredningarna.',
+        'Karin lägger sin utredning framför dig. Anna sitter kvar.',
+        'Hon går härifrån idag med ett besked.'
       ],
       introExtra: [
         { nyckel: 'anna-forslag', varde: 'ingen',
@@ -239,7 +239,7 @@
         ['Åtgärd', 'Anpassad träning påbörjad. Uppföljning om 10 dagar.']
       ],
       intro: [
-        'Fredag förmiddag, jourpass. Sara är klar med Bengt och hämtar dig.',
+        'Jourpass. Sara lägger sin utredning framför dig.',
         'Bengt sitter kvar. Han har fått med sig en lista på moment från arbetsplatsen.'
       ],
       introExtra: [

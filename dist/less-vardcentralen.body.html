@@ -495,6 +495,19 @@ body.touch #pad{
 .signfalt input:focus{ outline:none; border-color:var(--mark-mint); background:#fff; }
 .signfalt input::placeholder{ color:#a8b4b0; }
 
+/* ---------- Pingistavlan i skyddsrummet ---------- */
+
+table.topp{ width:100%; border-collapse:collapse; font-size:9px; margin:4px 0 6px; }
+table.topp th{
+  text-align:left; padding:2px 3px; color:var(--mark);
+  border-bottom:2px solid var(--mark); font-weight:normal; letter-spacing:1px;
+}
+table.topp td{ padding:2px 3px; border-bottom:1px solid var(--paper-sh); }
+table.topp td:first-child{ color:#8a9a96; width:14px; }
+table.topp td:last-child{ text-align:right; width:26px; }
+table.topp tr.etta td{ background:rgba(232,160,40,.18); }
+table.topp tr.etta td:nth-child(2){ color:#8a6010; }
+
 </style>
 
 
@@ -599,6 +612,19 @@ body.touch #pad{
   /* ---------- matte ---------- */
   LESS.clamp = function (v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); };
   LESS.lerp = function (a, b, t) { return a + (b - a) * t; };
+
+  /* Mörkare variant av en hexfärg – används för att härleda skuggfärger ur
+     en enda angiven färg i stället för att skriva tre överallt. */
+  LESS.morkare = function (hex, k) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+    if (!m) return hex;
+    var v = parseInt(m[1], 16), i, ut = '#';
+    var d = [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+    for (i = 0; i < 3; i++) {
+      ut += ('0' + Math.max(0, Math.round(d[i] * k)).toString(16)).slice(-2);
+    }
+    return ut;
+  };
 
   /* Deterministisk slump (så drill-ordningen går att återskapa) */
   LESS.rng = function (seed) {
@@ -1010,6 +1036,19 @@ body.touch #pad{
       R(c, x + 7, y, 1, 16, '#a8a498');
       R(c, x, y + 7, 16, 1, '#a8a498');
       R(c, x + 2, y + 11, 2, 1, '#a09c90');
+    },
+
+    topplista: function (c, x, y) {        /* topplistan på skyddsrummets vägg */
+      TILE.betong(c, x, y);
+      R(c, x + 1, y + 1, 14, 13, '#3a3a34');
+      R(c, x + 2, y + 2, 12, 11, '#f4f2e4');
+      R(c, x + 3, y + 3, 10, 2, '#c8a018');      /* gul rubrikrad */
+      var i;
+      for (i = 0; i < 4; i++) {
+        R(c, x + 3, y + 6 + i * 2, 1, 1, '#8a8a80');
+        R(c, x + 5, y + 6 + i * 2, 6 - i, 1, '#3a3a34');
+      }
+      R(c, x + 11, y + 6, 2, 2, '#1c5c3a');      /* liten boll */
     },
 
     pingis: function (c, x, y) {           /* pingisbord */
@@ -1572,6 +1611,116 @@ body.touch #pad{
 
 })(window);
 
+/* ==== js/overgang.js ==== */
+/* overgang.js – spiralövergången ("swirl")
+
+   Game Boy-spelen kunde inte tona ner en bild pixel för pixel. Det de gjorde
+   i stället var att fylla skärmen med bakgrundsrutor i en spiral utifrån och
+   in. Effekten är billig, tydlig och omedelbart igenkännbar – och den säger
+   något den vanliga toningen inte säger: nu byter vi läge, inte bara rum.
+
+   Här används den när spelaren byter roll mitt i ett ärende: utredningen är
+   klar, läkaren är hämtad, och den man styr är plötsligt någon annan.        */
+(function (global) {
+  'use strict';
+  var LESS = global.LESS;
+
+  var BLOCK = 8;                       /* 8x8 = 20 x 18 rutor på GB-skärmen */
+  var KOL = 160 / BLOCK, RAD = 144 / BLOCK;
+  var TOTALT = KOL * RAD;
+
+  /* Rektangulär spiral utifrån och in – exakt den ordning rutorna fylls i. */
+  var ORDNING = (function () {
+    var ut = [], x0 = 0, y0 = 0, x1 = KOL - 1, y1 = RAD - 1, x, y;
+    while (x0 <= x1 && y0 <= y1) {
+      for (x = x0; x <= x1; x++) ut.push(x + y0 * KOL);
+      for (y = y0 + 1; y <= y1; y++) ut.push(x1 + y * KOL);
+      if (y1 > y0) for (x = x1 - 1; x >= x0; x--) ut.push(x + y1 * KOL);
+      if (x1 > x0) for (y = y1 - 1; y > y0; y--) ut.push(x0 + y * KOL);
+      x0++; y0++; x1--; y1--;
+    }
+    return ut;
+  })();
+
+  function ritaSpiral(c, antal, farg) {
+    if (antal <= 0) return;
+    c.fillStyle = farg;
+    var n = Math.min(antal, TOTALT), i, r;
+    for (i = 0; i < n; i++) {
+      r = ORDNING[i];
+      c.fillRect((r % KOL) * BLOCK, ((r / KOL) | 0) * BLOCK, BLOCK, BLOCK);
+    }
+  }
+
+  /* Samma spiral baklänges: rutorna som ligger kvar är de som ännu inte
+     avtäckts, så den nya bilden växer fram inifrån och ut. */
+  function ritaSpiralKvar(c, antal, farg) {
+    c.fillStyle = farg;
+    var i, r;
+    for (i = antal; i < TOTALT; i++) {
+      r = ORDNING[i];
+      c.fillRect((r % KOL) * BLOCK, ((r / KOL) | 0) * BLOCK, BLOCK, BLOCK);
+    }
+  }
+
+  /* swirl(mitt, klar): spiralen fyller skärmen, mitt() byter scen bakom den,
+     och spiralen släpper sedan fram det nya. mitt() får alltså ändra allt –
+     roll, figurer, position – utan att en enda bildruta läcker igenom.      */
+  function swirl(mitt, klar, opts) {
+    opts = opts || {};
+    var farg = opts.farg || '#10100c';
+    var in_ = opts.in == null ? 620 : opts.in;      /* ms att fylla */
+    var hall = opts.hall == null ? 220 : opts.hall; /* ms svart */
+    var ut = opts.ut == null ? 560 : opts.ut;       /* ms att avtäcka */
+
+    var forra = LESS.getScene();
+    var t0 = null, fas = 0, mittKord = false;
+
+    var scen = {
+      draw: function (c, t) {
+        if (t0 === null) t0 = t;
+        var d = t - t0;
+
+        if (fas === 0) {
+          if (forra && forra.draw) forra.draw(c, t);
+          ritaSpiral(c, Math.ceil((d / in_) * TOTALT), farg);
+          if (d >= in_) { fas = 1; t0 = t; }
+          return;
+        }
+        if (fas === 1) {
+          c.fillStyle = farg; c.fillRect(0, 0, 160, 144);
+          if (!mittKord) {
+            mittKord = true;
+            if (mitt) mitt();
+            /* Satte mitt() en egen scen är det den som ska avtäckas. Rörde
+               den inte scenen ligger den gamla kvar – och att läsa tillbaka
+               den här utan kontroll skulle göra spiralen till sin egen
+               bakgrund, det vill säga oändlig rekursion. */
+            var ny = LESS.getScene();
+            if (ny && ny !== scen) forra = ny;
+            LESS.setScene(scen);
+          }
+          if (d >= hall) { fas = 2; t0 = t; }
+          return;
+        }
+        if (forra && forra.draw) forra.draw(c, t);
+        ritaSpiralKvar(c, Math.ceil((d / ut) * TOTALT), farg);
+        if (d >= ut) {
+          fas = 3;
+          LESS.setScene(forra);
+          if (klar) klar();
+        }
+      }
+    };
+
+    LESS.setScene(scen);
+  }
+
+  LESS.swirl = swirl;
+  LESS.swirlOrdning = ORDNING;
+
+})(window);
+
 /* ==== js/map.js ==== */
 /* map.js – vårdcentralens planlösning (32 x 35 rutor à 16 px)
    Raderna 0–21 är huset. 22–34 är skyddsrummet under det, som inte går
@@ -1587,7 +1736,8 @@ body.touch #pad{
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
      b bänk       p växt    e brits      k skåp   r matta
-     S tygskynke  C betong   g betonggolv q pingisbord  n bordets mitt  */
+     S tygskynke  C betong   g betonggolv q pingisbord  n bordets mitt
+     T topplistan på skyddsrummets vägg                                 */
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -1620,7 +1770,7 @@ body.touch #pad{
     /*23 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
     /*24 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
     /*25 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
-    /*26 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*26 */ 'CCCCCCCCCCCCCTCCCCCCCCCCCCCCCCCC',
     /*27 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
     /*28 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
     /*29 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
@@ -1661,7 +1811,7 @@ body.touch #pad{
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
     'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet',
     'S': 'skynke', 'C': 'betong', 'g': 'betonggolv',
-    'q': 'pingis', 'n': 'pingisnat'
+    'q': 'pingis', 'n': 'pingisnat', 'T': 'topplista'
   };
 
   var WALKABLE = { ' ': 1, '.': 1, 'D': 1, 'E': 1, 'r': 1, 'u': 1, 'g': 1 };
@@ -1695,7 +1845,8 @@ body.touch #pad{
 
     /* Skyddsrummet: skynket i korridorens ände och vägen tillbaka. */
     { id: 'skynke-in',  x: 31, y: 11, kind: 'skynke', till: { x: 16, y: 32, dir: 'up' } },
-    { id: 'skynke-ut',  x: 16, y: 33, kind: 'skynke', till: { x: 30, y: 11, dir: 'left' } }
+    { id: 'skynke-ut',  x: 16, y: 33, kind: 'skynke', till: { x: 30, y: 11, dir: 'left' } },
+    { id: 'topplista',  x: 13, y: 26, kind: 'topplista' }
   ];
 
   /* Pingisbordet upptar rad 30, kolumn 13–17. Vilken bordsruta man än står
@@ -2058,6 +2209,46 @@ body.touch #pad{
       var b = $('panel-body');
       if (b) b.scrollTop += delta;
     },
+    /* Ett riktigt textfält i en panel – signaturen på planschen och namnet
+       på topplistan använder samma ruta. Tangentbordet går till fältet så
+       länge det har fokus (se skriverText ovan), och Enter stoppas från att
+       bubbla vidare: annars läser spelet samma tryck som A och öppnar rutan
+       igen i samma ögonblick som den stängts. */
+    textInmatning: function (opts, klar) {
+      var h = (opts.html || '') +
+        '<div class="signfalt"><input id="txtfalt" type="text" maxlength="' + (opts.max || 60) + '" ' +
+        'autocomplete="off" spellcheck="false" placeholder="' +
+        LESS.esc(opts.platshallare || '') + '"></div>' +
+        '<p class="planschbak">Enter sparar. Esc avbryter.</p>';
+      ui.visaPanel(opts.titel || '', h, opts.fot || 'Enter = spara  ·  Esc = avbryt');
+      var falt = $('txtfalt');
+      falt.value = opts.varde || '';
+      falt.focus();
+      falt.select();
+
+      var handler = null;
+      function stang(sparat) {
+        var v = falt.value;
+        falt.removeEventListener('keydown', tangent);
+        falt.blur();
+        input.pop(handler);
+        LESS.sfx(sparat ? 'done' : 'back');
+        klar(sparat ? v : null);
+      }
+      function tangent(e) {
+        if (e.key !== 'Enter' && e.key !== 'Escape') return;
+        e.preventDefault();
+        e.stopPropagation();
+        stang(e.key === 'Enter');
+      }
+      falt.addEventListener('keydown', tangent);
+      /* Reserv för pekskärm och för den som ändå trycker A eller B. */
+      handler = input.push(function (k) {
+        if (k === 'a') stang(true);
+        else if (k === 'b' || k === 'meny') stang(false);
+      });
+    },
+
     panelSynlig: function (el) {
       var b = $('panel-body');
       if (b && el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
@@ -2975,6 +3166,16 @@ body.touch #pad{
               uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
   };
 
+  /* Overworld-figur härledd ur porträttet, så att patienten ser likadan ut
+     när hon sitter i väntrummet som när hon sitter i rummet. */
+  LESS.patientSprite = function (id) {
+    var p = LESS.personer[id];
+    if (!p || !p.portratt) return null;
+    var k = p.portratt.klader || '#8a94b8';
+    return { skin: p.portratt.skin, hair: p.portratt.hair, hairStyle: p.portratt.hairStyle,
+             uni: k, uni2: LESS.morkare(k, 0.78), acc: LESS.morkare(k, 0.55), bricka: false };
+  };
+
   /* ---------------- personal i overworld ---------------- */
   LESS.npcs = [
     { x: 2, y: 15, dir: 'down', namn: 'MEDARBETARE ROSA',
@@ -3826,8 +4027,8 @@ body.touch #pad{
         ['Arbete', 'Kommunikatör. Möten, texter, deadlines. Omorganisation pågår.']
       ],
       intro: [
-        'Torsdag 14.00. Anna sitter redan i väntrummet när du hämtar henne.',
-        'Hon har med sig en anteckningsbok.'
+        'Ni sätter er. Anna har med sig en anteckningsbok.',
+        'Torsdag 14.00. Fyrtiofyra minuter.'
       ],
       introExtra: [
         { nyckel: 'anna-triage', varde: 'lakare',
@@ -5015,9 +5216,9 @@ body.touch #pad{
         ['Åtgärd', 'Psykoedukation och situationsanalys genomförd. iKBT startar denna vecka.']
       ],
       intro: [
-        'Torsdag förmiddag. Du är jourläkare: inga egna bokade patienter, du finns till för de försäkringsmedicinska utredningarna.',
-        'Det knackar. Psykolog Karin är klar med Anna och vill föredra ärendet.',
-        'Anna sitter kvar i rummet. Hon går härifrån idag med ett besked.'
+        'Du är jourläkaren: inga egna bokade patienter, du finns till för de försäkringsmedicinska utredningarna.',
+        'Karin lägger sin utredning framför dig. Anna sitter kvar.',
+        'Hon går härifrån idag med ett besked.'
       ],
       introExtra: [
         { nyckel: 'anna-forslag', varde: 'ingen',
@@ -5222,7 +5423,7 @@ body.touch #pad{
         ['Åtgärd', 'Anpassad träning påbörjad. Uppföljning om 10 dagar.']
       ],
       intro: [
-        'Fredag förmiddag, jourpass. Sara är klar med Bengt och hämtar dig.',
+        'Jourpass. Sara lägger sin utredning framför dig.',
         'Bengt sitter kvar. Han har fått med sig en lista på moment från arbetsplatsen.'
       ],
       introExtra: [
@@ -5767,7 +5968,7 @@ body.touch #pad{
         steg: [
           { fall: 'ssk-anna', mellanspel: ['Ett nytt ärende ligger i chattkorgen.', 'Du är sjuksköterska idag.'] },
           { fall: 'psy-anna', mellanspel: ['Tre dagar senare. Torsdag.', 'Nu är du psykolog.'] },
-          { fall: 'lak-anna', mellanspel: ['Samma förmiddag. Anna sitter kvar i rummet.', 'Nu är du jourläkaren som Karin kommer och hämtar.'] },
+          { fall: 'lak-anna', mellanspel: ['Samma förmiddag. Anna sitter kvar i rummet.', 'Nu är du jourläkaren. Det är ditt namn som ska stå på beslutet.'] },
           { fall: 'rko-anna', mellanspel: ['Två veckor senare.', 'Nu är du rehabkoordinator.'] }
         ],
         epilog: [
@@ -5800,7 +6001,7 @@ body.touch #pad{
         steg: [
           { fall: 'ssk-bengt', mellanspel: ['Nästa ärende i chatten.', 'Du är sjuksköterska.'] },
           { fall: 'fys-bengt', mellanspel: ['Dagen efter. Fredag morgon.', 'Nu är du fysioterapeut.'] },
-          { fall: 'lak-bengt', mellanspel: ['Samma förmiddag. Bengt sitter kvar.', 'Nu är du jourläkaren som Sara kommer och hämtar.'] }
+          { fall: 'lak-bengt', mellanspel: ['Samma förmiddag. Bengt sitter kvar.', 'Nu är du jourläkaren. Det är ditt namn som ska stå på beslutet.'] }
         ],
         epilog: [
           { om: { nyckel: 'bengt-beslut', varde: '100' },
@@ -6098,47 +6299,19 @@ body.touch #pad{
      ui.js bort spelets tangentbindningar, annars äter styrningen bokstäverna. */
 
   function signera(roll, klar) {
-    var handler = null, falt = null;
-
     var h = '';
     h += '<p class="planschintro">Skriv ditt namn om du vill att svaren ska gå att följa upp. ' +
          'Det följer med varje skattning du gör härifrån och framåt.</p>';
     h += '<p class="planschintro">Vill du vara anonym lämnar du fältet tomt. ' +
          'Skattningen räknas lika mycket ändå.</p>';
-    h += '<div class="signfalt"><input id="signinput" type="text" maxlength="60" ' +
-         'autocomplete="off" spellcheck="false" placeholder="Förnamn Efternamn"></div>';
-    h += '<p class="planschbak">Enter sparar. Esc avbryter.</p>';
-    ui.visaPanel('SIGNATUR · ' + rollNamn(roll), h, 'Enter = spara  ·  Esc = avbryt');
-
-    falt = $('signinput');
-    falt.value = mittNamn();
-    falt.focus();
-    falt.select();
-
-    function stang(sparat) {
-      falt.removeEventListener('keydown', tangent);
-      falt.blur();
-      LESS.input.pop(handler);
-      LESS.sfx(sparat ? 'done' : 'back');
+    ui.textInmatning({
+      titel: 'SIGNATUR · ' + rollNamn(roll),
+      html: h,
+      varde: mittNamn(),
+      platshallare: 'Förnamn Efternamn'
+    }, function (varde) {
+      if (varde !== null) sparaNamn(varde);
       if (klar) klar();
-    }
-
-    /* stopPropagation är inte kosmetik: utan den bubblar samma Enter vidare
-       till spelets tangentlyssnare, som tolkar den som A – och öppnar rutan
-       igen i samma ögonblick som den stängts. */
-    function tangent(e) {
-      if (e.key !== 'Enter' && e.key !== 'Escape') return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (e.key === 'Enter') { sparaNamn(falt.value); stang(true); }
-      else stang(false);
-    }
-    falt.addEventListener('keydown', tangent);
-
-    /* Reserv för pekskärm och för den som ändå trycker A eller B. */
-    handler = LESS.input.push(function (k) {
-      if (k === 'a') { sparaNamn(falt.value); stang(true); }
-      else if (k === 'b' || k === 'meny') stang(false);
     });
   }
 
@@ -6261,6 +6434,16 @@ body.touch #pad{
   }
 
   LESS.plansch = { visa: visa, rapport: rapport };
+
+  /* Den delade lagringen är samma för planschen och för topplistan i
+     skyddsrummet: artefaktens databas när den finns, annars webbläsaren. */
+  LESS.delad = {
+    db: kopplaDb,
+    aktuell: function () { return db; },
+    deltagarId: deltagarId,
+    namn: mittNamn,
+    sparaNamn: sparaNamn
+  };
 
 })(window);
 
@@ -6515,8 +6698,16 @@ body.touch #pad{
 
   function stang() {
     if (handler) { LESS.input.pop(handler); handler = null; }
+    /* Bara en avslutad match som spelaren vann kommer på tavlan. Att avbryta
+       med B mitt i räknas inte, och en förlust hör inte hemma där. */
+    var vann = !!G && G.lage === 'slut' && G.poang > G.motpoang;
+    var mot = G ? G.mot.id : null, egna = G ? G.poang : 0, deras = G ? G.motpoang : 0;
     G = null;
     var k = slutfor; slutfor = null;
+    if (vann && LESS.topplista) {
+      LESS.topplista.registrera(mot, egna, deras, function () { if (k) k(); });
+      return;
+    }
     if (k) k();
   }
 
@@ -6540,6 +6731,187 @@ body.touch #pad{
   }
 
   LESS.pong = { motstandare: MOTSTANDARE, start: start };
+
+})(window);
+
+/* ==== js/topplista.js ==== */
+/* topplista.js – affischen på skyddsrummets vägg
+
+   Den som slår någon vid pingisbordet får skriva upp sig. Poängen räknas på
+   vem man slagit, inte bara på att man vunnit: Sam är svårast och ger mest,
+   John lättast och ger minst. Marginalen ger ett påslag, så en 5–0 mot Sam
+   står högre än en 5–4.
+
+   Listan sparas i spelets eget minne, och delas dessutom via artefaktens
+   databas när den finns – då ser alla på vårdcentralen samma tavla.        */
+(function (global) {
+  'use strict';
+  var LESS = global.LESS, ui = LESS.ui;
+
+  var VIKT = { sam: 100, martin: 70, filip: 45, john: 25 };
+  var TAK = 20;                       /* så många rader sparas lokalt */
+
+  function delad() { return LESS.delad || null; }
+  function db() { var d = delad(); return d ? d.aktuell() : null; }
+
+  function poang(motId, egna, motpoang) {
+    var bas = VIKT[motId] || 25;
+    return bas + Math.max(0, egna - motpoang) * 6;
+  }
+
+  function motNamn(id) {
+    var lista = (LESS.pong && LESS.pong.motstandare) || [];
+    for (var i = 0; i < lista.length; i++) if (lista[i].id === id) return lista[i].namn;
+    return id;
+  }
+
+  /* ---------------- lagring ---------------- */
+
+  function lokala() {
+    var d = LESS.state.data;
+    if (!d.pingis) d.pingis = { hittat: true, vinster: {}, forluster: {} };
+    if (!d.pingis.topp) d.pingis.topp = [];
+    return d.pingis.topp;
+  }
+
+  function sparaLokalt(rad) {
+    var lista = lokala();
+    /* En rad per spelare och motståndare – bästa resultatet vinner, annars
+       fylls tavlan av samma person som spelar om och om igen. */
+    var nyckel = (rad.namn || '').toLowerCase() + '|' + rad.mot;
+    var i, funnen = -1;
+    for (i = 0; i < lista.length; i++) {
+      if (((lista[i].namn || '').toLowerCase() + '|' + lista[i].mot) === nyckel) { funnen = i; break; }
+    }
+    if (funnen >= 0) {
+      if (lista[funnen].varde >= rad.varde) return false;
+      lista[funnen] = rad;
+    } else {
+      lista.push(rad);
+    }
+    lista.sort(function (a, b) { return b.varde - a.varde; });
+    if (lista.length > TAK) lista.length = TAK;
+    LESS.state.spara();
+    return true;
+  }
+
+  function delaRad(rad) {
+    var D = delad();
+    if (!D || !db()) return;
+    try {
+      db().doc('pingis/' + D.deltagarId() + '__' + rad.mot).set({
+        namn: rad.namn, mot: rad.mot, poang: rad.poang, motpoang: rad.motpoang,
+        varde: rad.varde, deltagare: D.deltagarId(), tid: rad.tid
+      }).then(null, function () { /* lokalt sparat räcker */ });
+    } catch (e) { /* tyst */ }
+  }
+
+  function hamtaDelade() {
+    var D = delad();
+    if (!D || !db()) return Promise.resolve([]);
+    return db().collection('pingis').get().then(function (snap) {
+      var ut = [];
+      snap.docs.forEach(function (d) {
+        var v = d.data() || {};
+        if (typeof v.varde !== 'number') return;
+        ut.push(v);
+      });
+      return ut;
+    }, function () { return []; });
+  }
+
+  /* Lokalt och delat är samma tavla sedd från två håll – slå ihop dem och
+     låt bästa resultatet per namn och motståndare stå kvar. */
+  function slaIhop(delade) {
+    var alla = lokala().concat(delade || []), per = {}, ut = [];
+    alla.forEach(function (r) {
+      var n = (r.namn || 'ANONYM').toLowerCase() + '|' + r.mot;
+      if (!per[n] || per[n].varde < r.varde) per[n] = r;
+    });
+    Object.keys(per).forEach(function (k) { ut.push(per[k]); });
+    ut.sort(function (a, b) { return b.varde - a.varde; });
+    return ut.slice(0, 10);
+  }
+
+  /* ---------------- affischen ---------------- */
+
+  function visa(klar) {
+    var handler = null, delade = [];
+
+    function rita() {
+      var rader = slaIhop(delade), h = '';
+      h += '<p class="planschintro">Skyddsrummets pingistavla. Poängen räknas på ' +
+           'vem du slagit: Sam ger mest, John minst, och marginalen ger påslag.</p>';
+      h += '<p class="planschintro lagring">' + (db()
+        ? '● Tavlan delas med alla som spelar. Kollegor på andra datorer syns här.'
+        : '○ Tavlan sparas bara i den här webbläsaren.') + '</p>';
+      if (!rader.length) {
+        h += '<p>Ingen har skrivit upp sig ännu. Vinn en match vid bordet, så får du chansen.</p>';
+      } else {
+        h += '<table class="topp"><tr><th>#</th><th>Namn</th><th>Slog</th><th>Res.</th><th>P</th></tr>';
+        rader.forEach(function (r, i) {
+          h += '<tr' + (i === 0 ? ' class="etta"' : '') + '>' +
+               '<td>' + (i + 1) + '</td>' +
+               '<td>' + LESS.esc(r.namn || 'ANONYM') + '</td>' +
+               '<td>' + LESS.esc(motNamn(r.mot)) + '</td>' +
+               '<td>' + r.poang + '–' + r.motpoang + '</td>' +
+               '<td><b>' + r.varde + '</b></td></tr>';
+        });
+        h += '</table>';
+      }
+      h += '<p class="planschbak">Sam 100 · Martin 70 · Filip 45 · John 25, plus 6 per bolls marginal.</p>';
+      ui.visaPanel('PINGISTAVLAN', h, '↑↓ = bläddra  ·  B = tillbaka');
+    }
+
+    rita();
+    var D = delad();
+    if (D) D.db().then(function () {
+      hamtaDelade().then(function (res) {
+        delade = res;
+        if (LESS.input.top() === handler) rita();
+      });
+    });
+
+    handler = LESS.input.push(function (k) {
+      if (k === 'down') ui.panelScroll(26);
+      else if (k === 'up') ui.panelScroll(-26);
+      else if (k === 'b' || k === 'a') {
+        LESS.sfx('back');
+        LESS.input.pop(handler);
+        ui.doljPanel();
+        if (klar) klar();
+      }
+    });
+  }
+
+  /* ---------------- skriva upp sig efter en vinst ---------------- */
+
+  function registrera(motId, egna, motpoang, klar) {
+    var D = delad();
+    var varde = poang(motId, egna, motpoang);
+    var h = '<p class="planschintro">Du slog ' + LESS.esc(motNamn(motId)) + ' med ' +
+            egna + '–' + motpoang + '. Det ger <b>' + varde + ' poäng</b>.</p>' +
+            '<p class="planschintro">Skriv ditt namn om du vill stå på tavlan i skyddsrummet. ' +
+            'Lämna tomt så räknas matchen ändå, men syns bara som din egen statistik.</p>';
+    ui.textInmatning({
+      titel: 'PINGISTAVLAN',
+      html: h,
+      max: 24,
+      varde: D ? D.namn() : '',
+      platshallare: 'Ditt namn'
+    }, function (namn) {
+      if (namn === null || !namn.trim()) { if (klar) klar(false); return; }
+      namn = namn.trim().slice(0, 24);
+      if (D) D.sparaNamn(namn);
+      var rad = { namn: namn, mot: motId, poang: egna, motpoang: motpoang,
+                  varde: varde, tid: new Date().toISOString() };
+      var battre = sparaLokalt(rad);
+      delaRad(rad);
+      if (klar) klar(battre);
+    });
+  }
+
+  LESS.topplista = { visa: visa, registrera: registrera, poang: poang };
 
 })(window);
 
@@ -7350,25 +7722,50 @@ body.touch #pad{
     }
     var o = oveRuta();
     if (o.x === nx && o.y === ny) { P.steg = (P.steg + 1) % 2; return; }
+    for (i = 0; i < statister.length; i++) {
+      if (statister[i].tx === nx && statister[i].ty === ny) { P.steg = (P.steg + 1) % 2; return; }
+    }
     P.frx = P.px; P.fry = P.py;
     P.tx = nx; P.ty = ny;
     P.gar = true; P.t0 = performance.now();
   }
 
-  function uppdatera(nu) {
-    if (!P.gar) return;
-    var k = (nu - P.t0) / GANGTID;
+  /* Ett steg för vilken figur som helst – spelaren och statisterna i
+     filmsekvenserna lyder samma tween. Returnerar true den bildruta då
+     steget blev klart. */
+  function stega(f, nu) {
+    if (!f.gar) return false;
+    var k = (nu - f.t0) / GANGTID;
     if (k >= 1) {
-      P.px = P.tx * TS; P.py = P.ty * TS;
-      P.gar = false;
-      P.steg = (P.steg + 1) % 2;
-      var d = LESS.input.dir() || P.buffert;
-      P.buffert = null;
-      if (d && aktiv) forsokGa(d);
+      f.px = f.tx * TS; f.py = f.ty * TS;
+      f.gar = false;
+      f.steg = (f.steg + 1) % 2;
+      return true;
+    }
+    f.px = f.frx + (f.tx * TS - f.frx) * k;
+    f.py = f.fry + (f.ty * TS - f.fry) * k;
+    return false;
+  }
+
+  function borjaSteg(f, nx, ny, nu) {
+    var dx = nx - f.tx, dy = ny - f.ty;
+    if (dx || dy) f.dir = dx > 0 ? 'right' : (dx < 0 ? 'left' : (dy > 0 ? 'down' : 'up'));
+    if (Math.abs(dx) + Math.abs(dy) > 1) {
+      /* längre än en ruta går inte att gå – ställ figuren där i stället för
+         att låta den glida genom en vägg */
+      f.tx = nx; f.ty = ny; f.px = nx * TS; f.py = ny * TS; f.gar = false;
       return;
     }
-    P.px = P.frx + (P.tx * TS - P.frx) * k;
-    P.py = P.fry + (P.ty * TS - P.fry) * k;
+    f.frx = f.px; f.fry = f.py;
+    f.tx = nx; f.ty = ny;
+    f.gar = true; f.t0 = nu;
+  }
+
+  function uppdatera(nu) {
+    if (!stega(P, nu)) return;
+    var d = LESS.input.dir() || P.buffert;
+    P.buffert = null;
+    if (d && aktiv) forsokGa(d);
   }
 
   /* ---------------- kamera & rendering ---------------- */
@@ -7410,6 +7807,10 @@ body.touch #pad{
       var o = oveRuta();
       figurer.push({ px: o.x * TS, py: o.y * TS,
         spr: LESS.charSprite('ove', LESS.handledare.sprite, oveRiktning(o), 0) });
+      statister.forEach(function (st) {
+        figurer.push({ px: st.px, py: st.py,
+          spr: LESS.charSprite('statist-' + st.id, st.sprite, st.dir, st.steg) });
+      });
       var rollDef = (LESS.roller[LESS.state.data.spelare.roll] || LESS.roller.ssk).sprite;
       figurer.push({
         px: P.px, py: P.py,
@@ -7421,7 +7822,12 @@ body.touch #pad{
       });
 
       /* markör över målrummet i kampanjläget – inte nere i skyddsrummet */
-      var mal = P.ty < 22 ? malStation() : null;
+      var mal = null;
+      if (P.ty < 22 && !sekvens) {
+        mal = (patientFigur && vantarPaHamtning(kampanjSteg()))
+          ? { x: patientFigur.tx, y: patientFigur.ty }
+          : malStation();
+      }
       if (mal) {
         var mx = mal.x * TS - cam.x + 4, my = mal.y * TS - cam.y - 10 + Math.round(Math.sin(t / 220) * 2);
         var iBild = mx > 0 && mx < VY_W - 8 && my > 0 && my < VY_H - 8;
@@ -7493,8 +7899,14 @@ body.touch #pad{
         o = (pers ? pers.namn.split(' ')[0].toUpperCase() : '') +
             ' · steg ' + (LESS.state.data.kampanj.steg + 1) + '/' + k.arende.steg.length +
             ' → ' + (r ? r.rum : '');
-        /* Väl inne i rummet byts vägvisningen mot vad man faktiskt ska göra. */
-        if (r && rumNamn() === r.rum) {
+        if (vantarPaHamtning(k)) {
+          /* Fysiskt besök: patienten sitter i väntrummet och ska hämtas. */
+          o = (pers ? pers.namn.split(' ')[0].toUpperCase() : '') +
+              ' · steg ' + (LESS.state.data.kampanj.steg + 1) + '/' + k.arende.steg.length +
+              ' → VÄNTRUMMET';
+          if (rumNamn() === 'VÄNTRUM') o = '▶ Gå fram till patienten och tryck A';
+        } else if (r && rumNamn() === r.rum) {
+          /* Väl inne i rummet byts vägvisningen mot vad man faktiskt ska göra. */
           o = (r.rum === 'TRIAGE' || r.rum === 'LÄKARRUM')
             ? '▶ Gå till datorn och tryck A'
             : '▶ Gå till skrivbordet och tryck A';
@@ -7588,8 +8000,15 @@ body.touch #pad{
 
     rad.push('Nu är du ' + (r ? r.namn.toLowerCase() : '') + '. ' +
              (pers ? pers.namn : 'Patienten') + ' väntar.');
-    rad.push('Du ska in i ' + (r ? r.rum : '') + '.' + (mal ? ' ' + vagbeskrivning(mal) : ''));
-    rad.push(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.');
+    if (vantarPaHamtning(k)) {
+      rad.push('Det här är ett fysiskt besök. ' + (pers ? pers.namn.split(' ')[0] : 'Hon') +
+               ' sitter i väntrummet – gå dit och hämta henne själv.');
+      rad.push('Ställ dig framför henne och tryck A, så går ni in tillsammans. ' +
+               'Att gå in bredvid patienten är inte artighet, det är där besöket börjar.');
+    } else {
+      rad.push('Du ska in i ' + (r ? r.rum : '') + '.' + (mal ? ' ' + vagbeskrivning(mal) : ''));
+      rad.push(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.');
+    }
     rad.push('Kör du fast kommer du tillbaka hit. Jag står alltid utanför rätt dörr.');
     return rad;
   }
@@ -7644,6 +8063,7 @@ body.touch #pad{
     if (d.lage !== 'kampanj') return;
     var k = kampanjSteg(), mal = malStation();
     if (!k || !mal) return;
+    if (vantarPaHamtning(k)) return;
     var nyckel = d.kampanj.arende + ':' + d.kampanj.steg;
     if (d.kampanj.rumstips === nyckel) return;
     var r = LESS.roller[k.fall.roll];
@@ -7653,6 +8073,279 @@ body.touch #pad{
     paus();
     LESS.sfx('alert');
     ui.say(ATGARD[k.fall.roll] || 'Ställ dig vid skrivbordet och tryck A.', null, ater);
+  }
+
+  /* ================= filmsekvenser =================
+     Scriptade sekvenser där spelaren inte styr. Samma grepp som när Pokémon
+     tar över styrningen för att ett event ska hända: man trycker A på rätt
+     ställe, och sedan går figurerna dit de ska av sig själva.
+
+     Två sekvenser finns. Den ena hämtar patienten i väntrummet vid det
+     fysiska besöket. Den andra hämtar jourläkaren när den försäkrings-
+     medicinska utredningen är klar – och den slutar med att den man styr
+     har bytt yrke.                                                          */
+
+  var statister = [];        /* figurer som bara finns under en sekvens */
+  var sekvens = null;
+
+  function nyStatist(id, sprite, x, y, dir) {
+    var f = { id: id, sprite: sprite || LESS.roller.ssk.sprite,
+              tx: x, ty: y, px: x * TS, py: y * TS,
+              dir: dir || 'down', gar: false, steg: 0, frx: x * TS, fry: y * TS, t0: 0 };
+    statister.push(f);
+    return f;
+  }
+
+  function taBortStatist(f) {
+    var i = statister.indexOf(f);
+    if (i >= 0) statister.splice(i, 1);
+  }
+
+  /* Bredden-först över gångbara rutor. Kartan är 32x35, så en full sökning
+     kostar ingenting och slipper alla specialfall en handskriven väg får. */
+  function vagTill(fran, till, sjalv, ignoreraFigurer) {
+    var W = M.W, H = M.H, i, k;
+    var upptagen = {};
+    if (!ignoreraFigurer) {
+      LESS.npcs.forEach(function (n) { upptagen[n.x + n.y * W] = 1; });
+      var o = oveRuta();
+      upptagen[o.x + o.y * W] = 1;
+      statister.forEach(function (f) { if (f !== sjalv) upptagen[f.tx + f.ty * W] = 1; });
+      if (P && P !== sjalv) upptagen[P.tx + P.ty * W] = 1;
+    }
+    var kom = new Int32Array(W * H);
+    for (i = 0; i < kom.length; i++) kom[i] = -2;
+    var start = fran.x + fran.y * W, mal = till.x + till.y * W;
+    var ko = [start];
+    kom[start] = -1;
+    var D = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+    for (i = 0; i < ko.length; i++) {
+      var cur = ko[i];
+      if (cur === mal) break;
+      var cx = cur % W, cy = (cur / W) | 0;
+      for (k = 0; k < 4; k++) {
+        var nx = cx + D[k][0], ny = cy + D[k][1];
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+        var ni = nx + ny * W;
+        if (kom[ni] !== -2) continue;
+        if (!M.walkable(nx, ny)) continue;
+        if (upptagen[ni] && ni !== mal) continue;
+        kom[ni] = cur; ko.push(ni);
+      }
+    }
+    if (kom[mal] === -2) {
+      /* Blockerad av en figur – försök igen utan hänsyn till dem hellre än
+         att låta sekvensen stanna mitt i. */
+      return ignoreraFigurer ? null : vagTill(fran, till, sjalv, true);
+    }
+    var vag = [], c = mal;
+    while (c !== -1) { vag.push({ x: c % W, y: (c / W) | 0 }); c = kom[c]; }
+    vag.reverse();
+    vag.shift();
+    return vag;
+  }
+
+  /* Stegtyper:
+       {typ:'ga',     vem, till:{x,y}, foljs:[figur,...]}
+       {typ:'vand',   vem, dir}
+       {typ:'vanta',  ms}
+       {typ:'replik', rader:[{text,speaker}]}
+       {typ:'kor',    fn(nasta)}
+     'vem' är en statist eller strängen 'spelare'.                          */
+  function korSekvens(steg, klar) {
+    paus();
+    sekvens = { steg: steg, i: -1, akt: null, klar: klar };
+    nastaSekvenssteg();
+  }
+
+  function figurAv(vem) { return vem === 'spelare' ? P : vem; }
+
+  function nastaSekvenssteg() {
+    if (!sekvens) return;
+    sekvens.i += 1;
+    sekvens.akt = null;
+    var s = sekvens.steg[sekvens.i];
+    if (!s) {
+      var k = sekvens.klar;
+      sekvens = null;
+      if (k) k();
+      return;
+    }
+    if (s.typ === 'ga') {
+      var f = figurAv(s.vem);
+      var vag = vagTill({ x: f.tx, y: f.ty }, s.till, f);
+      if (!vag || !vag.length) { nastaSekvenssteg(); return; }
+      sekvens.akt = { typ: 'ga', vag: vag, steg: 0,
+                      kedja: [f].concat((s.foljs || []).map(figurAv)) };
+      return;
+    }
+    if (s.typ === 'vand') { figurAv(s.vem).dir = s.dir; nastaSekvenssteg(); return; }
+    if (s.typ === 'vanta') { sekvens.akt = { typ: 'vanta', till: performance.now() + s.ms }; return; }
+    if (s.typ === 'replik') { ui.sayAll(s.rader, nastaSekvenssteg); return; }
+    if (s.typ === 'kor') { s.fn(nastaSekvenssteg); return; }
+    nastaSekvenssteg();
+  }
+
+  function tickSekvens(nu) {
+    var a = sekvens && sekvens.akt;
+    if (!a) return;
+    if (a.typ === 'vanta') {
+      if (nu >= a.till) { sekvens.akt = null; nastaSekvenssteg(); }
+      return;
+    }
+    if (a.typ !== 'ga') return;
+
+    var i, gar = false;
+    for (i = 0; i < a.kedja.length; i++) { stega(a.kedja[i], nu); if (a.kedja[i].gar) gar = true; }
+    if (gar) return;
+
+    if (a.steg >= a.vag.length) { sekvens.akt = null; nastaSekvenssteg(); return; }
+
+    /* Hela kedjan flyttar samtidigt: var och en till rutan framför sig, och
+       ledaren till nästa ruta på vägen. Det ger den klassiska följa-John. */
+    var mal = a.vag[a.steg];
+    for (i = a.kedja.length - 1; i > 0; i--) {
+      borjaSteg(a.kedja[i], a.kedja[i - 1].tx, a.kedja[i - 1].ty, nu);
+    }
+    borjaSteg(a.kedja[0], mal.x, mal.y, nu);
+    a.steg += 1;
+  }
+
+  /* ---------------- kampanjens patient ----------------
+     Vid det fysiska besöket sitter patienten i väntrummet tills någon
+     hämtar henne. Figuren lever kvar mellan stegen i ett ärende: när
+     utredningen är klar sitter hon fortfarande i rummet, och det är dit
+     jourläkaren hämtas.                                                    */
+
+  var BANKEN = { x: 3, y: 16 };          /* bänken i väntrummet */
+  var patientFigur = null;
+
+  function vantarPaHamtning(k) {
+    var d = LESS.state.data;
+    if (d.lage !== 'kampanj' || !k || !k.fall || k.fall.lage !== 'rum') return false;
+    return d.kampanj.hamtad !== k.arende.id + ':' + d.kampanj.steg;
+  }
+
+  function synkaKampanjfigurer() {
+    var d = LESS.state.data;
+    var k = d.lage === 'kampanj' ? kampanjSteg() : null;
+    var pahplats = k && k.fall && (k.fall.lage === 'rum' || k.fall.lage === 'trepart');
+    if (!pahplats) {
+      if (patientFigur) { taBortStatist(patientFigur); patientFigur = null; }
+      return;
+    }
+    var pid = k.arende.patient;
+    if (patientFigur && patientFigur.person !== pid) { taBortStatist(patientFigur); patientFigur = null; }
+    if (!patientFigur) {
+      patientFigur = nyStatist('patient-' + pid, LESS.patientSprite(pid), BANKEN.x, BANKEN.y, 'down');
+      patientFigur.person = pid;
+      patientFigur.namn = (LESS.personer[pid] || {}).namn || 'PATIENT';
+    }
+    if (vantarPaHamtning(k)) {
+      patientFigur.tx = BANKEN.x; patientFigur.ty = BANKEN.y;
+      patientFigur.px = BANKEN.x * TS; patientFigur.py = BANKEN.y * TS;
+      patientFigur.dir = 'down'; patientFigur.gar = false;
+    }
+  }
+
+  function fornamn(pid) { return ((LESS.personer[pid] || {}).namn || 'Patienten').split(' ')[0]; }
+
+  /* Sekvens 1: hämta patienten i väntrummet och gå in tillsammans. */
+  function hamtaPatienten() {
+    var k = kampanjSteg();
+    var st = malStation();
+    if (!k || !st || !patientFigur) return;
+    var d = LESS.state.data;
+    var pers = LESS.personer[k.arende.patient] || {};
+    var r = LESS.roller[k.fall.roll] || {};
+    var mig = { name: r.namn || 'DU', kind: 'you' };
+    var hon = { name: (pers.namn || 'PATIENT').toUpperCase(), kind: 'you' };
+    var pat = patientFigur;
+
+    LESS.sfx('ok');
+    korSekvens([
+      { typ: 'replik', rader: [
+        { text: (pers.namn || 'Hej') + '?', speaker: mig },
+        { text: 'Ja. Det är jag.', speaker: hon },
+        { text: 'Välkommen. Kom med, så går vi in.', speaker: mig }
+      ] },
+      { typ: 'vand', vem: pat, dir: 'down' },
+      { typ: 'vanta', ms: 180 },
+      { typ: 'ga', vem: 'spelare', till: { x: st.x, y: st.y + 1 }, foljs: [pat] },
+      { typ: 'ga', vem: pat, till: { x: st.x + 1, y: st.y + 1 } },
+      { typ: 'vand', vem: 'spelare', dir: 'up' },
+      { typ: 'vand', vem: pat, dir: 'left' },
+      { typ: 'kor', fn: function (nasta) {
+          d.kampanj.hamtad = k.arende.id + ':' + d.kampanj.steg;
+          LESS.state.spara();
+          LESS.sfx('door');
+          nasta();
+        } },
+      { typ: 'vanta', ms: 320 }
+    ], function () {
+      korFall(k.fall, { kampanj: true }, function () { efterKampanj(k); });
+    });
+  }
+
+  /* Sekvens 2: utredningen är klar – hämta jourläkaren, och byt roll.
+     Spiralövergången mitt i är där man slutar vara psykolog eller
+     fysioterapeut och börjar vara den som signerar.                        */
+
+  var LAKARDORREN = { x: 27, y: 11 };    /* korridoren utanför läkarrummet */
+
+  function hamtaLakaren(k) {
+    var d = LESS.state.data;
+    var utredare = LESS.roller[d.spelare.roll] || LESS.roller.psykolog;
+    var lak = LESS.roller.lakare;
+    var rummet = { x: P.tx, y: P.ty }, riktning = P.dir;
+    var doktor = nyStatist('lakare-hamtad', lak.sprite, 27, 7, 'down');
+    var mig = { name: utredare.namn, kind: 'you' };
+    var han = { name: lak.namn, kind: 'you' };
+
+    ui.transition(function () { LESS.setScene(scene); }, function () {
+      korSekvens([
+        { typ: 'replik', rader: [
+          { text: 'Utredningen är klar. ' + fornamn(k.arende.patient) +
+                  ' sitter kvar – nu hämtar du jourläkaren.', speaker: null }
+        ] },
+        { typ: 'ga', vem: 'spelare', till: LAKARDORREN },
+        { typ: 'vand', vem: 'spelare', dir: 'up' },
+        { typ: 'ga', vem: doktor, till: { x: 27, y: 10 } },
+        { typ: 'vand', vem: doktor, dir: 'down' },
+        { typ: 'replik', rader: [
+          { text: 'Jag har en utredning klar. Har du tio minuter?', speaker: mig },
+          { text: 'Det är därför jag sitter här. Berätta på vägen.', speaker: han }
+        ] },
+        { typ: 'ga', vem: 'spelare', till: rummet, foljs: [doktor] },
+        { typ: 'ga', vem: doktor, till: { x: rummet.x - 1, y: rummet.y } },
+        { typ: 'vand', vem: 'spelare', dir: riktning },
+        { typ: 'vand', vem: doktor, dir: riktning },
+        { typ: 'kor', fn: function (nasta) {
+            LESS.sfx('alert');
+            LESS.swirl(function () {
+              /* Bakom spiralen byter de plats och yrke. Den man styr är
+                 nu den som ska signera – utredaren står kvar bredvid. */
+              var px = P.tx, py = P.ty, ddir = P.dir;
+              P.tx = doktor.tx; P.ty = doktor.ty;
+              P.px = P.tx * TS; P.py = P.ty * TS; P.frx = P.px; P.fry = P.py;
+              doktor.tx = px; doktor.ty = py;
+              doktor.px = px * TS; doktor.py = py * TS;
+              doktor.id = 'kollega-' + utredare.id;
+              doktor.sprite = utredare.sprite;
+              doktor.dir = ddir;
+              P.dir = ddir;
+              d.spelare.roll = 'lakare';
+              LESS.state.spara();
+            }, nasta);
+          } },
+        { typ: 'replik', rader: (k.steg.mellanspel || ['Nu är du jourläkaren.'])
+            .map(function (t) { return { text: t, speaker: null }; }) },
+        { typ: 'vanta', ms: 200 }
+      ], function () {
+        taBortStatist(doktor);
+        korFall(k.fall, { kampanj: true }, function () { efterKampanj(k); });
+      });
+    });
   }
 
   /* ---------------- interaktion ---------------- */
@@ -7668,6 +8361,11 @@ body.touch #pad{
     var o = oveRuta();
     if (o.x === f.x && o.y === f.y) { prataOve(); return; }
 
+    if (patientFigur && patientFigur.tx === f.x && patientFigur.ty === f.y) {
+      if (vantarPaHamtning(kampanjSteg())) { hamtaPatienten(); return; }
+      prataNpc({ namn: patientFigur.namn, repliker: ['Jag väntar här.'] });
+      return;
+    }
     for (i = 0; i < LESS.npcs.length; i++) {
       if (LESS.npcs[i].x === f.x && LESS.npcs[i].y === f.y) { prataNpc(LESS.npcs[i]); return; }
     }
@@ -7686,6 +8384,7 @@ body.touch #pad{
   function ater() {
     aktiv = true;
     LESS.setScene(scene);
+    synkaKampanjfigurer();
     uppdateraVarldsrad();
     LESS.show($('worldbar'), true);
   }
@@ -7710,6 +8409,7 @@ body.touch #pad{
     if (s.kind === 'utgang')  { utgang(); return; }
     if (s.kind === 'skynke')  { skynke(s); return; }
     if (s.kind === 'pingis')  { pingisbordet(); return; }
+    if (s.kind === 'topplista') { paus(); LESS.sfx('ok'); LESS.topplista.visa(ater); return; }
     if (s.role) startRoll(s.role);
   }
 
@@ -7941,6 +8641,8 @@ body.touch #pad{
         visaEpilog(k.arende);
       } else {
         LESS.state.spara();
+        var nasta = kampanjSteg();
+        if (nasta && nasta.fall && nasta.fall.lage === 'trepart') { hamtaLakaren(nasta); return; }
         mellanspel();
       }
     }
@@ -8062,6 +8764,7 @@ body.touch #pad{
     if (!P || nyPosition) P = nyPlayer();
     LESS.setScene(scene);
     aktiv = true;
+    synkaKampanjfigurer();
     uppdateraVarldsrad();
 
     if (handler) LESS.input.pop(handler);
@@ -8095,6 +8798,7 @@ body.touch #pad{
     leave: leave,
     uppdatera: function (t) { if (aktiv) uppdatera(t); },
     tick: function (t) {
+      if (sekvens) { tickSekvens(t); return; }
       if (!aktiv) return;
       uppdatera(t);
       if (!P.gar) {
@@ -8115,6 +8819,7 @@ body.touch #pad{
   var canvas, ctx, scen = null;
 
   LESS.setScene = function (s) { scen = s; };
+  LESS.getScene = function () { return scen; };
 
   /* ---------------- skalning ---------------- */
 

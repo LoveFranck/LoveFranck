@@ -125,6 +125,16 @@
               uni: PROFIL, uni2: PROFIL_D, acc: '#00443c', glasogon: true }
   };
 
+  /* Overworld-figur härledd ur porträttet, så att patienten ser likadan ut
+     när hon sitter i väntrummet som när hon sitter i rummet. */
+  LESS.patientSprite = function (id) {
+    var p = LESS.personer[id];
+    if (!p || !p.portratt) return null;
+    var k = p.portratt.klader || '#8a94b8';
+    return { skin: p.portratt.skin, hair: p.portratt.hair, hairStyle: p.portratt.hairStyle,
+             uni: k, uni2: LESS.morkare(k, 0.78), acc: LESS.morkare(k, 0.55), bricka: false };
+  };
+
   /* ---------------- personal i overworld ---------------- */
   LESS.npcs = [
     { x: 2, y: 15, dir: 'down', namn: 'MEDARBETARE ROSA',

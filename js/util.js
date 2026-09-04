@@ -10,6 +10,19 @@
   LESS.clamp = function (v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); };
   LESS.lerp = function (a, b, t) { return a + (b - a) * t; };
 
+  /* Mörkare variant av en hexfärg – används för att härleda skuggfärger ur
+     en enda angiven färg i stället för att skriva tre överallt. */
+  LESS.morkare = function (hex, k) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+    if (!m) return hex;
+    var v = parseInt(m[1], 16), i, ut = '#';
+    var d = [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+    for (i = 0; i < 3; i++) {
+      ut += ('0' + Math.max(0, Math.round(d[i] * k)).toString(16)).slice(-2);
+    }
+    return ut;
+  };
+
   /* Deterministisk slump (så drill-ordningen går att återskapa) */
   LESS.rng = function (seed) {
     var s = seed >>> 0 || 1;

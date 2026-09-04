@@ -248,8 +248,16 @@
 
   function stang() {
     if (handler) { LESS.input.pop(handler); handler = null; }
+    /* Bara en avslutad match som spelaren vann kommer på tavlan. Att avbryta
+       med B mitt i räknas inte, och en förlust hör inte hemma där. */
+    var vann = !!G && G.lage === 'slut' && G.poang > G.motpoang;
+    var mot = G ? G.mot.id : null, egna = G ? G.poang : 0, deras = G ? G.motpoang : 0;
     G = null;
     var k = slutfor; slutfor = null;
+    if (vann && LESS.topplista) {
+      LESS.topplista.registrera(mot, egna, deras, function () { if (k) k(); });
+      return;
+    }
     if (k) k();
   }
 

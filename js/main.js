@@ -6,6 +6,7 @@
   var canvas, ctx, scen = null;
 
   LESS.setScene = function (s) { scen = s; };
+  LESS.getScene = function () { return scen; };
 
   /* ---------------- skalning ---------------- */
 

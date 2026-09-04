@@ -252,6 +252,19 @@
       R(c, x + 2, y + 11, 2, 1, '#a09c90');
     },
 
+    topplista: function (c, x, y) {        /* topplistan på skyddsrummets vägg */
+      TILE.betong(c, x, y);
+      R(c, x + 1, y + 1, 14, 13, '#3a3a34');
+      R(c, x + 2, y + 2, 12, 11, '#f4f2e4');
+      R(c, x + 3, y + 3, 10, 2, '#c8a018');      /* gul rubrikrad */
+      var i;
+      for (i = 0; i < 4; i++) {
+        R(c, x + 3, y + 6 + i * 2, 1, 1, '#8a8a80');
+        R(c, x + 5, y + 6 + i * 2, 6 - i, 1, '#3a3a34');
+      }
+      R(c, x + 11, y + 6, 2, 2, '#1c5c3a');      /* liten boll */
+    },
+
     pingis: function (c, x, y) {           /* pingisbord */
       TILE.betonggolv(c, x, y);
       R(c, x, y + 1, 16, 11, '#1c5c3a');

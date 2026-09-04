@@ -292,6 +292,29 @@ behöver:
 Varje fallfil inleds med en `EJ KLINISKT GRANSKAT`-flagga. Ta bort den när
 innehållet är genomgånget.
 
+## Filmsekvenserna
+
+Två gånger per ärende tar spelet över styrningen, som när Pokémon flyttar
+figuren själv för att ett event ska hända. Båda finns för att de lär ut något
+en textruta inte kan.
+
+**Det fysiska besöket.** Från och med andra steget sitter patienten i
+väntrummet. Du går dit, trycker A, och sedan går ni in i rummet tillsammans –
+hon en ruta bakom dig hela vägen. Att hämta patienten själv i stället för att
+ropa ut ett namn är en del av arbetssättet, inte artighet.
+
+**Att hämta läkaren.** När den försäkringsmedicinska utredningen är klar går
+du ut i korridoren, knackar på hos jourläkaren och föredrar ärendet på vägen
+tillbaka. Väl inne i rummet stänger en spiral igen skärmen utifrån och in –
+och när den öppnas är du inte längre psykolog eller fysioterapeut. Du är den
+som ska signera, och utredaren står bredvid dig. Det är LESS-modellens kärna
+uttryckt som en scenövergång: samma patient, samma rum, samma förmiddag.
+
+Spiralen ligger i [`js/overgang.js`](js/overgang.js) och är gjord av 8×8-rutor
+som fylls i en rektangulär spiral, precis som på en Game Boy. Sekvensmotorn
+ligger i `js/overworld.js` och kan gå, vända, vänta, säga repliker och köra
+godtycklig kod – figurerna följer efter varandra i kedja.
+
 ## Skyddsrummet
 
 Vårdcentralen har ett rum som inte står i menyerna och som inte syns på kartan
@@ -300,6 +323,10 @@ omkring i det utan uppdrag – och för att den som hittar det ska ha hittat nå
 själv, inte fått det utpekat.
 
 Ledtråden är att korridoren tar slut på ett sätt som inte ser ut som en vägg.
+
+På väggen där nere hänger en tavla. Den som vinner en match får skriva upp sig,
+och poängen räknas på vem man slagit – inte bara på att man vunnit. Tavlan
+delas via artefaktens databas när den finns, annars sparas den i webbläsaren.
 
 ## Idéer som sparats till senare
 

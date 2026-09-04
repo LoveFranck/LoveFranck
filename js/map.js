@@ -12,7 +12,8 @@
      .  korridorgolv   (blank) rumsgolv
      d skrivbord  c skrivbord m. dator   x disk   h stol
      b bänk       p växt    e brits      k skåp   r matta
-     S tygskynke  C betong   g betonggolv q pingisbord  n bordets mitt  */
+     S tygskynke  C betong   g betonggolv q pingisbord  n bordets mitt
+     T topplistan på skyddsrummets vägg                                 */
 
   var ROWS = [
     /* 0 */ '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -45,7 +46,7 @@
     /*23 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
     /*24 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
     /*25 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
-    /*26 */ 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC',
+    /*26 */ 'CCCCCCCCCCCCCTCCCCCCCCCCCCCCCCCC',
     /*27 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
     /*28 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
     /*29 */ 'CCCCCCCCCCggggggggggggCCCCCCCCCC',
@@ -86,7 +87,7 @@
     'd': 'desk', 'c': 'deskPc', 'x': 'counter', 'h': 'chair',
     'b': 'bench', 'p': 'plant', 'e': 'brits', 'k': 'cabinet',
     'S': 'skynke', 'C': 'betong', 'g': 'betonggolv',
-    'q': 'pingis', 'n': 'pingisnat'
+    'q': 'pingis', 'n': 'pingisnat', 'T': 'topplista'
   };
 
   var WALKABLE = { ' ': 1, '.': 1, 'D': 1, 'E': 1, 'r': 1, 'u': 1, 'g': 1 };
@@ -120,7 +121,8 @@
 
     /* Skyddsrummet: skynket i korridorens ände och vägen tillbaka. */
     { id: 'skynke-in',  x: 31, y: 11, kind: 'skynke', till: { x: 16, y: 32, dir: 'up' } },
-    { id: 'skynke-ut',  x: 16, y: 33, kind: 'skynke', till: { x: 30, y: 11, dir: 'left' } }
+    { id: 'skynke-ut',  x: 16, y: 33, kind: 'skynke', till: { x: 30, y: 11, dir: 'left' } },
+    { id: 'topplista',  x: 13, y: 26, kind: 'topplista' }
   ];
 
   /* Pingisbordet upptar rad 30, kolumn 13–17. Vilken bordsruta man än står

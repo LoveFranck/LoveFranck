@@ -491,3 +491,16 @@ body.touch #pad{
 }
 .signfalt input:focus{ outline:none; border-color:var(--mark-mint); background:#fff; }
 .signfalt input::placeholder{ color:#a8b4b0; }
+
+/* ---------- Pingistavlan i skyddsrummet ---------- */
+
+table.topp{ width:100%; border-collapse:collapse; font-size:9px; margin:4px 0 6px; }
+table.topp th{
+  text-align:left; padding:2px 3px; color:var(--mark);
+  border-bottom:2px solid var(--mark); font-weight:normal; letter-spacing:1px;
+}
+table.topp td{ padding:2px 3px; border-bottom:1px solid var(--paper-sh); }
+table.topp td:first-child{ color:#8a9a96; width:14px; }
+table.topp td:last-child{ text-align:right; width:26px; }
+table.topp tr.etta td{ background:rgba(232,160,40,.18); }
+table.topp tr.etta td:nth-child(2){ color:#8a6010; }

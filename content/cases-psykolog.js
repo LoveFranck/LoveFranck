@@ -27,8 +27,8 @@
         ['Arbete', 'Kommunikatör. Möten, texter, deadlines. Omorganisation pågår.']
       ],
       intro: [
-        'Torsdag 14.00. Anna sitter redan i väntrummet när du hämtar henne.',
-        'Hon har med sig en anteckningsbok.'
+        'Ni sätter er. Anna har med sig en anteckningsbok.',
+        'Torsdag 14.00. Fyrtiofyra minuter.'
       ],
       introExtra: [
         { nyckel: 'anna-triage', varde: 'lakare',
