@@ -2366,6 +2366,13 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       LESS.store.clear();
     },
 
+    /* Kampanjen är klarad när alla ärenden är avverkade. Det är nyckeln som
+       låser upp de oplanerade besöken. */
+    kampanjKlarad: function () {
+      var n = (LESS.kampanj && LESS.kampanj.arenden) ? LESS.kampanj.arenden.length : 0;
+      return n > 0 && S.kampanj.arende >= n;
+    },
+
     finnsSparat: function () {
       return S.statistik.moten > 0 || S.kampanj.arende > 0 || S.kampanj.steg > 0;
     },
@@ -3161,6 +3168,44 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       namn: 'Jonas Ek', alder: 38, yrke: 'IT-support',
       portratt: { skin: SK.ljus, hair: HR.brun, hairStyle: 'kort', klader: '#78889a', glasogon: true, ogon: '#3a4a3a' },
       bakgrund: 'Sjukskriven 100 % i elva månader för utmattningssyndrom. Kontakten med arbetsgivaren har tystnat.'
+    },
+
+    /* ---- Oplanerade besök ----
+       Fem patienter som ser ut som LESS-ärenden och inte är det. De låses
+       upp när kampanjen är klar, av pedagogiska skäl: modellen måste sitta
+       innan man tränar på att känna igen när den inte gäller. Poängen är
+       inte att lura spelaren utan att bryta en generalisering spelet självt
+       riskerar att lära ut – att svaret alltid är att triagera förbi
+       läkaren.                                                              */
+
+    katrin: {
+      namn: 'Katrin Vall', alder: 44, yrke: 'Undersköterska, natt',
+      portratt: { skin: SK.ljus, hair: HR.blond, hairStyle: 'knut', klader: '#9a8ab0', ogon: '#4a4a38' },
+      bakgrund: 'Trött i ett halvår, tappar tråden, fryser jämt. Nattpass sedan nio år. Ingen tidigare psykisk ohälsa. Inga prover tagna.'
+    },
+
+    leo: {
+      namn: 'Leo Brandt', alder: 33, yrke: 'Byggnadsarbetare',
+      portratt: { skin: SK.mellan, hair: HR.mork, hairStyle: 'kort', klader: '#7a8a6a', skagg: true, ogon: '#3a3028' },
+      bakgrund: 'Ryggskott efter ett lyft för fyra dagar sedan. Vill ha två veckors sjukskrivning "som förra gången".'
+    },
+
+    miriam: {
+      namn: 'Miriam Sjödin', alder: 51, yrke: 'Teamledare, kommunen',
+      portratt: { skin: SK.mycketljus, hair: HR.rod, hairStyle: 'langt', klader: '#a89098', glasogon: true, ogon: '#4a5a4a' },
+      bakgrund: 'Ny chef sedan i januari. Fråntagen arbetsuppgifter, utesluten ur möten. Sover, äter och tränar som vanligt. Vill bli sjukskriven för att slippa gå dit.'
+    },
+
+    ronny: {
+      namn: 'Ronny Holmqvist', alder: 24, yrke: 'Lagerarbetare, deltid',
+      portratt: { skin: SK.ljus, hair: HR.mork, hairStyle: 'kort', klader: '#6a7a8a', ogon: '#3a3a30' },
+      bakgrund: 'Separation för tre veckor sedan. Skriver i chatten på natten. Har slutat höra av sig till kompisar.'
+    },
+
+    yvonne: {
+      namn: 'Yvonne Krantz', alder: 56, yrke: 'Förskolechef',
+      portratt: { skin: SK.mellan, hair: HR.gra, hairStyle: 'kort', klader: '#8a9aa8', ogon: '#3a3a2a' },
+      bakgrund: 'Tappar saker ur händerna sedan ett halvår, snubblar ibland. Söker för "artros i händerna som mamma hade".'
     }
   };
 
@@ -6073,9 +6118,20 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
     return null;
   };
 
-  /* Alla fall för en roll som får spelas i övningsläget. */
+  /* Alla fall för en roll som får spelas i övningsläget.
+     Fall märkta laser: 'oplanerat' hålls tillbaka tills kampanjen är klar.
+     Skälet är pedagogiskt: de handlar om att känna igen när LESS inte
+     gäller, och den bedömningen går inte att göra innan modellen sitter. */
   LESS.drillFall = function (roll) {
-    return (LESS.fall[roll] || []).slice();
+    var oppet = LESS.state && LESS.state.kampanjKlarad();
+    return (LESS.fall[roll] || []).filter(function (f) {
+      return !f.laser || oppet;
+    });
+  };
+
+  /* Finns det låsta fall för rollen? Används av anslagstavlan. */
+  LESS.lastaFall = function (roll) {
+    return (LESS.fall[roll] || []).filter(function (f) { return !!f.laser; });
   };
 
 })(window);

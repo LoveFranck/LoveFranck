@@ -55,6 +55,13 @@
       LESS.store.clear();
     },
 
+    /* Kampanjen är klarad när alla ärenden är avverkade. Det är nyckeln som
+       låser upp de oplanerade besöken. */
+    kampanjKlarad: function () {
+      var n = (LESS.kampanj && LESS.kampanj.arenden) ? LESS.kampanj.arenden.length : 0;
+      return n > 0 && S.kampanj.arende >= n;
+    },
+
     finnsSparat: function () {
       return S.statistik.moten > 0 || S.kampanj.arende > 0 || S.kampanj.steg > 0;
     },

@@ -112,9 +112,20 @@
     return null;
   };
 
-  /* Alla fall för en roll som får spelas i övningsläget. */
+  /* Alla fall för en roll som får spelas i övningsläget.
+     Fall märkta laser: 'oplanerat' hålls tillbaka tills kampanjen är klar.
+     Skälet är pedagogiskt: de handlar om att känna igen när LESS inte
+     gäller, och den bedömningen går inte att göra innan modellen sitter. */
   LESS.drillFall = function (roll) {
-    return (LESS.fall[roll] || []).slice();
+    var oppet = LESS.state && LESS.state.kampanjKlarad();
+    return (LESS.fall[roll] || []).filter(function (f) {
+      return !f.laser || oppet;
+    });
+  };
+
+  /* Finns det låsta fall för rollen? Används av anslagstavlan. */
+  LESS.lastaFall = function (roll) {
+    return (LESS.fall[roll] || []).filter(function (f) { return !!f.laser; });
   };
 
 })(window);
