@@ -98,7 +98,10 @@
       'Tre ärenden. Sex roller. Ett flöde.',
       'Skillnaden mellan LESS och det gamla flödet ligger inte i vem som bestämmer – läkaren skriver fortfarande under.',
       'Skillnaden ligger i vem patienten möter först, och hur snabbt något faktiskt börjar hända.',
-      'Öva vidare i övningsläget. Handledartipsen tonas bort när en roll sitter.'
+      'En sak till, innan du går.',
+      'Nu när flödet sitter kommer patienter som inte hör hemma i det. De ser likadana ut i chatten. Skillnaden är en fråga du måste komma ihåg att ställa.',
+      'Fem sådana ligger nu i övningsläget, blandade med de andra. Ingen säger till vilket som är vilket.',
+      'Det är hela poängen. En modell man tillämpar utan att tveka är inte en modell längre, utan en vana.'
     ]
   };
 

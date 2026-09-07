@@ -308,9 +308,16 @@
     var d = LESS.state.data;
 
     if (d.lage === 'drill') {
-      return ['Övningsläge. Här väljer du fritt vilket rum du vill gå in i.',
-              'Varje profession har egna fall. Ställ dig vid skrivbordet i rummet och tryck A.',
-              'Fall som tränar det du missat kommer tillbaka först.'];
+      var rad = ['Övningsläge. Här väljer du fritt vilket rum du vill gå in i.',
+                 'Varje profession har egna fall. Ställ dig vid skrivbordet i rummet och tryck A.',
+                 'Fall som tränar det du missat kommer tillbaka först.'];
+      if (LESS.state.kampanjKlarad()) {
+        rad.push('Och sedan du blev klar med de tre ärendena ligger det fem till här inne. ' +
+                 'Patienter som ser ut precis som de du känner igen.');
+        rad.push('Jag säger inte vilka. Går jag runt och pekar ut dem lär du dig ingenting – ' +
+                 'det är att ställa frågan varje gång som är övningen.');
+      }
+      return rad;
     }
 
     var k = kampanjSteg();
@@ -900,6 +907,31 @@
       ko.forEach(function (p) { html += '<li>' + LESS.esc(LESS.principer[p] || p) + '</li>'; });
       html += '</ul>';
       html += '<p>Övningsläget prioriterar fall som tränar dessa.</p>';
+    }
+
+    html += '<h3>Oplanerade besök</h3>';
+    var oppet = LESS.state.kampanjKlarad();
+    var antalLasta = LESS.rollLista.reduce(function (n, r) { return n + LESS.lastaFall(r).length; }, 0);
+    if (!antalLasta) {
+      html += '<p>Inga inlagda ännu.</p>';
+    } else if (!oppet) {
+      html += '<p>' + antalLasta + ' fall är låsta. De handlar om att känna igen när LESS ' +
+              '<i>inte</i> gäller, och den bedömningen går inte att göra innan modellen sitter. ' +
+              'De öppnas när kampanjens tre ärenden är klara.</p>';
+    } else {
+      html += '<p>Upplåsta. ' + antalLasta + ' patienter som ser ut som kampanjens och inte är det. ' +
+              'De ligger blandade bland de andra fallen i övningsläget – ingen säger vilket som är vilket.</p>';
+      html += '<ul>';
+      LESS.rollLista.forEach(function (r) {
+        LESS.lastaFall(r).forEach(function (f) {
+          var pers = LESS.personer[f.patient] || {};
+          var res = d.resultat[f.id];
+          html += '<li>' + LESS.esc(pers.namn || f.patient) + ' · ' +
+                  LESS.esc(LESS.roller[r].kort) + ' — ' +
+                  (res ? res.basta.toUpperCase() : 'ej spelat') + '</li>';
+        });
+      });
+      html += '</ul>';
     }
 
     html += '<h3>Handledartips</h3>';
