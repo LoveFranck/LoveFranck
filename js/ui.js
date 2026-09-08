@@ -351,6 +351,12 @@
         falt.removeEventListener('keydown', tangent);
         falt.blur();
         input.pop(handler);
+        /* Panelen måste stängas här, inte av den som anropade. Planschen
+           ritar om sin egen ruta direkt efteråt och märkte därför aldrig
+           att den låg kvar – men topplistan efter en pingismatch har ingen
+           ruta att rita om, och då blev spelaren stående bakom en
+           namnruta som inte gick att stänga med någon knapp. */
+        ui.doljPanel();
         LESS.sfx(sparat ? 'done' : 'back');
         klar(sparat ? v : null);
       }
