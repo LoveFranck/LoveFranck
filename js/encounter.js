@@ -313,7 +313,7 @@
           logga({ fraga: b.fraga, text: 'Valde inte: ' + o.text, ok: false, varfor: o.varfor, princip: o.princip });
         }
       });
-      if (bra === antal) { LESS.sfx('warm'); ui.cue('✔ Alla tre satt.'); }
+      if (bra === antal) { LESS.sfx('warm'); ui.cue('✔ Alla ' + antal + ' satt.'); }
       else if (bra === 0) { LESS.sfx('cold'); ui.cue('✘ Ingen av dem bar.'); }
       else { LESS.sfx('ok'); ui.cue(bra + ' av ' + antal + '.'); }
       next();
