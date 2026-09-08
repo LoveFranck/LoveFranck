@@ -70,3 +70,62 @@ En rådgivare per fil, så att ingen skriver över någon annan:
 | `content/cases-arbetsterapeut.js` | arbetsterapeut-radgivare |
 | `content/cases-rehabkoordinator.js` | rehabkoordinator-radgivare |
 | `content/fragor.js` | ingen – nya frågor lämnas i rapporten, jag lägger in dem |
+
+## Status
+
+Alla tio fall är skrivna, spelas igenom utan fel och är låsta bakom kampanjen.
+
+| Patient | Triage | Professionsfall |
+|---|---|---|
+| Katrin Vall | `ssk-katrin` | `psy-katrin` |
+| Leo Brandt | `ssk-leo` | `fys-leo` |
+| Miriam Sjödin | `ssk-miriam` | `rko-miriam` |
+| Ronny Holmqvist | `ssk-ronny` | `lak-ronny` |
+| Yvonne Krantz | `ssk-yvonne` | `arb-yvonne` |
+
+### Fem nya principnycklar
+
+Rådgivarna bad om egna nycklar där de tvingats använda en näraliggande som
+platshållare. Skälet är mekaniskt: repetitionskön bygger på principnycklar, och
+en approximativ tagg gör att fel sak kommer tillbaka. De som infördes bär flera
+fall vardera.
+
+| Nyckel | Betydelse | Bärs av |
+|---|---|---|
+| `hypotes` | Pröva den förklaring du fått med dig | Yvonne, Carina, Katrin |
+| `avbryt` | Avbryt uppdraget när fynden byter fråga | Ronny, Leo, Yvonne |
+| `sjukdomskrav` | Nedsatt arbetsförmåga av sjukdom, inte av situation | Miriam |
+| `skriftgrans` | Skriften bär inte allt – byt verktyg | Leo |
+| `overlamning` | Säkra kontakten, inte bara bokningen | Ronny, Leo |
+
+### Regel 5 är inte uppfylld
+
+Specen kräver att minst ett av fallen ska sluta i att LESS faktiskt gäller.
+Sjuksköterskerådgivaren lade den rollen på `ssk-miriam`, men är rak med att det
+är den minst dåliga lösningen och inte en bra: Miriams ärende avgörs visserligen
+på rätt nivå direkt, men ytan ser inte konstig ut. Ingen av de fyra andra kan
+bära rollen utan ett facit hon inte skulle säga högt.
+
+Hennes förslag är en **sjätte patient vars enda uppgift är att vara falskt
+larm** – en 38-åring med tre veckors ryggsmärta efter en flytt, som nämner att
+det "domnar ner i benet" och att han "vaknar av det på natten". Två
+formuleringar som låter som röda flaggor och inte är det. Frågorna som skiljer:
+domnar det eller gör det ont, gör det ont när du ligger stilla eller när du
+vänder dig, kan du gå på tå och hälar. Guld: fysioterapeut i morgon, precis som
+Bengt.
+
+**Status: väntar på verksamhetens besked.** Utan den är risken att uppsättningen
+lär ut att allt som ser konstigt ut är konstigt.
+
+### Fynd i befintligt innehåll
+
+- `rko-jonas` lät koordinatorn kalla till **avstämningsmöte**. Det är
+  Försäkringskassan som kallar (SFB 110 kap. 14 §); vården kan begära ett, och
+  det vården själv kallar till är ett trepartsmöte. Rättat.
+- Kvittensen efter en `flera`-beat i `js/encounter.js` sa "Alla tre satt"
+  oavsett hur många som skulle väljas. Rättat. Två rådgivare hittade den
+  oberoende av varandra, och en av dem valde `antal: 3` i sitt eget fall delvis
+  för att undvika den.
+- `fys-farid` och `fys-bengt` har fortfarande två oskattade frågor i
+  `content/fragor.js`. Fysioterapeutrådgivaren skrev sitt fall innan
+  frågelistan blev en del av uppdraget.

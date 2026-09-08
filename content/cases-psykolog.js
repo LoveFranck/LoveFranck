@@ -534,7 +534,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['somatik', 'bedda-b', 'signering', 'dorr', 'forvantan', 'evidens', 'plan', 'agens'],
+      principer: ['somatik', 'bedda-b', 'signering', 'dorr', 'forvantan', 'evidens', 'plan', 'agens', 'hypotes'],
       journal: [
         ['Remiss', 'Triagerad av sjuksköterska i chatt för tre veckor sedan. Bedömd som trolig utmattning – nattarbete i nio år, underbemannad avdelning. Bokad hit för nybesök och försäkringsmedicinsk utredning.'],
         ['Noterat i triagen', 'Trötthet ca 6 månader, tappar tråden, glömmer saker på arbetet, sover uselt på dagarna. Nekar tankar på att inte vilja leva. Rubriken Somatik är tom.'],
@@ -665,7 +665,7 @@
           banner: 'STÄMMER FÖRKLARINGEN MED BILDEN?',
           fraga: 'Trötthet i ett halvår, tappar tråden, sover uselt på dagarna – och nattarbete i nio år på en underbemannad avdelning. Vad i det Katrin berättat går INTE ihop med den förklaring du fick med remissen?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Att tröttheten är lika stor ledig som i arbete och inte ger med sig av nio timmars sömn, att lusten är kvar – och att fem andra saker i kroppen ändrat sig under samma halvår.',
               ratt: true },

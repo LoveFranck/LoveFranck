@@ -2737,6 +2737,11 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
     'salutogen':     'Salutogen kommunikation',
     'rodflagga':     'Röda flaggor först',
     'somatik':       'Den somatiska frågan måste tilldelas någon',
+    'hypotes':       'Pröva den förklaring du fått med dig',
+    'avbryt':        'Avbryt uppdraget när fynden byter fråga',
+    'sjukdomskrav':  'Nedsatt arbetsförmåga av sjukdom, inte av situation',
+    'skriftgrans':   'Skriften bär inte allt – byt verktyg',
+    'overlamning':   'Säkra kontakten, inte bara bokningen',
     'triage-f':      'F-diagnos i botten → psykolog',
     'triage-m':      'M-diagnos i botten → fysioterapeut',
     'triage-akt':    'Aktivitet och handfunktion → arbetsterapeut',
@@ -2884,15 +2889,49 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
         fraga: 'Går det att starta iKBT med behandlarstöd inom en vecka från första psykologbesöket?',
         bakgrund: 'Guldsvaret i psy-anna förutsätter det.',
         berorFall: ['psy-anna'],
-        skattning: null, sakerhet: null, motivering: '',
-        status: 'väntar på rådgivare' },
+        skattning: 30, sakerhet: 'låg',
+        motivering: 'iKBT med behandlarstöd finns i de flesta regioner via stöd- och behandlingsplattformen, så tekniken är sällan hindret. Flaskhalsen är en behandlare med ledig tid att följa modulerna vecka för vecka. Att starta samma vecka förutsätter alltså inte en plattform utan en person.',
+        status: 'skattad av rådgivare' },
 
       { id: 'psy-tid-45min',
         fraga: 'Hinner man en situationsanalys, psykoedukation, sömngenomgång och ett försäkringsmedicinskt underlag på ett nybesök?',
         bakgrund: 'psy-anna har 44 minuters budget och innehåller alla fyra momenten.',
-        berorFall: ['psy-anna'],
-        skattning: null, sakerhet: null, motivering: '',
-        status: 'väntar på rådgivare' }
+        berorFall: ['psy-anna', 'psy-katrin'],
+        skattning: 35, sakerhet: 'medel',
+        motivering: 'Ett psykologiskt nybesök är ofta bokat 45–60 minuter, så tiden finns på papperet. Fyra fullständiga moment i samma besök är däremot en bra dag, inte en vanlig. Det som oftast trängs undan är sömnen och underlaget, i den ordningen.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'psy-boka-lakartid',
+        fraga: 'Kan du som psykolog boka en läkartid åt din patient inom en vecka, eller måste patienten själv ringa?',
+        bakgrund: 'Guldsvaret i psy-katrin bygger på att psykologen tar ägarskapet för den somatiska frågan och bokar tiden. Går det inte faller skillnaden mellan guld och silver i fallet.',
+        berorFall: ['psy-katrin'],
+        skattning: 25, sakerhet: 'låg',
+        motivering: 'Att skriva en intern konsultationsfråga eller lägga en bokning till en kollega förekommer, men det vanliga är att psykologen skriver i journalen och ber patienten kontakta receptionen. Skillnaden är hela poängen i det här fallet: en fråga vars ägare är patienten själv har ingen ägare när patienten är för trött för att orka. Delfrågan som avgör: har du någon gång själv lagt en läkartid i kalendern åt en av dina patienter? Berör även läkarrådgivaren.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'psy-somatisk-anamnes',
+        fraga: 'Frågar du om vikt, mage, hud, hår och blödningar vid ett psykologiskt nybesök om trötthet?',
+        bakgrund: 'I psy-katrin är det den enda fråga som skiljer fallen åt, och psykologen är sista ledet innan ett underlag skrivs. Se lak-somatisk-utredning-f43 och ssk-somatisk-fraga-triage.',
+        berorFall: ['psy-katrin', 'psy-anna'],
+        skattning: 20, sakerhet: 'medel',
+        motivering: 'Frågan är tillåten, tar under en minut och kräver ingen medicinsk kompetens – det är en anamnesfråga, inte en undersökning. Ändå ligger den utanför det jag är van att göra: jag frågar om sömn, aptit och alkohol för de står i mallen, men inte om blödningar. Skälet är att jag i det gamla flödet visste att en läkare redan tagit den. I LESS har ingen gjort det. Jag skattar 20 för att någon av frågorna ställs och betydligt lägre för att de journalförs.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'psy-avbryta-bokad-utredning',
+        fraga: 'Har du avbrutit en bokad försäkringsmedicinsk utredning mitt i, för att en annan fråga behövde besvaras först?',
+        bakgrund: 'Det centrala momentet i psy-katrin. Om det aldrig görs är fallets guldsvar ett ideal snarare än en praxis, och då behöver fallet lära ut hur man motiverar det – inte bara att man ska.',
+        berorFall: ['psy-katrin'],
+        skattning: 10, sakerhet: 'låg',
+        motivering: 'Trycket åt andra hållet är starkt och kommer från alla håll samtidigt: tiden är bokad, patienten har tagit ledigt, remissen har en frågeställning och nästa besök är om tre veckor. Att skriva ett underlag med reservation känns som kompromissen, och det är den vanliga lösningen. Jag tror att den rena avbrytningen är sällsynt, och att det snarare beror på strukturen än på bedömningen. Delfrågan som avgör: när gjorde du det senast, och vad kostade det dig?',
+        status: 'skattad av rådgivare' },
+
+      { id: 'psy-skiftarbete-somnrad',
+        fraga: 'Anpassar du sömnråden efter skiftschema, eller ger du standardrådet om fast uppstigningstid?',
+        bakgrund: 'I psy-anna är fast uppstigningstid guldsvaret. I psy-katrin är samma råd omöjligt att följa och en av distraktorerna. Skillnaden är hela poängen med att sömnen får ett eget spår.',
+        berorFall: ['psy-katrin', 'psy-anna'],
+        skattning: 20, sakerhet: 'medel',
+        motivering: 'Sömnhygien och KBT-i vid insomni är byggda kring ett dygn med sömn på natten, och materialet vi delar ut är skrivet för det. Skiftanpassade råd – ankartid, mörkläggning på dagen, planerad sömn före passet, koffeintiming – finns i litteraturen men sällan i mottagningens mappar. Min gissning är att den som möter en nattarbetare oftast antingen ger standardråden ändå eller hoppar över sömnen. Ett omöjligt råd kostar mer än inget råd: patienten lär sig att hon misslyckas med det vården ber henne göra.',
+        status: 'skattad av rådgivare' }
     ],
 
     fysioterapeut: [
@@ -3028,15 +3067,65 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
         fraga: 'Sitter rehabkoordinatorn med när patienten själv ringer sin chef?',
         bakgrund: 'Bästa alternativet i rko-anna bygger på det.',
         berorFall: ['rko-anna'],
-        skattning: null, sakerhet: null, motivering: '',
-        status: 'väntar på rådgivare' },
+        skattning: 20, sakerhet: 'medel',
+        motivering: 'Metoden är rätt och lärs ut, men den kräver att patienten sitter hos mig i just det fönster då chefen råkar svara. Det jag oftare gör är att förbereda samtalet – vad ska sägas, i vilken ordning, vad gör du om han säger nej – och att patienten ringer själv efteråt och berättar hur det gick. Skillnaden i agens mellan de två är liten; skillnaden i genomförbarhet är stor. Delfrågan som avgör: har du någon gång de senaste tre månaderna suttit bredvid en patient som ringde sin chef?',
+        status: 'skattad av rådgivare' },
 
       { id: 'rko-avstamningsmote-tva-veckor',
         fraga: 'Går det att få till ett avstämningsmöte inom två veckor?',
-        bakgrund: 'Bästa alternativet i rko-jonas förutsätter det.',
+        bakgrund: 'Bästa alternativet i rko-jonas förutsatte det, tills fallet skrevs om till trepartsmöte plus en begäran.',
         berorFall: ['rko-jonas'],
-        skattning: null, sakerhet: null, motivering: '',
-        status: 'väntar på rådgivare' }
+        skattning: 10, sakerhet: 'medel',
+        motivering: 'Två invändningar. Den första är formell: avstämningsmöte kallar Försäkringskassan till, vården kan begära ett – tidsåtgången ligger alltså inte hos oss. Den andra är praktisk: tre kalendrar, en arbetsgivare som inte svarar på första försöket och en handläggare som kan ha bytts sedan förra kontakten. Två veckor är i min erfarenhet ovanligt snabbt. Det som däremot går på två veckor är ett trepartsmöte som vården själv kallar till.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'rko-icke-sjukskrivna-patienter',
+        fraga: 'Tar din rehabkoordinatorfunktion emot patienter som inte är sjukskrivna?',
+        bakgrund: 'Hela mandatfrågan i rko-miriam. Lagen (2019:1297) gäller sjukskrivna patienter; flera regioner har ändå med "riskerar sjukskrivning" i uppdraget.',
+        berorFall: ['rko-miriam', 'ssk-miriam'],
+        skattning: 35, sakerhet: 'medel',
+        motivering: 'Förarbetena är tydliga: regeringen valde att INTE göra förebyggande insatser till en skyldighet – men förbjöd dem inte. Region Kronoberg skriver rakt ut "sjukskrivna eller riskerar att bli sjukskrivna"; Region Östergötland låter varje vårdenhet avgöra. Så det förekommer, och i vissa regioner är det norm. Min skattning är ändå under hälften, av en enkel resursorsak: en koordinator på trettio procent med sextio pågående sjukfall prioriterar dem som redan har en sjukpenning att förlora. Berör även sjuksköterskerådgivaren – det är hennes triagebeslut som avgör om ärendet ens kommer hit.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'rko-skriftligt-uppdrag',
+        fraga: 'Finns det ett skriftligt uppdrag på din vårdcentral som säger vilka patienter du som koordinator tar emot?',
+        bakgrund: 'Kontrollen MANDATET i rko-miriam bygger på att svaret går att slå upp. Utan skriftligt uppdrag är svaret vad chefen råkar tycka den dagen.',
+        berorFall: ['rko-miriam'],
+        skattning: 40, sakerhet: 'låg',
+        motivering: 'Regional uppdragsbeskrivning finns nästan alltid. Frågan gäller den lokala: har DIN mottagning skrivit ned vilka patienter du tar, hur många ärenden du kan bära och vad du inte gör? Min gissning är att det ofta finns ett regiondokument som ingen läst och en lokal praxis som ingen skrivit ned – och att gränsen därför dras i stunden, av den som råkar boka. Är siffran låg är det ett fynd i sig: det förklarar varför samma patient tas emot på en vårdcentral och avvisas på nästa.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'rko-arbetsplatskonflikt-utan-sjukdom',
+        fraga: 'Hur ofta är grundproblemet i dina ärenden en arbetsplatskonflikt utan sjukdom?',
+        bakgrund: 'rko-miriam förutsätter att det här är ett igenkännbart ärende, inte ett konstruerat.',
+        berorFall: ['rko-miriam'],
+        skattning: 55, sakerhet: 'medel',
+        motivering: 'Skatta hur ofta konflikten är det som verkligen driver ärendet, inte hur ofta den nämns – nämnas gör den nästan jämt. Min erfarenhet är att en stor del av de stressrelaterade sjukfallen har en chef, en omorganisation eller en utfrysning i botten, och att sjukskrivningen ibland är det enda verktyg någon hittat. Blir siffran hög är det ett argument för fler fall av den här typen, inte färre.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'rko-hanvisar-skyddsombud',
+        fraga: 'Hänvisar du till skyddsombud eller fack när grundproblemet är arbetsmiljön?',
+        bakgrund: 'Det gyllene avslutet i rko-miriam står och faller med att det här är en hänvisning koordinatorer faktiskt gör.',
+        berorFall: ['rko-miriam'],
+        skattning: 30, sakerhet: 'låg',
+        motivering: 'Jag tror att vi hänvisar till företagshälsovård ofta och till skyddsombud sällan, trots att skyddsombudet är den enda part som kan tvinga fram ett skriftligt svar från arbetsgivaren och gå vidare till Arbetsmiljöverket om svaret uteblir. Skälet är förmodligen att vi kan FHV-vägen och inte den fackliga, och att det känns som att lägga sig i arbetsrätten. Det gör man inte – att säga att skyddsombudet finns är allmän information, inte partsställning. Låg säkerhet: det här är den fråga i listan där jag helst vill bli motbevisad.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'rko-samtycke-avgransat',
+        fraga: 'Är era samtycken avgränsade i vem, om vad och hur länge – eller generella?',
+        bakgrund: 'Kontrollen om arbetsgivarkontakt i rko-miriam och samtyckesbeaten i rko-anna gör avgränsningen till facit.',
+        berorFall: ['rko-miriam', 'rko-anna'],
+        skattning: 25, sakerhet: 'medel',
+        motivering: 'SKR har blanketter och Vårdhandboken säger att samtycket bör vara skriftligt och att muntligt ska dokumenteras med datum, sätt och innehåll. Att ett samtycke tas är alltså vanligt. Att det är avgränsat är något annat: min gissning är att den vanligaste varianten är ett kryss för "kontakt med berörda aktörer" taget vid första besöket, utan tidsgräns och utan angivet innehåll. Det håller tills någon ställer en fråga man inte tänkt på, och då står man ensam med den.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'rko-journalplats-koordinering',
+        fraga: 'Finns en självklar plats i journalsystemet för koordineringsinsatser – eget sökord, mall eller KVÅ-kod?',
+        bakgrund: 'Alla tre rehabkoordinatorfallen slutar i att något ska dokumenteras. Saknas platsen blir dokumentationen osynlig för nästa person, och då är facit en instruktion utan mottagare.',
+        berorFall: ['rko-anna', 'rko-jonas', 'rko-miriam'],
+        skattning: 45, sakerhet: 'medel',
+        motivering: 'Flera regioner har rutiner för diagnos- och KVÅ-registrering av koordineringskontakter, så strukturen finns på papperet. Frågan är om den finns i din journal, om du hittar den utan att leta, och om läkaren som skriver nästa intyg ser vad du skrivit. Regeringen bedömde i förarbetena att koordineringsinsatser inte är hälso- och sjukvård enligt HSL, samtidigt som patientdatalagen gjordes tillämplig – en gränsdragning som mycket väl kan vara en del av förklaringen till att anteckningen hamnar på en plats ingen annan tittar.',
+        status: 'skattad av rådgivare' }
     ]
   };
 
@@ -3756,7 +3845,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'STÄMMER DIAGNOSEN MED BILDEN?',
           fraga: 'Journalen säger tumbasartros. Carina säger tummar OCH handleder, båda sidor. Vad frågar du innan du sorterar ärendet?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Om hon är stel på morgonen och i så fall hur länge, om lederna är svullna, och om fler leder är med.', ratt: true },
             { text: 'Ingenting – diagnosen är redan ställd av läkare.', ratt: false,
@@ -4265,7 +4354,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['rodflagga', 'bedda-b', 'dorr'],
+      principer: ['rodflagga', 'bedda-b', 'dorr', 'skriftgrans', 'overlamning'],
       journal: [
         ['Kontaktorsak', 'Ryggskott efter lyft, begär sjukskrivning 2 veckor'],
         ['Yrke', 'Byggnadsarbetare'],
@@ -4320,7 +4409,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'DET SOM REDAN STÅR I ÄRENDET',
           fraga: 'I gårkvällens formulär står ett samlat "Nej" på frågeblocket om blås- och tarmpåverkan, domning i grenen, feber och kraftnedsättning. Vad är det svaret värt?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'skriftgrans',
           val: [
             { text: 'Det är ett svar på ett block, avgivet i går. Jag ställer frågan om blås- och tarmfunktion ensam, konkret, och om läget idag.', ratt: true },
             { text: 'Det är journalfört och besvarat. Jag går vidare till bedömningen.', ratt: false,
@@ -4397,7 +4486,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'BESLUT OM VÅRDNIVÅ',
           fraga: 'Vad gör du nu?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'overlamning',
           fx: { sakerhet: 15 },
           val: [
             { text: 'Detta talar för cauda equina-misstanke. Jag ringer upp honom omgående och ärendet ska till akutmottagning för bedömning idag.', ratt: true },
@@ -4567,7 +4656,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'GÅR DET ATT SJUKSKRIVA?',
           fraga: 'Miriam sover, äter och tränar som vanligt, och utför det hon får utföra. Vad är det som saknas för att sjukskrivning ska vara möjlig?',
           tidFel: 2,
-          princip: 'evidens',
+          princip: 'sjukdomskrav',
           val: [
             { text: 'En arbetsförmåga som är nedsatt av sjukdom. Miriams arbetsförmåga är inte nedsatt – det är arbetsplatsen som är outhärdlig.', ratt: true },
             { text: 'Ingenting. Hon far uppenbart illa, och det räcker som skäl.', ratt: false,
@@ -4664,7 +4753,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['rodflagga', 'dorr', 'samtycke', 'bedda-a'],
+      principer: ['rodflagga', 'dorr', 'samtycke', 'bedda-a', 'overlamning'],
       journal: [
         ['Kontaktorsak', 'Sömnsvårigheter, frågar om sjukskrivning'],
         ['Yrke', 'Lagerarbetare, deltid'],
@@ -4779,7 +4868,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'BESLUT OM VÅRDNIVÅ',
           fraga: 'Vad gör du?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'overlamning',
           fx: { sakerhet: 12 },
           val: [
             { text: 'Läkarbedömning idag. Jag släpper inte kontakten förrän tid och tidpunkt är bestämda och han har sagt att han kommer.', ratt: true },
@@ -4863,7 +4952,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['bedda-b', 'rodflagga', 'triage-akt', 'dorr'],
+      principer: ['bedda-b', 'rodflagga', 'triage-akt', 'dorr', 'hypotes'],
       journal: [
         ['Kontaktorsak', 'Artros i händerna, önskar hjälpmedel och skenor'],
         ['Yrke', 'Förskolechef'],
@@ -4954,7 +5043,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'VEM STÄLLDE DIAGNOSEN?',
           fraga: 'Ärendet heter "artros i händerna". Vad står det egentligen i journalen?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Ingen diagnos är ställd. Artros är Yvonnes egen förklaring – och den har blivit ärendets rubrik.', ratt: true },
             { text: 'Artros är rimligt i hennes ålder, så det duger som arbetshypotes.', ratt: false,
@@ -5555,6 +5644,342 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
               fx: { sakerhet: -14, agens: -10 },
               utfall: 'Elin är hemma igen inom två veckor, nu helt utan plan.',
               varfor: 'Att avsluta en sjukskrivning hos en patient som försämras, utan att något ändrats, är inte aktiv rehabilitering. Det är att flytta problemet till nästa akutbesök.' }
+          ] }
+      ]
+    },
+
+    /* ================================================================
+       KATRIN – oplanerat besök. Läser som Anna. Är det inte.
+       Fortsättningen på det felaktiga triagebeslutet i ssk-katrin:
+       ärendet kom hit i stället för till läkare, och psykologen är den
+       som sitter fyrtio minuter med henne. Tredje delen av resonemanget
+       om den somatiska frågan – efter lak-somatisk-utredning-f43 och
+       beatet DEN FRÅGA INGEN ÄGER i ssk-anna.
+       Låses upp när kampanjen är klar. Endast övningsläge.
+       ================================================================ */
+    {
+      id: 'psy-katrin',
+      roll: 'psykolog',
+      titel: 'Nybesök, torsdag 13.00',
+      patient: 'katrin',
+      lage: 'rum',
+      minuter: 37,
+      svarighet: 3,
+      laser: 'oplanerat',
+      endastDrill: true,
+      principer: ['somatik', 'bedda-b', 'signering', 'dorr', 'forvantan', 'evidens', 'plan', 'agens', 'hypotes'],
+      journal: [
+        ['Remiss', 'Triagerad av sjuksköterska i chatt för tre veckor sedan. Bedömd som trolig utmattning – nattarbete i nio år, underbemannad avdelning. Bokad hit för nybesök och försäkringsmedicinsk utredning.'],
+        ['Noterat i triagen', 'Trötthet ca 6 månader, tappar tråden, glömmer saker på arbetet, sover uselt på dagarna. Nekar tankar på att inte vilja leva. Rubriken Somatik är tom.'],
+        ['Tidigare', 'Inga kontakter för psykisk ohälsa. Inga läkemedel. Röker ej.'],
+        ['Prover', 'Inga laboratorieprover registrerade. Katrin uppgav i chatten att senaste provet togs vid en graviditet för fjorton år sedan.'],
+        ['Arbete', 'Undersköterska, kommunalt särskilt boende. Ständig natt sedan nio år, fyra nätter i rad och sedan ledigt. Nästa pass lördag natt.'],
+        ['Socialt', 'Sambo, två barn 14 och 18 år.']
+      ],
+      intro: [
+        'Torsdag 13.00. Tiden är avsatt för nybesök och försäkringsmedicinsk utredning. Triagen har redan skrivit vad ärendet handlar om, och mallen ligger öppen på skärmen.',
+        'Katrin kommer in i ytterjacka och behåller den på.'
+      ],
+
+      beats: [
+
+        { typ: 'replik', humor: 'trott',
+          text: 'Det står visst att jag är utbränd. Jag vet inte om jag är det. Jag är inte ledsen och jag tycker fortfarande om jobbet. Jag är bara trött på ett sätt jag inte kan förklara. Sedan i mars.' },
+
+        { typ: 'val',
+          fraga: 'Hur ramar du in besöket?',
+          tips: 'Du har fått ett ärende med en förklaring redan påklistrad. Frågan är om du prövar den eller bygger vidare på den.',
+          val: [
+            { text: 'Det står utmattning i remissen, men det är någon annans hypotes, inte en diagnos. Jag vill börja om från början och höra hur tröttheten faktiskt ser ut. Sedan bestämmer vi vad det här besöket ska bli.',
+              tid: 3, ok: true, princip: 'bedda-b',
+              humor: 'oppen', reaktion: 'Katrin tittar upp för första gången.',
+              svar: 'Tack. Jag kände mig lite dum som satt här och tänkte att det inte stämmer.',
+              fx: { allians: 10, tydlighet: 12, sakerhet: 6 },
+              varfor: 'En hypotes man får med sig från någon annan är den svåraste sorten att pröva – man börjar leta bekräftelse utan att märka det, och materialet man samlar in passar alltid. Att säga högt att den är en hypotes gör den prövbar, och ger dessutom Katrin tillstånd att invända. Hon försökte redan i sin första replik.' },
+
+            { text: 'Vi tar det i tur och ordning. Berätta hur belastningen på avdelningen sett ut det senaste året.',
+              tid: 3, ok: 'delvis', princip: 'bedda-b',
+              humor: 'neutral', reaktion: 'Katrin drar på det och börjar berätta om schemat.',
+              svar: 'Vi är underbemannade. Men det har vi varit i nio år.',
+              fx: { underlag: 4, sakerhet: -4 },
+              varfor: 'En fråga vilken psykolog som helst ställer, och den är inte fel – men du började i triagens förklaring, och då får du material som passar den. Lägg märke till svaret: belastningen är oförändrad, tröttheten är ny. Frågan är värd att ställa som prövning av hypotesen, inte som utgångspunkt för den.' },
+
+            { text: 'Vad bra att du kom. Vi hinner göra hela utredningen idag, så slipper du komma tillbaka.',
+              tid: 2, ok: false, princip: 'forvantan',
+              humor: 'lattad', reaktion: 'Katrin ser lättad ut och lossar på jackan.',
+              svar: 'Skönt. Jag har bytt bort ett pass för att komma hit.',
+              fx: { allians: 8, tydlighet: -6, underlag: -6, sakerhet: -10 },
+              varfor: 'Du lovade ett resultat innan du gjort en bedömning, och priset betalas senare i besöket: när det visar sig att utredningen inte borde slutföras idag är det ditt eget löfte som står i vägen. Ett besök ramas in med vad ni ska göra, aldrig med vad det ska mynna ut i.' },
+
+            { text: 'Jag ser att inga prover är tagna. Det tar vi först – jag skickar en remiss på blodstatus och TSH så har vi svaren.',
+              tid: 2, ok: false, princip: 'signering',
+              humor: 'neutral', reaktion: 'Katrin: "Får du göra det?"',
+              svar: 'Ska jag gå och lämna blod nu, alltså?',
+              fx: { sakerhet: -12, tydlighet: -6 },
+              varfor: 'Rätt instinkt, fel hand. En provbeställning är en ordination: någon ska svara för indikationen, tolka svaret och ta ansvar när det avviker. Det är inte du. Du har dessutom inte hört anamnesen ännu, så du vet inte vilken fråga proverna skulle svara på. Instinkten kommer tillbaka senare i besöket – då med rätt ägare.' }
+          ] },
+
+        { typ: 'flera',
+          banner: 'ANAMNESEN',
+          fraga: 'Du hinner fyra frågor innan du bestämmer vad besöket ska bli. Välj fyra.',
+          antal: 4,
+          tidPer: 2,
+          tips: 'Fråga efter det som skulle kunna få dig att ändra dig. En fråga som bara kan bekräfta hypotesen är ingen fråga.',
+          val: [
+            { text: 'Är du lika trött de veckor du är ledig, eller släpper det då?',
+              ratt: true, princip: 'bedda-b', fx: { underlag: 10, sakerhet: 8 },
+              varfor: 'En trötthet som kommer ur belastning varierar oftast med belastningen. En trötthet som kommer ur kroppen gör det inte. Svaret bevisar ingenting på egen hand – vid ett utvecklat utmattningstillstånd uteblir återhämtningen också – men det är den enskilda fråga som flyttar mest per sekund, och den kostar tio.' },
+
+            { text: 'Har något annat i kroppen ändrat sig det här halvåret? Vikt, mage, hud, hår, blödningar.',
+              ratt: true, princip: 'somatik', flagga: 'kroppen-fragad',
+              fx: { underlag: 12, sakerhet: 12 },
+              varfor: 'Det här är en anamnesfråga, inte en undersökning. Du ställer ingen diagnos genom att fråga – du samlar det som gör att någon annan kan göra det. Att psykologen varken får utreda eller uttala sig om kroppen betyder inte att psykologen inte får fråga om den. Tvärtom: du är den i huset som sitter längst tid med patienten, och därför den som har råd att ställa den.' },
+
+            { text: 'Vill du men orkar inte, eller har lusten till saker försvunnit?',
+              ratt: true, princip: 'bedda-b', fx: { underlag: 10 },
+              varfor: 'Skiljer bevarad lust med bristande ork från anhedoni och nedstämdhet. Det är frågan som avgör om en depressionsbild överhuvudtaget är på bordet, och den ställs förvånansvärt sällan uttryckligen – man antar svaret i stället, och antar oftast fel håll.' },
+
+            { text: 'Hur många timmar sover du efter ett nattpass – och hur är det de nätter du är ledig och kan sova en hel natt?',
+              ratt: true, princip: 'evidens', fx: { underlag: 10, sakerhet: 6 },
+              varfor: 'Två frågor i en, och det är den andra som bär. Fem timmars dagsömn efter ett nattpass gör vem som helst trött, och så har hon sovit i nio år. Frågan om de lediga nätterna skiljer den kroniska sömnskulden från något som inte ger med sig ens när sömnen räcker till. Utan den delfrågan blir nattarbetet en förklaring som täcker allt och förklarar ingenting.' },
+
+            { text: 'Låt henne fylla i KEDS så ni har ett utgångsvärde.',
+              ratt: false, princip: 'bedda-b', fx: { underlag: -6, sakerhet: -8 },
+              varfor: 'Instrumentet är inte fel, men det kan inte göra det du behöver här. En skala för uttröttbarhet blir hög oavsett vad tröttheten beror på – en obehandlad kroppslig sjukdom ger också hög poäng. Du får en siffra som gör hypotesen mer övertygande utan att göra den mer sann, och som pekar ut riktningen för nästa läsare av journalen.' },
+
+            { text: 'Hur är stämningen i arbetsgruppen, och hur fungerar det med chefen?',
+              ratt: false, princip: 'bedda-b', fx: { underlag: -4 },
+              varfor: 'Varken dum eller oviktig – men den kan bara ge material till den förklaring du redan blivit tilldelad, och svaret blir ja, för svaret blir alltid ja. Den skiljer ingenting, och den kostar två minuter i just den del av besöket där du fortfarande kunde ha ändrat dig.' },
+
+            { text: 'Hur länge tänker du dig själv att du skulle behöva vara borta från jobbet?',
+              ratt: false, princip: 'forvantan', fx: { allians: 4, tydlighet: -8, agens: -8 },
+              varfor: 'Frågan förutsätter slutsatsen. Ni är några minuter in i ett besök där ingen ännu vet vad tröttheten beror på, och du har just gjort sjukskrivningen till besökets ämne. Efter det blir varje annan väg en besvikelse.' },
+
+            { text: 'Har du provat att sätta gränser hemma och prioritera bort saker?',
+              ratt: false, princip: 'bedda-b', fx: { allians: -6, agens: -6 },
+              varfor: 'Ett råd förklätt till en fråga, givet före bedömningen. Om tröttheten har en kroppslig orsak är rådet dessutom en anklagelse: hon har slitit i ett halvår för att orka, och får nu höra att hon inte försökt.' }
+          ] },
+
+        { typ: 'replik', humor: 'trott',
+          text: 'Ledig? Nej, det spelar ingen roll. Jag var borta två veckor i somras och kom hem precis lika trött. Och nej, lusten finns kvar – jag ligger på soffan och vill upp och göra saker, jag kommer bara inte upp. Efter ett pass sover jag fem timmar med gardinerna för, som alltid. Men de lediga nätterna sover jag nio timmar och vaknar precis lika trött. Det gjorde jag inte förr.' },
+
+        { typ: 'replik', om: { finns: 'kroppen-fragad' }, humor: 'trott',
+          text: 'Kroppen, säger du... jo. Jag fryser hela tiden, jag har filt på mig på nattpasset och tjejerna skrattar åt mig. Har gått upp sex kilo utan att äta annorlunda, och magen går trögt. Håret ligger i duschen. Och blödningarna har varit riktigt rikliga sedan i höstas, jag trodde det var övergångsåldern. Fast det har väl inte med saken att göra?' },
+
+        { typ: 'val', om: { saknas: 'kroppen-fragad' },
+          humor: 'trott',
+          text: 'Förlåt – är det kallt här inne? Jag fryser jämt nuförtiden. Ta det inte personligt, jag har filt på mig på nattpasset också.',
+          fraga: 'Hon ber om ursäkt för en detalj. Vad gör du?',
+          tips: 'Det som sägs som en ursäkt är ofta det som inte fick plats bland frågorna du hann ställa.',
+          val: [
+            { text: 'Stanna vid det: sedan när fryser du, och har något annat i kroppen ändrat sig samtidigt – vikt, mage, hud, hår, blödningar?',
+              tid: 3, ok: true, princip: 'somatik', flagga: 'kroppen-fragad',
+              humor: 'neutral', reaktion: 'Katrin tystnar och tänker efter.',
+              svar: 'Sedan i höstas, ungefär. Jag har gått upp sex kilo utan att äta annorlunda, magen går trögt och håret ligger i duschen. Och blödningarna har varit riktigt rikliga, jag trodde det var övergångsåldern. Fast det har väl inte med saken att göra?',
+              fx: { underlag: 14, sakerhet: 14, allians: 6 },
+              varfor: 'Du fick en andra chans och tog den – och den kostade tre minuter du kunde ha lagt i anamnesen. Patienter avväpnar det som skrämmer dem genom att be om ursäkt för det. Att stanna vid en sådan mening är billigare än varje utredning som görs för att ingen stannade.' },
+
+            { text: 'Notera det och gå vidare – ni har ont om tid och mycket kvar av utredningen.',
+              tid: 1, ok: false, princip: 'somatik',
+              humor: 'sluten', reaktion: 'Katrin nickar och drar jackan tätare om sig.',
+              svar: 'Nej nej, det är inget. Fast jag har gått upp sex kilo också, och håret ligger i duschen. Men det är väl bara åldern.',
+              fx: { underlag: -8, sakerhet: -14 },
+              varfor: 'Hon säger det ändå, i förbifarten, som något hon redan förklarat bort. Uppgiften hölls aldrig undan från dig – du hann bara bestämma vad besöket handlade om innan du hörde den. Så här försvinner den somatiska frågan i praktiken: inte för att någon döljer något, utan för att ingen stannar.' },
+
+            { text: 'Frusenhet hör till när kroppen gått på högvarv länge. Det brukar ge med sig när stressen släpper.',
+              tid: 1, ok: false, princip: 'bedda-b',
+              humor: 'lattad', reaktion: 'Katrin ser lugnad ut. "Jaha, så det hör ihop."',
+              svar: 'Skönt. Då är det inget konstigt alltså.',
+              fx: { allians: 8, underlag: -10, sakerhet: -18 },
+              varfor: 'Du gjorde en invändning mot hypotesen till ett stöd för den, och du gjorde det med en fysiologisk förklaring du inte har täckning för. Nu har Katrin dessutom fått höra av vården att symtomet är förklarat, vilket är det effektivaste sättet att se till att hon inte tar upp det nästa gång heller.' }
+          ] },
+
+        { typ: 'kontroll',
+          banner: 'STÄMMER FÖRKLARINGEN MED BILDEN?',
+          fraga: 'Trötthet i ett halvår, tappar tråden, sover uselt på dagarna – och nattarbete i nio år på en underbemannad avdelning. Vad i det Katrin berättat går INTE ihop med den förklaring du fick med remissen?',
+          tidFel: 2,
+          princip: 'hypotes',
+          val: [
+            { text: 'Att tröttheten är lika stor ledig som i arbete och inte ger med sig av nio timmars sömn, att lusten är kvar – och att fem andra saker i kroppen ändrat sig under samma halvår.',
+              ratt: true },
+            { text: 'Att hon tappar tråden och glömmer saker.',
+              ratt: false,
+              varfor: 'Kognitiv svikt finns vid båda förklaringarna, och vid sömnbrist också. Det är det vanligaste i rummet och det som skiljer dem åt allra sämst.' },
+            { text: 'Att hon bara sover fem timmar efter ett nattpass.',
+              ratt: false,
+              varfor: 'Det är en verklig sömnskuld och en verklig delförklaring – men den har sett likadan ut i nio år. En exponering som är oförändrad förklarar sällan en förändring som är ett halvår gammal. Att den ändå kan ha börjat ta ut sin rätt, eftersom tåligheten för skiftarbete typiskt minskar med åldern, är värt att diskutera i gruppen. Det gör den till en delförklaring, inte till det som skaver.' },
+            { text: 'Att inga prover någonsin är tagna.',
+              ratt: false,
+              varfor: 'Sant, och en brist i handläggningen – men det är ingen iakttagelse hos Katrin. Hade allt annat stämt med utmattning hade det varit rätt att arbeta vidare och lämna provfrågan vidare i skrift.' },
+            { text: 'Att hon aldrig sökt för psykisk ohälsa förut.',
+              ratt: false,
+              varfor: 'Säger ingenting om vad tröttheten beror på. Utmattning drabbar oftast just den som aldrig varit sjuk förut.' }
+          ],
+          forklaring: 'Ett tillstånd som utvecklas ur belastning brukar också röra sig med belastningen: det byggs upp av krav och lättar, långsamt, av avlastning. Katrins trötthet gör ingetdera. Den ligger still oavsett om hon arbetar eller är ledig, den påverkas inte av att hon får sova ut, och lusten är kvar – hon vill men orkar inte. Samtidigt har fem andra saker i kroppen ändrat sig under samma halvår, och belastningen som skulle vara motorn har varit oförändrad i nio år. Kombinationen trötthet som inte svarar på vila och nytillkomna kroppsliga förändringar är ett mönster med flera möjliga orsaker. Vilken av dem det är kan du varken avgöra eller behöva avgöra. Det du kan säga, och som är hela din uppgift här, är att bilden inte har den form som utmattning brukar ha.' },
+
+        { typ: 'kontroll',
+          banner: 'DEN FRÅGA INGEN ÄGER',
+          fraga: 'Du sitter med det här, och tiden som återstår är bokad för en försäkringsmedicinsk utredning. Vad är slutsatsen?',
+          tidFel: 2,
+          princip: 'somatik',
+          val: [
+            { text: 'Underlaget för en psykiatrisk diagnos håller inte förrän någon tagit ställning till det kroppsliga. Utredningen kan inte slutföras idag.',
+              ratt: true },
+            { text: 'Ingenting i det hon berättar talar för allvarlig kroppslig sjukdom. Slutför utredningen.',
+              ratt: false,
+              varfor: 'En uteslutning du inte får göra. Att du inte kan bedöma något är inte samma sak som att det inte finns – och att fria kroppen är exakt lika mycket en medicinsk bedömning som att fälla den. Det är samma otillåtna beslut, sett från andra hållet.' },
+            { text: 'Kroppsligt och psykiskt kan pågå samtidigt. Slutför utredningen och lägg till en rad om att prover bör tas.',
+              ratt: false,
+              varfor: 'Sant att de kan pågå samtidigt – men ett underlag som är skrivet blir läst, och slutsatsen i det väger tyngre än reservationen längre ned. Du skulle beskriva en uttalad funktionsnedsättning vars orsak du inte känner till, och en läkare bygger sedan ett intyg på den beskrivningen.' },
+            { text: 'Somatiken är läkarens bord. Gör din del och skicka med frågan i journalen.',
+              ratt: false,
+              varfor: 'Halva vägen, och det är den halva som brister. Att skriva ned frågan är nödvändigt men inte tillräckligt. En anteckning utan mottagare och utan datum är inte en tilldelad fråga – den är en spårbar underlåtenhet. Någon ska heta något, och något ska stå i en kalender.' },
+            { text: 'Det här är akut. Hon ska till akutmottagningen idag.',
+              ratt: false,
+              varfor: 'Ingenting i bilden är akut. Ett halvårs successiv trötthet utreds planerat, med prover först och en bokad tid sedan. Att göra varje obesvarad fråga till en akuttid är samma mekaniska reflex som spelet tränar bort på andra ställen, bara med omvänt förtecken.' }
+          ],
+          forklaring: 'Sjuksköterskan mötte samma fråga i triagen och lämnade den vidare hit. Du är sista ledet – och du är den som sitter fyrtio minuter med Katrin, vilket gör dig till den som faktiskt hör att hon fryser. Du ska inte utreda kroppen: du får inte beställa prover, inte tolka dem och inte ställa diagnosen. Men Socialstyrelsens intygsföreskrift (HSLF-FS 2018:54) säger i 6 kap. 2 § att intygsutfärdaren endast ska uttala sig om sådana förhållanden hon har tillräcklig kännedom om, och i 6 kap. 3 § att det ska framgå från vem varje uppgift kommer och vad som är utfärdarens egen bedömning. Båda kraven träffar också det underlag en läkare bygger sitt intyg på. Att beskriva en uttalad funktionsnedsättning med en psykiatrisk diagnos i botten, när ingen tagit ett prov på fjorton år, är att uttala sig om något du inte vet. Det du ska göra är att formulera frågan så skarpt att den går att svara på – och se till att den får en namngiven ägare och ett datum.' },
+
+        { typ: 'val',
+          humor: 'orolig',
+          text: 'Vad tänker du? Är det utbrändhet?',
+          fraga: 'Vad svarar du?',
+          tips: 'Du får säga att något behöver undersökas. Du får inte säga vad det är, och inte heller vad det inte är. Skillnaden mellan de meningarna är hela din legitimation.',
+          val: [
+            { text: 'Jag vet inte, och det är faktiskt mitt svar. Att tröttheten är lika stor när du är ledig, att du fryser, att flera saker i kroppen ändrat sig samtidigt – och att ingen tagit ett prov på fjorton år. Det behöver en läkare titta på innan någon skriver något om utmattning. Jag ordnar det. Du ska inte behöva driva det själv.',
+              tid: 4, ok: true, princip: 'signering',
+              humor: 'oppen', reaktion: 'Katrin blir alldeles tyst. Sedan börjar hon gråta.',
+              svar: 'Förlåt. Det är bara... jag har gått ett halvår och trott att jag håller på att bli dement. Eller att jag bara blivit lat.',
+              fx: { allians: 12, tydlighet: 14, sakerhet: 14, agens: 8 },
+              varfor: 'Tre saker på en gång, och alla tre behövs. Du säger vad du inte vet, vilket är det enda du har grund för att säga. Du säger att det finns en fråga som ska besvaras, vilket är det Katrin behöver höra. Och du tar ägarskapet, i stället för att lämna ett halvårs trötthet till den tröttaste personen i rummet att administrera.' },
+
+            { text: 'Det här låter faktiskt som sköldkörteln. Kylan, vikten, håret – det är ganska klassiskt. Vi ska ta prover på det.',
+              tid: 2, ok: false, princip: 'signering',
+              humor: 'lattad', reaktion: 'Katrin ser hoppfull ut för första gången under besöket.',
+              svar: 'Så det finns en förklaring? Och den går att behandla?',
+              fx: { allians: 10, tydlighet: -6, sakerhet: -14 },
+              varfor: 'Den varmaste reaktionen i hela besöket, och den kommer av att du sa något du inte får säga. Du är psykolog och har just ställt en medicinsk diagnos, utan undersökning och utan prover. Blir provet normalt har du inte bara haft fel om sköldkörteln – du har förbrukat trovärdigheten för allt annat du sagt, inklusive att det kan finnas en psykologisk del. Och ser hon ett provsvar i appen innan läkaren hunnit ringa, är det du som satt förväntan på vad det betyder.' },
+
+            { text: 'Nej, det här är inte utbrändhet. Men det är ingenting allvarligt – vi tar några prover så får vi se.',
+              tid: 2, ok: false, princip: 'signering',
+              humor: 'lattad', reaktion: 'Katrin slappnar av. "Skönt att det inte är något farligt."',
+              svar: 'Vad skönt. Då behöver jag inte gå och oroa mig i alla fall.',
+              fx: { allians: 10, tydlighet: -8, sakerhet: -16 },
+              varfor: 'Du friade i stället för att fälla, och trodde att det var den ofarliga riktningen. Det är det inte. Att säga att ingenting är allvarligt är precis lika mycket en medicinsk bedömning som att säga vad det är – och den versionen har dessutom en biverkning: en patient som blivit lugnad söker senare när det blir sämre. Du har ingen aning om vad proverna visar.' },
+
+            { text: 'Jag kan tyvärr inte uttala mig om kroppsliga saker. Det får du ta med en läkare.',
+              tid: 1, ok: 'delvis', princip: 'dorr',
+              humor: 'sluten', reaktion: 'Katrin drar jackan tätare om sig.',
+              svar: 'Okej. Då ringer jag och bokar en läkartid då.',
+              fx: { allians: -10, agens: -10, tydlighet: -8, sakerhet: 4 },
+              varfor: 'Formellt korrekt och praktiskt oanvändbart, och värt att diskutera i gruppen: gränsen är riktigt dragen, men den levereras som en dörr i ansiktet. Du stängde utan att öppna, och lämnade frågan till den som redan väntat ett halvår på att någon skulle ställa den. Att inte få uttala sig om något är inte samma sak som att inte få ta ansvar för att det blir gjort.' }
+          ] },
+
+        { typ: 'val',
+          humor: 'orolig',
+          text: 'Men jag är ju kallad hit för det där intyget. Jag har väntat tre veckor och bytt bort ett pass för att komma. Ska jag komma tillbaka en gång till?',
+          fraga: 'Vad gör du med den avsatta tiden?',
+          tips: 'Att inte slutföra utredningen är rätt beslut. Frågan är vad du gör med de tjugo minuter som blir över.',
+          val: [
+            { text: 'Vi gör inte klart intygsdelen idag – jag skulle skriva något jag inte vet är sant. Men du går inte härifrån tomhänt. Jag ordnar läkartid och prover, och tiden vi har använder vi till sömnen kring nattpassen. Den har du nytta av oavsett vad proverna visar.',
+              tid: 3, ok: true, princip: 'dorr',
+              humor: 'neutral', reaktion: 'Katrin sätter sig tillbaka i stolen.',
+              svar: 'Så jag har inte kommit hit i onödan. Okej. Sömnen, ja – den är ett elände, och den har ingen frågat om på nio år.',
+              fx: { allians: 8, tydlighet: 16, agens: 12 },
+              varfor: 'Ett avbrutet moment är inte ett avbrutet besök. Du säger vad du inte gör och varför, och fyller tiden med det som är verksamt oavsett vilken förklaring som visar sig stämma. Det är också så du undviker att lära in en reflex lika mekanisk som den du just bröt: att osäkerhet ska hanteras genom att skicka vidare och avsluta.' },
+
+            { text: 'Nej, det här kan vi inte göra idag. Jag bokar en läkartid åt dig, så tar vi om det när proverna är klara.',
+              tid: 2, ok: 'delvis', princip: 'plan',
+              humor: 'neutral', reaktion: 'Katrin reser sig och tar sin väska.',
+              svar: 'Okej. Tack ändå.',
+              fx: { allians: -4, tydlighet: 4, agens: -8, sakerhet: 8 },
+              varfor: 'Beslutet är rätt och tryggt, och du gav ändå tillbaka tjugo minuter som ingen annan kommer att ge henne. Hon har varit trött i ett halvår, väntat tre veckor på tiden, har ett nattpass på lördag – och fick ingenting att göra fram till dess. Att vara försiktig är inte i sig ett arbete. Rätt beslut och tomma händer räcker till silver, inte till guld.' },
+
+            { text: 'Jag gör klart utredningen som planerat och skriver att somatisk orsak inte är utredd, så får läkaren väga in det.',
+              tid: 4, ok: false, princip: 'signering',
+              humor: 'lattad', reaktion: 'Katrin ser lättad ut. "Så det blir gjort ändå."',
+              svar: 'Tack. Jag ville verkligen inte ha kommit hit förgäves.',
+              fx: { allians: 6, underlag: -14, sakerhet: -12 },
+              varfor: 'Den snällaste versionen av fel svar, och den vanligaste. Reservationen står i en fritextruta; slutsatsen står i rubriken, och det är rubriken som läses av någon med sju minuter per ärende. Funktionsbeskrivningen ser dessutom likadan ut vare sig orsaken sitter i kroppen eller i belastningen – det som skiljer är vad som ska göras åt den, och det är precis den skillnaden ditt underlag skulle sudda ut.' },
+
+            { text: 'Jag skriver ett underlag på fyra veckors sjukskrivning, så får du vila medan utredningen görs.',
+              tid: 3, ok: false, princip: 'evidens',
+              humor: 'lattad', reaktion: 'Katrin drar efter andan. "Menar du det?"',
+              svar: 'Tack. Tack. Det är precis vad jag behöver.',
+              fx: { allians: 10, agens: -14, underlag: -14, sakerhet: -8 },
+              varfor: 'Den varmaste reaktionen i besöket och den sämsta åtgärden. Ett förslag om sjukskrivning måste vila på en diagnos, och den diagnos som skulle stå där är den du nyss konstaterade att du saknar grund för. Vila är dessutom ingen behandling mot något av det som kan ligga bakom – den fördröjer bara det som hjälper. Behöver Katrin vara borta från lördagens pass går det via sjukanmälan till arbetsgivaren; läkarintyg begärs normalt först från den åttonde sjukdagen, och det är en fråga för läkaren på måndag, inte för dig idag.' }
+          ] },
+
+        { typ: 'flera',
+          banner: 'DET SOM GÅR ATT GÖRA IDAG',
+          fraga: 'Tjugo minuter kvar och ett halvår bakom henne. Vad gör du med tiden? Välj tre.',
+          antal: 3,
+          tidPer: 2,
+          tips: 'Välj det som är verksamt oavsett vad proverna visar. Allt annat måste vänta på svaret.',
+          val: [
+            { text: 'Gå igenom sömnen kring nattpassen konkret: mörkläggning och tyst sovrum på dagen, sovtiden lagd på samma klockslag mellan passen, planerad sömn före passet i stället för att gå upp trött, och när på natten hon dricker sitt sista kaffe.',
+              ratt: true, princip: 'evidens', fx: { agens: 14, allians: 8, underlag: 8 },
+              varfor: 'Nio år på ständig natt med fem timmars dagsömn är en tredje förklaring vid sidan av de två uppenbara, och den kräver ingen diagnos för att åtgärdas. Det är också den enda insats som säkert inte är bortkastad tid idag: den hjälper vare sig proverna visar något eller inte. Sömnen är ett eget spår här precis som hos Anna – men spåret ser annorlunda ut, och ingen har frågat om det på nio år.' },
+
+            { text: 'Skriv ned en enkel baslinje tillsammans: timmar sömn per dygn, trötthet på en skala, och vad hon faktiskt klarar av på en ledig dag. Daterat.',
+              ratt: true, princip: 'plan', fx: { underlag: 12, agens: 6 },
+              varfor: 'Står hon om åtta veckor på en behandling måste någon kunna avgöra om den hjälpte. Utan en daterad utgångspunkt blir svaret "jag vet inte, kanske lite", och då fortsätter både utredningen och tröttheten. Baslinjen är dessutom den enda del av din anteckning som håller oavsett vilken diagnos som till slut hamnar överst i den.' },
+
+            { text: 'Säg rakt ut att ett halvårs trötthet med de här kroppsliga inslagen inte är lathet, inte begynnande demens och inte något hon kunnat tänka bort – och att det är just därför du inte tänker skriva något innan någon vet.',
+              ratt: true, princip: 'agens', fx: { allians: 12, agens: 12 },
+              varfor: 'Hon sa själv att hon trott sig hålla på att bli dement, eller bara ha blivit lat. Ett halvår av den slutsatsen är en inlärningshistoria som gör att man slutar söka och börjar dölja. Att lyfta av skulden är inte tröst här – det är det som gör att hon kommer på läkartiden och hör av sig om hon blir sämre.' },
+
+            { text: 'Starta iKBT mot stress redan idag. Det skadar aldrig, och då är hon igång om det ändå visar sig vara utmattning.',
+              ratt: false, princip: 'evidens', fx: { underlag: -8, sakerhet: -8 },
+              varfor: 'Det låter som en gratis försäkring och är det inte. Du binder henne till en förklaring som inte är prövad, du tar en behandlingsplats som räknas som påbörjad insats i nästa anteckning, och blir hon inte bättre bekräftas exakt den bild hon kom hit med: att det sitter i huvudet och att hon inte anstränger sig nog.' },
+
+            { text: 'Inför fast uppstigningstid varje dag, samma klockslag, även på lediga dagar.',
+              ratt: false, princip: 'evidens', fx: { agens: -10, allians: -6 },
+              varfor: 'Rätt råd i fel kropp. Fast uppstigningstid håller ihop dygnet för den som ska sova på natten, och den är rätt svar hos Anna. För en nattarbetare med fyra pass i rad är den omöjlig att följa, och ett omöjligt råd kostar mer än inget råd alls: det lär patienten att hon misslyckas med det vården ber henne göra. Att kopiera ett sömnspår rakt av är samma mekanik som fallet i övrigt handlar om.' },
+
+            { text: 'Rekommendera henne att gå över till dagtjänst.',
+              ratt: false, princip: 'ansvar', fx: { agens: -8, tydlighet: -4 },
+              varfor: 'Kanske rätt på sikt och värt att diskutera i gruppen – men inte idag och inte av dig. Det är hennes försörjning, nattillägget är en del av lönen, och rådet ges innan någon vet om nattarbetet ens är orsaken. Att lägga ett stort beslut på patienten som ett välmenande råd är ett sätt att flytta över ansvaret utan att kalla det så.' },
+
+            { text: 'Gör en situationsanalys på en typisk kväll, så har ni något konkret att arbeta med.',
+              ratt: false, princip: 'sorkk', fx: { underlag: -6 },
+              varfor: 'Bra verktyg, fel verktyg. En situationsanalys förutsätter att beteendet står i relation till något i situationen. Katrins trötthet varierar inte med situationen – det var just det svaret som fick dig att byta spår för tjugo minuter sedan. Att göra SORKK ändå är att låta metoden bestämma vad problemet är.' }
+          ] },
+
+        { typ: 'beslut',
+          banner: 'AVSLUT OCH ÖVERLÄMNING',
+          fraga: 'Vad skriver du, och vad bokar du?',
+          tips: 'Frågan ska gå att svara på, ha en namngiven ägare och ett datum. Och Katrin ska veta vad som gäller till dess.',
+          val: [
+            { text: 'Journalför med källa – vad Katrin uppger, vad du själv iakttagit – och skriv en riktad frågeställning till namngiven läkare: trötthet 6 mån utan variation med belastning eller ledighet, ej reversibel av tillräcklig sömn, frusenhet, viktuppgång, trög mage, håravfall, rikliga blödningar sedan i höstas, bevarad lust, ingen nedstämdhet, inga prover på fjorton år. Somatisk bedömning före ställningstagande till psykiatrisk diagnos och sjukskrivning. Läkartid bokad, provtagning innan. Sömnplan kring nattpassen påbörjad. Återbesök hos dig om tre veckor – utredningen slutförs då, om den behövs.',
+              ok: true, tid: 3, princip: 'somatik',
+              fx: { underlag: 18, tydlighet: 14, sakerhet: 14 },
+              utfall: 'Katrin lämnar prover i morgon bitti efter passet och träffar läkare på måndag. Din tid om tre veckor står kvar i kalendern.',
+              varfor: 'Frågan har nu tre saker den saknade i morse: en formulering som går att svara på, en namngiven ägare och ett datum. Lägg också märke till vad du inte gjorde – ingen diagnos, ingen uteslutning, ingen remiss, ingen akut – och till att din egen tid står kvar. Det är den som gör att LESS fortfarande gäller: utredningen är inte avskriven, den är uppskjuten till den dag den går att göra. Visar proverna ingenting sitter ni här igen om tre veckor, och då görs den på en grund som håller. Finns ingen läkartid den här veckan är näst bästa väg en daterad överlämning till en namngiven läkare – aldrig "hör av dig själv".' },
+
+            { text: 'Samma anteckning och samma frågeställning – men du ber Katrin ringa mottagningen själv för att boka läkartid.',
+              ok: 'delvis', tid: 2, princip: 'plan',
+              fx: { underlag: 10, tydlighet: -6, agens: -6 },
+              utfall: 'Katrin lovar att ringa. Hon jobbar fyra nätter i rad, och telefontiden är 08–10.',
+              varfor: 'Innehållet håller, överlämningen gör det inte – och det är värt att diskutera i gruppen, för så här ser det ut på de flesta mottagningar. Men en nattarbetare som ska ringa en telefontid mitt i sin sömn är en fråga som med god sannolikhet inte blir ställd. En ägare som är patienten själv är ingen ägare, när patienten är den som är för trött för att orka.' },
+
+            { text: 'Slutför utredningen: utmattningssyndrom som föreslagen diagnos, sjukskrivning 50 % i fyra veckor, med en notering om att prover bör tas.',
+              ok: false, tid: 3, princip: 'signering',
+              fx: { underlag: -18, agens: -8, sakerhet: -18 },
+              utfall: 'Läkaren signerar utan att träffa Katrin. Proverna tas två månader senare, av någon annan, när hon söker akut för hjärtklappning.',
+              varfor: 'Precis den lucka LESS-flödet skapar när det fungerar som det ska: alla gör sin del, ingen gör den kroppsliga. Notera formuleringen "prover bör tas" – den har ingen ägare, inget datum och ingen som saknar den om den uteblir. Utfallet är inte att någon gjorde fel, utan att en fråga låg mellan tre professioner tills den blev ett akutbesök.' },
+
+            { text: 'Skriv att psykologisk problematik inte föreligger och avsluta ärendet hos dig.',
+              ok: false, tid: 1, princip: 'dorr',
+              fx: { allians: -10, tydlighet: -12, agens: -12, sakerhet: -8 },
+              utfall: 'Ärendet avslutas. Katrin får ett brev om att bedömningen är gjord och att inget ytterligare planeras.',
+              varfor: 'Du hade rätt i sak och lämnade henne ändå tomhänt. Att fria från det ena är inte att tilldela det andra, och ett avslutat ärende är den starkaste signal ett journalsystem kan skicka om att ingenting återstår. Katrin är fortfarande trött – och nu står det svart på vitt att hon är färdigbedömd.' },
+
+            { text: 'Remittera till psykiatrisk mottagning för fördjupad bedömning av trötthetstillståndet.',
+              ok: false, tid: 2, princip: 'somatik',
+              fx: { tydlighet: -6, sakerhet: -12 },
+              utfall: 'Remissen returneras efter fem veckor med begäran om somatisk utredning.',
+              varfor: 'Att skicka frågan uppåt i samma spår är inte att byta spår. Specialistpsykiatrin ställer den somatiska frågan som första punkt i sin remissbedömning, precis som du just gjorde – skillnaden är att Katrin då väntat fem veckor på att få höra det.' }
           ] }
       ]
     }
@@ -6496,7 +6921,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['bedda-b', 'rodflagga', 'somatik', 'dorr', 'hjalpmedel', 'ansvar', 'bedda-a'],
+      principer: ['bedda-b', 'rodflagga', 'somatik', 'dorr', 'hjalpmedel', 'ansvar', 'bedda-a', 'hypotes'],
       journal: [
         ['Remiss', 'Triagerad till arbetsterapeut. Frågeställning: ortos och greppanpassning vid handartros.'],
         ['Diagnos', 'Ingen. "Artros" är patientens egen benämning. Ingen läkarbedömning och ingen undersökning av händerna finns dokumenterad.'],
@@ -6540,7 +6965,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
               fx: { underlag: 10, sakerhet: 8, allians: -8 },
               varfor: 'Du såg rätt sak, och det är besökets viktigaste iakttagelse. Men du började i det hon inte kommit för utan att först ta emot det hon kom för. Rätt innehåll, fel tidpunkt – och du betalar i förtroende som du kommer att behöva om en stund, när du säger nej till skenan.' },
             { text: 'Artros i släkten är en stark ärftlighet, så det stämmer säkert. Vi går igenom vad du har svårt för på jobbet.',
-              tid: 2, ok: false, princip: 'bedda-b',
+              tid: 2, ok: false, princip: 'hypotes',
               humor: 'lattad', reaktion: 'Yvonne nickar ivrigt och börjar räkna upp.',
               svar: 'Precis. Det är pärmarna, och att skriva på tavlan, och att bära kaffebrickan.',
               fx: { allians: 10, underlag: -12, sakerhet: -12 },
@@ -6592,7 +7017,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'STÄMMER DIAGNOSEN MED BILDEN?',
           fraga: 'Yvonne får manschettknappen på fjärde försöket och tittar på handen medan hon gör det. Gemet får hon inte upp från bordet. Tumbasen är varken öm eller förstorad, och muskeln mellan tumme och pekfinger är plattare än du väntat dig – på båda händerna. Hon har hållit i ledstången sedan i somras. Vad är det som inte går ihop med artros?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Att det inte gör ont, att lederna saknar fynd, att kraften försvunnit ur muskler som magrat – och att besvären finns i benen också.', ratt: true },
             { text: 'Att hon har nedsatt greppstyrka.', ratt: false,
@@ -7189,6 +7614,316 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
               varfor: 'Ibland nödvändigt, men här går det snabbare att komplettera. Och kollegan lär sig ingenting av att ärendet tas ifrån hen.' }
           ] }
       ]
+    },
+
+    /* ================================================================
+       RONNY – oplanerat besök. Ser ut som ett intygsärende som redan
+       är triagerat och bokat. Är en akut suicidriskbedömning där
+       LESS-flödets normala tempo är för långsamt. Endast övningsläge.
+       ================================================================ */
+    {
+      id: 'lak-ronny',
+      roll: 'lakare',
+      titel: 'Jourtid klockan två',
+      patient: 'ronny',
+      lage: 'rum',
+      minuter: 32,
+      svarighet: 3,
+      laser: 'oplanerat',
+      endastDrill: true,
+      principer: ['rodflagga', 'bedda-e', 'plan', 'samtycke', 'ansvar', 'evidens', 'grad', 'avbryt'],
+      journal: [
+        ['Ärende', 'Ronny Holmqvist, 24 år, lagerarbetare 75 procent. Inbokad akut på dagens jourtid efter telefonkontakt med sjuksköterska i morse.'],
+        ['Bakgrund till kontakten', 'Chattärende inkommet i natt 01.52, 02.40 och 03.14. Sista meddelandet: "Jag orkar inte det här. Glöm det. Förlåt att jag skrev." Läst 08.05, uppringd på förmiddagen.'],
+        ['Hans egna ord i telefon, sjuksköterskans anteckning', '"Skönt att bara slippa." Har i natt sökt information om intoxikation med anhörigs läkemedel. Har inte gjort något. Ensam i lägenheten. Har inte berättat för någon. Dricker nästan varje kväll. Var berusad när meddelandena skrevs.'],
+        ['Situation', 'Separation för tre veckor sedan, sambon flyttade ut. Har inte varit på arbetet sedan i tisdags. Har slutat höra av sig till vänner.'],
+        ['Närstående', 'Mormor bor i lägenheten ovanför – det är hennes läkemedel han läst om. Ronny har samtyckt till att hon kontaktas. Hon följde med hit och sitter i väntrummet.'],
+        ['Risknivå', 'Ingen gradering gjord. Sjuksköterskan har dokumenterat uppgifter, inte en bedömning.'],
+        ['Tidigare', 'Inga tidigare kontakter för psykisk ohälsa. Inga kända suicidförsök. Inga läkemedel. Inga kända kroppsliga sjukdomar. Inga prover tagna.'],
+        ['Sjukanmälan till arbetsgivaren', 'Ingen uppgift.']
+      ],
+      intro: [
+        'Jourtiden klockan två var avsatt för en försäkringsmedicinsk föredragning. Sjuksköterskan tog den i morse i stället.',
+        'Anteckningen från telefonsamtalet är läst. Uppgifterna finns. Bedömningen finns inte – den är din.',
+        'Ronny kommer in med jackan på och sätter sig på stolskanten. Hans mormor sitter kvar i väntrummet.'
+      ],
+
+      beats: [
+
+        { typ: 'replik', humor: 'sluten',
+          text: 'Hej. Alltså … jag mår bra nu. Jag vet inte varför hon ringde upp det där. Jag var full när jag skrev. Det är inte så farligt som det lät.' },
+
+        { typ: 'val',
+          fraga: 'Han tar tillbaka det han skrev i natt. Vad gör du med det?',
+          tips: 'Han ljuger inte. Klockan två är det ofta sant att det inte känns lika farligt. Frågan är vilken av de två versionerna du ska planera efter.',
+          val: [
+            { text: 'Säg att du är glad att han kom, att du läst vad han berättade i telefon, och att du tänker fråga om samma sak igen – för att du behöver höra det av honom själv, inte för att någon misstror honom.',
+              tid: 3, ok: true, princip: 'bedda-e',
+              humor: 'ledsen', reaktion: 'Han drar ner dragkedjan men behåller jackan på.',
+              svar: 'Okej. Men jag skulle inte gjort nåt. Jag ville bara att det skulle sluta snurra.',
+              fx: { allians: 12, sakerhet: 12, tydlighet: 8 },
+              varfor: 'Två saker på en gång. Du normaliserar att frågan ställs igen – annars läser han om-frågandet som misstro och stänger. Och du gör klart att bedömningen är din och att den bygger på det här samtalet. Att en patient tar tillbaka det han sa på natten är regel, inte undantag, och det är inte lögn: risken svänger över dygnet och den svänger tillbaka. Din uppgift är inte att avgöra vilken version som är den sanna, utan att planera för att båda är det.' },
+
+            { text: 'Ta emot det. Han verkar samlad, han säger själv att det inte var så farligt, och suicidfrågan är redan ställd och besvarad i morse. Gå vidare till sjukskrivningen.',
+              tid: 2, ok: false, princip: 'avbryt',
+              humor: 'lattad', reaktion: 'Han slappnar av direkt. Samtalet blir lätt.',
+              svar: 'Skönt. Ja, det är väl mest att jag behöver sova och komma tillbaka till jobbet.',
+              fx: { allians: 14, sakerhet: -22, underlag: -12 },
+              varfor: 'Det här är genvägen som faktiskt tas, och den tas sällan av okunskap. Den tas för att frågan är obehaglig och för att patienten just erbjudit dig en väg förbi den. Två fel i ett. Suicidrisk är färskvara: ett svar klockan 08.20 i telefon säger något om klockan 08.20. Och du kan ärva uppgifter av en kollega, men inte en riskbedömning – sjuksköterskan skrev ned vad han sagt och avstod uttryckligen från att gradera, eftersom graderingen inte är hennes. Tar inte du den finns den inte.' },
+
+            { text: 'Läs upp hans egna ord ur telefonanteckningen och fråga vad han menade med dem.',
+              tid: 4, ok: 'delvis', princip: 'bedda-b',
+              humor: 'spand', reaktion: 'Han rodnar och tittar ner. "Står det så där?"',
+              svar: 'Det låter mycket värre när du säger det högt.',
+              fx: { sakerhet: 8, underlag: 6, allians: -6 },
+              varfor: 'Metoden är riktig – att gå tillbaka till patientens egna ord slår att fråga abstrakt – men ordningen skaver. Att bli citerad ur en journal innan han blivit hälsad på gör att han försvarar sig i stället för att berätta. Samma citat fungerar tre minuter senare, ställt som en fråga: "Du sa något i morse som jag fastnade för. Får jag fråga om det?"' },
+
+            { text: 'Fråga vad han vill få ut av besöket, så att ni inte lägger tiden på fel saker.',
+              tid: 2, ok: false, princip: 'forvantan',
+              humor: 'sluten', reaktion: 'Han tittar upp för första gången.',
+              svar: 'Ett intyg, väl? Och kanske nåt att sova på.',
+              fx: { allians: 4, tydlighet: -8, sakerhet: -14 },
+              varfor: 'En bra öppning i nästan varje annat besök, och fel i det här. Du lämnar över dagordningen till den enda person i rummet som har starka skäl att vilja prata om något annat, och du gör det innan du vet vad du har framför dig. Att fråga efter patientens förväntan är rätt – efter att du satt ramen för vad besöket måste innehålla, inte i stället för.' }
+          ] },
+
+        { typ: 'flera',
+          banner: 'DIN EGEN BEDÖMNING',
+          fraga: 'Sköterskan har uppgifterna. Graderingen är din. Vad tar du reda på som hon inte kunde? Välj tre.',
+          antal: 3,
+          tidPer: 2,
+          tips: 'Fyra frågor är redan ställda och besvarade i journalen. Att fråga om dem igen är inte fel – men de tre platserna här är till för det som ligger bortom dem.',
+          val: [
+            { text: 'Vad som fått honom att inte göra något hittills. Vad som håller emot – och om det håller ikväll också.',
+              ratt: true, princip: 'rodflagga', flagga: 'ambivalens-fragad',
+              fx: { sakerhet: 16, underlag: 10, agens: 8 },
+              varfor: 'Den viktigaste frågan i besöket och den som ställs minst. Att fråga efter skyddsfaktorer är inte att leta tröst – det är att ta reda på vad planen ska byggas av. Svaret ger dig namnet på det som bär honom, och det talar samtidigt om hur tunt det är. En man som säger "mormor skulle inte klara det" har något att arbeta med. En man som blir tyst har inte det, och den tystnaden är ett fynd du inte får någon annanstans ifrån.' },
+
+            { text: 'Vad han tänker sig om ikväll, konkret: var han ska vara, om han ska dricka, och vad han gör när klockan blir tre.',
+              ratt: true, princip: 'plan', fx: { sakerhet: 16, tydlighet: 12 },
+              varfor: 'Suicidrisk är inte ett värde du mäter, det är ett förlopp du planerar för. Nattens timmar är hans farligaste och alkoholen är den enskilt mest påverkbara faktorn i dem – han dricker nästan varje kväll och han var berusad när han skrev. Frågar du inte om ikväll blir din bedömning en beskrivning av eftermiddagen. Svaret är dessutom det som ska stå i planen, med hans ord och inte dina.' },
+
+            { text: 'Om det svängt förut i livet: tidigare perioder av nedstämdhet, tidigare självskada, och hur det ser ut i familjen.',
+              ratt: true, princip: 'bedda-b', fx: { underlag: 12, sakerhet: 10 },
+              varfor: 'Det här är anamnesen som skiljer en kris efter en separation från en depressiv episod som separationen utlöste, och skillnaden avgör både behandling och tempo. Tidigare självskadehandling är dessutom en av de starkaste kända riskfaktorerna för suicid – och den står inte i journalen, för ingen har frågat. Det är också den enda av frågorna här som kräver din kompetens snarare än ditt mod.' },
+
+            { text: 'Ställ om sköterskans fyra frågor ordagrant, som en checklista, så att du har dem i din egen anteckning.',
+              ratt: false, princip: 'signering', fx: { sakerhet: 4, allians: -8 },
+              varfor: 'Delvis riktigt och därför lockande: du ska höra det själv, och det ska stå i din anteckning. Men att upprepa fyra frågor ordagrant är inte en bedömning, och det kostar dig alla tre platserna. Väv in dem i samtalet i stället – "du sa i morse att du läst om tabletterna, har du tänkt på det idag också?" tar tjugo sekunder och ger mer än en omtagning.' },
+
+            { text: 'MADRS-S i väntrummet, så att du får en siffra på depressionsdjupet innan du bestämmer dig.',
+              ratt: false, princip: 'evidens', fx: { sakerhet: -12, allians: -6 },
+              varfor: 'Det ser strukturerat ut och det kostar inte din tid – därför lockar det. Men ingen skattningsskala har tillräcklig tillförlitlighet för att förutsäga suicid. Skalor är ett stöd för att inte missa frågor i ett samtal, aldrig en ersättning för samtalet, och den här skalan svarar inte på frågan du faktiskt har. Att skicka ut honom med ett formulär är dessutom att byta bort den enda halvtimme du hade honom hos dig.' },
+
+            { text: 'TSH, blodstatus, B12 och leverstatus, för att inte missa en somatisk orsak till nedstämdheten.',
+              ratt: false, princip: 'somatik', fx: { sakerhet: -6, tydlighet: -6 },
+              varfor: 'Precis rätt reflex i fel ögonblick. Den somatiska frågan måste tilldelas någon och i ett stressärende är den din – och han dricker dagligen, så levervärden är dessutom rimliga. Poängen är tidpunkten. Prover som besvaras i övermorgon köper ingen säkerhet ikväll, och att vänta in dem är att skjuta upp ett beslut som inte går att skjuta upp. Beställ dem på vägen ut, inte i stället för bedömningen.' },
+
+            { text: 'Vilka arbetsuppgifter på lagret han inte klarar, så att aktivitetsbegränsningen blir rätt beskriven i intyget.',
+              ratt: false, princip: 'avbryt', fx: { underlag: -8, sakerhet: -10 },
+              varfor: 'DFA-kedjan gjord enligt konstens alla regler, på fel dag. Aktivitetsbegränsningen går att komplettera nästa vecka. Kvällen går inte att komplettera. Ett formellt oklanderligt intyg på en patient vars risk ingen graderat är den sortens handling som ser bra ut i en efterhandsgranskning och inte hjälpte någon.' }
+          ] },
+
+        { typ: 'replik', humor: 'ledsen',
+          text: 'Jag vet inte vad som håller emot. Mormor, kanske. Hon skulle ta det jättehårt. … Ikväll blir väl som vanligt. Jag sitter uppe. Jag brukar köpa några öl på vägen hem. Och nej, jag har aldrig gjort nåt sånt förut. Farsan var väl deppig ibland, men det pratades inte om.' },
+
+        { typ: 'kontroll',
+          banner: 'GRADERINGEN',
+          fraga: 'Du ska gradera risken och skriva den i journalen. Vad ska graderingen bygga på?',
+          tidFel: 2,
+          princip: 'rodflagga',
+          val: [
+            { text: 'En sammanvägning av hans egna ord, förloppet, tillgången till medel, alkoholen ikväll och vad som håller emot – med risknivån och de åtgärder den leder till skrivna i klartext.',
+              ratt: true },
+            { text: 'Antalet riskfaktorer: ung man, separation, isolering, sömnbrist, alkohol, tillgång till läkemedel.', ratt: false,
+              varfor: 'Riskfaktorer beskriver en grupp, inte en kväll, och de allra flesta unga män med precis den listan gör aldrig något. Att räkna faktorer ger en känsla av mätning utan att skilja de två grupperna åt. Det som gör bedömningen användbar är konkretion, tillgång, ensamhet, alkohol och förändringstakt – och vad du gör åt de av dem som går att göra något åt.' },
+            { text: 'Poängen på en skattningsskala, som ger en jämförbar och dokumenterbar risknivå.', ratt: false,
+              varfor: 'En skala gör bedömningen dokumenterbar men inte riktig. Ingen skattningsskala har tillräcklig tillförlitlighet för att förutsäga suicid, och en siffra i journalen som ser objektiv ut är farligare än ett ord som är ärligt osäkert.' },
+            { text: 'Att han besvarade suicidfrågan i telefon i morse och att han kom till besöket – det talar för låg risk.', ratt: false,
+              varfor: 'Att han kom är ett gott tecken, men det är inte en bedömning. Att svara på frågor och komma till en tid utesluter ingenting; de flesta som dör i suicid har haft vårdkontakt kort dessförinnan. Och risken klockan 14 säger begränsat om risken klockan tre på natten. Det är därför planen, inte graderingen, är det som skyddar honom.' }
+          ],
+          forklaring: 'Tre saker att ta med. Ett: risknivån ska skrivas ut – låg, måttlig, hög eller svårbedömd – och den ska följas av vad den leder till. En gradering utan åtgärd är en anteckning, inte en bedömning. Två: skriv hans egna ord, inte dina slutsatser. "Uttrycker att det vore skönt att slippa, har i natt sökt information om intoxikation med anhörigs läkemedel, ensam nattetid, dricker dagligen, anger mormor som skäl att inte göra något" går att ompröva av nästa läkare. "Suicidrisk bedöms låg" går inte, och den formuleringen är det vanligaste sättet att låsa en efterföljare. Tre: du kan inte förutsäga. Det ingen kan är att veta vad som händer i natt. Det alla kan är att minska det som går att minska – medlen, ensamheten, alkoholen – och att se till att nästa kontakt har ett namn och ett klockslag.' },
+
+        { typ: 'val',
+          humor: 'orolig',
+          text: 'Du får inte säga till mormor vad jag sa. Hon får tro att det handlar om att jag inte sover.',
+          fraga: 'Tabletterna ligger i mormors lägenhet, en trappa upp. Vad gör du?',
+          tips: 'Han har samtyckt till att hon kontaktas. Det är inte samma sak som samtycke till vad du får säga.',
+          val: [
+            { text: 'Förhandla ramen med honom först: vad du måste säga för att hon ska kunna göra det du behöver att hon gör, och vad du kan lämna därhän. Be sedan in henne, med honom kvar i rummet.',
+              tid: 4, ok: true, princip: 'samtycke',
+              humor: 'orolig', reaktion: 'Han tänker länge. Sedan nickar han långsamt.',
+              svar: 'Du kan säga att jag mår dåligt och att tabletter inte ska ligga framme. Inte resten.',
+              fx: { sakerhet: 18, allians: 10, agens: 10, tydlighet: 10 },
+              varfor: 'Samtycke är inte en ja- eller nej-fråga du ställer en gång, det är en ram du förhandlar. Han behöver inte gå med på allt – han behöver gå med på tillräckligt: att hon vet att han mår dåligt, att hon finns i kväll och att läkemedlen inte ligger framme. Det räcker för att göra kvällen annorlunda, och det respekterar gränsen han satte. Att ta in henne medan han sitter kvar är dessutom det enda sättet att göra det utan att han sedan går och undrar vad ni sa. Skriv i journalen exakt vad samtycket omfattade.' },
+
+            { text: 'Be honom själv säga till mormor att tabletterna ska bort, och stäm av med honom imorgon att det blev gjort.',
+              tid: 3, ok: 'delvis', princip: 'agens',
+              humor: 'neutral', reaktion: 'Han nickar. "Jag kan väl säga det."',
+              svar: 'Jag kan väl säga att jag inte vill ha tabletter framme. Hon frågar väl inte varför.',
+              fx: { agens: 10, allians: 6, sakerhet: 4 },
+              varfor: 'Respektfullt och inte fel – det han klarar själv ska han göra själv, och att äga sin egen begäran är i sig verksamt. Men du lägger ett samtal han har starka skäl att skjuta upp på den person i rummet som har minst kraft just nu, och du får inte veta om det blev av förrän imorgon. Värt att diskutera i gruppen: när blir respekt för patientens autonomi ett sätt att slippa ett obehagligt samtal själv?' },
+
+            { text: 'Ring mormor efteråt och ge henne hela bilden. Läget är akut och hon behöver veta allt för att kunna hjälpa.',
+              tid: 2, ok: false, princip: 'samtycke',
+              humor: 'spand', reaktion: 'Han vet ingenting om det. Ännu.',
+              svar: '',
+              fx: { sakerhet: -12, allians: -18, tydlighet: -8 },
+              varfor: 'Han har samtyckt till att hon kontaktas, inte till innehållet, och han har uttryckligen satt en gräns. Sekretessen gäller mot närstående som mot alla andra. Det finns undantag för akuta nödsituationer, men de är till för ögonblicket då någon håller på att dö framför dig – de är inte ett planeringsverktyg för en kväll du känner dig orolig inför. Priset betalas ikväll och det är konkret: den första person i vården han berättade något för blev den som gick bakom hans rygg.' },
+
+            { text: 'Lämna tablettfrågan. Vill han verkligen göra något hittar han ett annat sätt.',
+              tid: 2, ok: false, princip: 'plan',
+              humor: 'neutral', reaktion: 'Frågan lämnas. Ni går vidare.',
+              svar: '',
+              fx: { sakerhet: -20 },
+              varfor: 'Det låter luttrat och det är fel. Att begränsa tillgången till medel är en av få suicidpreventiva åtgärder med robust stöd: handlingen är ofta impulsiv, tidsfönstret kort, och en substitution sker långt ifrån alltid. Just de här tabletterna är dessutom det han låg och läste om i natt. Att lämna dem kvar en trappa upp är att lämna kvar den enda konkreta sak i hela ärendet som du faktiskt kunde ändra på.' }
+          ] },
+
+        { typ: 'kontroll',
+          banner: 'VAR GÅR GRÄNSEN',
+          fraga: 'Är det här ett vårdintyg?',
+          tidFel: 2,
+          princip: 'ansvar',
+          val: [
+            { text: 'Nej. Han tar emot hjälp frivilligt, och tvångsvård förutsätter både en allvarlig psykisk störning och att han motsätter sig vården.',
+              ratt: true },
+            { text: 'Ja. Konkreta suicidtankar med tillgång till medel räcker för vårdintyg.', ratt: false,
+              varfor: 'Suicidtankar är inte i sig en allvarlig psykisk störning i lagens mening, hur konkreta de än är. Tvångsvård förutsätter dessutom att patienten motsätter sig vården eller inte kan ta grundad ställning till den – och Ronny sitter i din stol och samtalar med dig.' },
+            { text: 'Ja, om psykiatrin säger att de inte kan ta emot honom. Då är vårdintyget vägen in.', ratt: false,
+              varfor: 'Den vanligaste felanvändningen och den mest begripliga: du är orolig, dörren är stängd, och vårdintyget ser ut som en nyckel. Men ett vårdintyg är ett rättsligt intygande om att förutsättningarna för tvång är uppfyllda – det är inte ett sätt att lösa en resursbrist. Skriver du det utan att kriterierna finns intygar du något du vet inte stämmer.' },
+            { text: 'Nej – vårdintyg får bara utfärdas av psykiater.', ratt: false,
+              varfor: 'Vanlig missuppfattning. Ett vårdintyg får utfärdas av varje legitimerad läkare efter en särskild läkarundersökning, alltså också av dig på vårdcentralen. Att du får skriva det är precis därför du måste veta när du inte ska.' }
+          ],
+          forklaring: 'Lagen om psykiatrisk tvångsvård kräver tre saker samtidigt: allvarlig psykisk störning, ett oundgängligt behov av psykiatrisk vård dygnet runt som inte kan tillgodoses på annat sätt, och att patienten motsätter sig vården eller inte kan ta grundad ställning till den (3 §). Vårdintyget får utfärdas av en legitimerad läkare efter en särskild läkarundersökning och ska skrivas i omedelbar anslutning till den (4–5 §§). Har ett vårdintyg utfärdats får patienten hållas kvar tills frågan om intagning avgjorts (6 §), och polishandräckning kan begäras (47 §). Vägrar någon låta sig undersökas alls får en läkare i allmän tjänst besluta om omhändertagande för undersökning (4 §). Allt det här är verktyg du faktiskt har på en vårdcentral. Poängen med att kunna dem är att veta att Ronny inte är där – och att också det ska stå i journalen. Ett övervägande om tvångsvård som gjordes och landade i nej ser i efterhand ut som en fråga ingen ställde, om det inte är skrivet.' },
+
+        { typ: 'val',
+          humor: 'spand',
+          text: 'Jag åker inte in på nån psykakut. Jag är inte galen.',
+          fraga: 'Klockan är 14.35. Vad gör du med psykiatrin?',
+          tips: 'Tre olika saker heter "kontakta psykiatrin", och de tar olika lång tid att bli av med.',
+          val: [
+            { text: 'Ring psykiatrisk akutmottagning eller bakjour medan han sitter kvar. Föredra vad du sett, säg vad du är osäker på, och kom överens om vem som gör vad och när. Skriv in vem du talade med, klockslag och vad ni bestämde.',
+              tid: 5, ok: true, princip: 'ansvar',
+              humor: 'orolig', reaktion: 'Sju minuter i kö. Ronny sitter kvar och hör din halva av samtalet.',
+              svar: 'Vad sa dom?',
+              fx: { sakerhet: 16, tydlighet: 12, underlag: 10 },
+              varfor: 'Konsultation, inte överlämning. Du behåller ärendet men delar bedömningen med någon som gör den varje dag, och du gör det medan patienten är kvar – så att beskedet kan ges till honom direkt i stället för att bli ett brev. Två saker gör samtalet användbart: att du refererar vad du faktiskt hört med hans ord, och att du säger vad du är osäker på i stället för att argumentera för ett utfall. Blir svaret nej har du en delad och dokumenterad bedömning att stå på. Blir svaret ja har du sluppit skicka honom till en väntsal på vinst och förlust. Att han hörde samtalet är inget problem – det är det mest respektfulla i hela besöket.' },
+
+            { text: 'Skicka honom till psykiatriska akutmottagningen nu. Ring en taxi och se till att han åker.',
+              tid: 3, ok: 'delvis', princip: 'rodflagga',
+              humor: 'spand', reaktion: 'Han reser sig halvvägs ur stolen.',
+              svar: 'Menar du allvar? Jag har ju inte gjort nåt.',
+              fx: { sakerhet: 6, allians: -10, agens: -12, tydlighet: -6 },
+              varfor: 'Ibland är det precis rätt, och då ska du inte tveka en sekund: pågående handling, uttalad förvirring eller psykos, kraftig påverkan, eller att du helt enkelt inte kan svara för att han lever i natt. Men det är inte gratis. Han vill inte, du kan inte tvinga eftersom kriterierna för tvång inte är uppfyllda, och en frivillig resa patienten inte vill göra slutar ofta i att han kliver av på vägen. Kommer han fram väntar han i flera timmar och skickas hem sent på kvällen – och nästa gång söker han inte. Att eskalera är ett verktyg, inte ett bevis på omsorg.' },
+
+            { text: 'Skriv en remiss till allmänpsykiatrin, märk den akut, och ge honom kopian med hem.',
+              tid: 2, ok: false, princip: 'plan',
+              humor: 'neutral', reaktion: 'Remissen är skriven på två minuter och ser bra ut.',
+              svar: 'Så då hör dom av sig?',
+              fx: { sakerhet: -16, tydlighet: -12 },
+              varfor: 'Det känns som en åtgärd och är en fördröjning. En remiss är en begäran om bedömning, inte en tid: den ska läsas, prioriteras och bedömas, och ordet akut i en remiss betyder olika saker på olika håll. Under tiden har Ronny ett papper i fickan och ingenting i kalendern. Remissen ska skickas – den är bara inte det som bär kvällen.' },
+
+            { text: 'Tidigarelägg psykologtiden till imorgon och nöj dig med det. Psykologen är den som ska göra utredningen ändå.',
+              tid: 2, ok: false, princip: 'triage-f',
+              humor: 'lattad', reaktion: 'Han verkar okej med det.',
+              svar: 'Imorgon, ja. Det är väl bra.',
+              fx: { allians: 8, sakerhet: -18, tydlighet: -8 },
+              varfor: 'Det här är LESS-svaret, och det är därför det är farligt. Modellen är byggd för ärenden där ett dygn inte spelar någon roll, och för dem är den bra. Här spelar dygnet roll. En psykologtid är dessutom inte en riskbedömning – det är en behandlingsinsats som förutsätter att någon redan bedömt att patienten kan vänta till dess. Den bedömningen är din, den är gjord, och den säger något annat. Flytta tiden också. Den är bara inte svaret på frågan om ikväll.' }
+          ] },
+
+        { typ: 'val',
+          humor: 'trott',
+          text: 'Kan jag inte bara få nåt så jag sover? Och papperet till chefen, han har frågat.',
+          fraga: 'Två saker han själv har bett om. Vad gör du med dem?',
+          tips: 'Det ena kan hjälpa i natt, skjuta upp en behandling eller bli metoden. Det andra är två minuters arbete – frågan är vad det är värt just idag.',
+          val: [
+            { text: 'Ta ställning till sömnen i klartext, och förskriv i så fall litet och kortvarigt med begränsat uttag. Vänta med antidepressiv behandling till uppföljningen om ett par dagar. Fråga om han sjukanmält sig – och säg att intyget inte är det som brådskar.',
+              tid: 3, ok: true, princip: 'grad',
+              humor: 'neutral', reaktion: 'Han ser förvånad ut när du säger att papperet kan vänta.',
+              svar: 'Så jag behöver inget intyg idag?',
+              fx: { tydlighet: 14, underlag: 12, allians: 8, sakerhet: 6 },
+              varfor: 'Tre små beslut som alla spelar roll. Sömnen: två–tre timmar per natt i tre veckor är i sig en riskförstärkare och att göra något åt den är verksamt – men mängden i handen är en del av risken, så förskriv litet, kortvarigt och med begränsat uttag, och säg varför. Att avstå helt är också ett svar, och då ska det sägas rakt, inte som "vi tar det sen". Behandlingen: att starta ett antidepressivum kan mycket väl bli rätt, men diagnosen är oklar så länge han dricker dagligen, effekten kommer först efter veckor, och de första veckorna hos en ung vuxen kräver täta kontakter. Det beslutet blir bättre om två dagar, när du vet om planen höll. Intyget: han har varit borta sedan i tisdags, arbetsgivaren betalar sjuklön de första fjorton dagarna och kan enligt sjuklönelagen som huvudregel begära läkarintyg först från och med dag åtta. Att kunna den regeln är det som låter dig rensa bordet utan att neka honom något. Fråga däremot om han sjukanmält sig – har han inte det finns ingen sjuklön att intyga för, och det märker han först om två veckor.' },
+
+            { text: 'Starta en SSRI idag och skriv en liten mängd sömnmedel, med återbesök om en vecka.',
+              tid: 3, ok: 'delvis', princip: 'evidens',
+              humor: 'neutral', reaktion: 'Han tar emot recepten.',
+              svar: 'Okej. Hur lång tid tar det innan det funkar?',
+              fx: { allians: 8, tydlighet: 4, sakerhet: -4 },
+              varfor: 'Fullt försvarbart, och många skulle göra det. Bilden talar för en depressiv episod och behandling ska starta. Det som gör det till andrahandsval idag är att den dagliga alkoholen gör både diagnosen och läkemedelseffekten svårvärderad, och att en vecka är lång tid när planen för ikväll ännu inte är prövad. En kortare första uppföljning kostar dig ingenting och gör beslutet bättre. Värt att diskutera i gruppen: startar ni antidepressivt vid första besöket när det finns suicidtankar, eller vid den första uppföljningen?' },
+
+            { text: 'Skriv ut en förpackning zopiklon och en SSRI, och boka uppföljning om fyra veckor.',
+              tid: 2, ok: false, princip: 'evidens',
+              humor: 'lattad', reaktion: 'Han ser lättad ut. Det här kände han igen som hjälp.',
+              svar: 'Tack. Då kanske jag får sova i alla fall.',
+              fx: { allians: 10, sakerhet: -18, tydlighet: -8 },
+              varfor: 'Fyra veckor är fel intervall i varje del av det här. Effekten av antidepressiv behandling kommer inte förrän efter flera veckor, och de första veckorna är de känsligaste hos en ung vuxen – han ska ses långt innan dess. Och du har just lämnat över två fulla förpackningar till en man som samma natt läste på om hur mycket som skulle behövas. Läkemedel kan vara rätt här, men mängd, uttag och nästa besök är delar av ordinationen, inte administrativa detaljer.' },
+
+            { text: 'Ingen medicin och inget intyg idag – vi tar det när läget är utrett.',
+              tid: 2, ok: false, princip: 'forvantan',
+              humor: 'sluten', reaktion: 'Han tittar ner i golvet.',
+              svar: 'Så jag kom hit för ingenting.',
+              fx: { allians: -12, agens: -8, tydlighet: -10, sakerhet: 2 },
+              varfor: 'Försiktighet utan besked är inte försiktighet, det är att skjuta upp. Två saker fattas. Sömnen är en riskfaktor du valde att inte göra något åt utan att säga varför, och ett nej som inte motiveras hörs som ett nej till honom. Och han fick inget besked om pengarna, så den oron går han hem med ovanpå allt annat – trots att svaret på just den frågan var enkelt och lugnande. Att avstå från sjukskrivning eller från en förskrivning är ett medicinskt ställningstagande som ska motiveras och dokumenteras, aldrig ett tyst nej.' }
+          ] },
+
+        { typ: 'val',
+          om: { saknas: 'ambivalens-fragad' },
+          humor: 'sluten',
+          text: 'Han drar upp dragkedjan och reser sig. "Tack ändå."',
+          fraga: 'Han är på väg ut och du vet fortfarande inte vad som håller emot. Vad gör du?',
+          tips: 'Frågan blir inte lättare av att komma sent. Den blir bara obligatorisk.',
+          val: [
+            { text: 'Be honom sätta sig igen och fråga rakt: vad är det som gjort att du inte gjort något, och håller det ikväll också?',
+              tid: 3, ok: true, princip: 'rodflagga', flagga: 'ambivalens-fragad',
+              humor: 'ledsen', reaktion: 'Han står kvar en stund. Sedan sätter han sig.',
+              svar: 'Mormor, väl. Hon skulle ta det jättehårt.',
+              fx: { sakerhet: 14, underlag: 8, allians: -4 },
+              varfor: 'Sent är oändligt mycket bättre än aldrig, och priset är litet: några minuter och att han märker att du tvekade. Utan svaret vet du inte vad planen ska byggas av, och en säkerhetsplan konstruerad av dina antaganden om vad som betyder något för honom håller inte till natten.' },
+
+            { text: 'Ställ frågan stående, i dörren.',
+              tid: 2, ok: 'delvis', princip: 'rodflagga', flagga: 'ambivalens-fragad',
+              humor: 'spand', reaktion: 'Han svarar med handen på handtaget.',
+              svar: 'Nej … jag vet inte. Mormor kanske. Hej då.',
+              fx: { sakerhet: 6, allians: -6 },
+              varfor: 'Frågan är ställd och det räknas – dörrhandtagsfrågor ger ofta besked. Men svaret du får i dörren är det korta, och du har ingenstans att ta det vidare. Att be någon sätta sig igen kostar två minuter och ändrar vad du får veta.' },
+
+            { text: 'Låt honom gå. Skriv "inga aktuella suicidtankar framkom" i journalen.',
+              tid: 1, ok: false, princip: 'signering',
+              humor: 'neutral', reaktion: 'Dörren går igen. Anteckningen tar tjugo sekunder.',
+              svar: '',
+              fx: { sakerhet: -26, underlag: -16 },
+              varfor: 'Du skriver att något inte framkom ur en fråga du aldrig ställde. Journalen är inte en sammanfattning av din känsla, den är en handling som nästa läkare fattar beslut på – och den här raden kommer att läsas som att risken bedömts och avfärdats. Det är samma sak som gör en intygsrad osann: en slutsats placerad där en observation ska stå. Skriv i stället vad du faktiskt gjorde och inte gjorde, också när det är obekvämt.' }
+          ] },
+
+        { typ: 'beslut',
+          banner: 'STÄLLNINGSTAGANDE',
+          fraga: 'Klockan är 14.50. Vad går Ronny härifrån med?',
+          tips: 'Du kan inte förutsäga natten. Du kan minska det som går att minska och se till att någon annan än han själv håller i nästa kontakt.',
+          val: [
+            { text: 'En skriven plan för kvällen och en tid imorgon: mormor inne i rummet inom den ram han godkänt, tabletterna omhändertagna, överenskommet att han inte dricker ikväll, återbesök hos dig om två dagar och ett telefonsamtal imorgon förmiddag från en namngiven person – och hela riskbedömningen dokumenterad med hans egna ord.',
+              ok: true, princip: 'plan', tid: 3,
+              fx: { sakerhet: 18, tydlighet: 14, underlag: 12, allians: 8, agens: 8 },
+              utfall: 'Mormor tar med sig sina tabletter hem och Ronny sover i hennes gästrum. Sjuksköterskan ringer 09.10 dagen efter och han svarar. Han kommer på återbesöket. Psykologtiden ligger på fredag.',
+              varfor: 'Det här är vad en vårdcentral faktiskt kan göra en eftermiddag, och det räcker längre än det ser ut. Fyra ben: någon vet, medlen är borta, alkoholen är avtalad bort för just ikväll, och nästa kontakt har ett namn, ett klockslag och en ansvarig som inte är han själv. Ovanpå det står bedömningen skriven, så att den går att ompröva av nästa läkare i stället för att behöva göras om från noll. Att du inte kan förutsäga natten är inte ett skäl att låta bli – det är skälet att göra just det som går att göra. Lägg också märke till vad som inte hände: ingen tvingades någonstans, inget vårdintyg skrevs, ingen skickades till en väntsal. Det är inte en mildare variant av rätt svar. Det är rätt svar.' },
+
+            { text: 'Skicka honom till psykiatriska akutmottagningen ändå. Hellre en gång för mycket.',
+              ok: 'delvis', princip: 'rodflagga', tid: 3,
+              fx: { sakerhet: 4, allians: -12, agens: -12, tydlighet: -6 },
+              utfall: 'Han säger ja i rummet. Mormor kör honom. De vänder efter tjugo minuter i väntsalen och åker hem.',
+              varfor: 'Ibland är det det enda rätta, och då ska det göras utan att tveka. Men hellre en gång för mycket är en princip som fungerar för den som skickar och sällan för den som skickas. Han samtycker inte på riktigt, du kan inte tvinga, och en frivillig transport patienten inte vill göra är ingen säkerhetsåtgärd – bara en överlämning som ser ut som en. Det som faktiskt skyddar honom går att göra här: färre tabletter i huset, någon som vet, en nykter kväll och en tid imorgon med ett namn på. Värt att diskutera i gruppen: var går er gräns, och vem hos er bestämmer den klockan tre på eftermiddagen?' },
+
+            { text: 'Intyg fjorton dagar, psykologtiden ligger kvar, och han hör av sig om det blir värre.',
+              ok: false, princip: 'avbryt', tid: 1,
+              fx: { allians: 10, sakerhet: -26, tydlighet: -16 },
+              utfall: 'Han går klockan 14.55 med ett intyg och en tid längre fram. Mormor får aldrig veta något. På söndagen svarar han inte i telefon.',
+              varfor: 'Flödet korrekt tillämpat på en patient flödet inte är byggt för. Varje steg är rimligt för sig: triagerat, uppringt, bokat till rätt profession, intyg utfärdat. Det som saknas är att någon tog ställning till om tempot höll – och det var den enda frågan i det här besöket som bara du kunde svara på. "Hör av dig om det blir värre" flyttar dessutom bedömningen till den som är sämst rustad att göra den, ensam klockan tre på natten, efter några öl.' },
+
+            { text: 'Skriv ett vårdintyg och begär polishandräckning, så vet du att han kommer fram.',
+              ok: false, princip: 'ansvar', tid: 2,
+              fx: { sakerhet: -20, allians: -20, agens: -16 },
+              utfall: 'Psykiatrin bedömer att kriterierna inte är uppfyllda och han skrivs ut samma kväll. Han kommer aldrig tillbaka till er.',
+              varfor: 'Det ser ut som det mest ansvarsfulla alternativet och det är det minst tillåtna. Förutsättningarna för tvångsvård är inte uppfyllda: ingen allvarlig psykisk störning i lagens mening, och han motsätter sig inte vård – han sitter i din stol och samtalar. Att intyga att kriterierna är uppfyllda när du vet att de inte är det är inte en försiktighetsåtgärd, det är ett osant intygande. Priset betalas av en 24-åring som hämtas av polis efter att ha berättat sanningen för en läkare. Nästa gång berättar han inte.' }
+          ] }
+      ]
     }
   ];
 
@@ -7447,9 +8182,9 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
             { text: 'Ny medicinsk bedömning och ställningstagande till återupptagen behandling', ratt: true, princip: 'plan',
               fx: { underlag: 12 },
               varfor: 'Fem månader utan behandling i ett pågående sjukfall är i sig ett skäl till omprövning.' },
-            { text: 'Avstämningsmöte med arbetsgivaren, efter samtycke, med Jonas närvarande', ratt: true, princip: 'ansvar',
+            { text: 'Trepartsmöte med Jonas och arbetsgivaren, efter dokumenterat samtycke – och en begäran till Försäkringskassan om avstämningsmöte', ratt: true, princip: 'ansvar',
               fx: { tydlighet: 12, agens: 8 },
-              varfor: 'Kontakten har legat nere i fyra månader. Ett avstämningsmöte är verktyget när planen står still – och Jonas ska vara med, inte omtalad.' },
+              varfor: 'Kontakten har legat nere i fyra månader. Håll isär de två mötena: trepartsmötet med patient och arbetsgivare kallar du till själv, avstämningsmötet kallar Försäkringskassan till i ett pågående ärende och det du kan göra är att begära det. Att veta vilket möte som är vems är skillnaden mellan att få till ett möte och att vänta på ett. Jonas ska vara med, inte omtalad.' },
             { text: 'Uppdaterad rehabplan med arbetsträning i små steg, ansvarig och datum', ratt: true, princip: 'plan',
               fx: { tydlighet: 14 },
               varfor: 'Efter elva månader krävs konkreta, små och daterade steg. Det första steget ska vara så litet att det är svårt att misslyckas med.' },
@@ -7468,7 +8203,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           banner: 'AVSLUT',
           fraga: 'Vad blir nästa steg?',
           val: [
-            { text: 'Avstämningsmöte inom två veckor, uppdaterad plan med daterade delmål, ny medicinsk bedömning bokad, och Jonas ringer själv sin chef i morgon med ditt stöd.',
+            { text: 'Trepartsmöte inom två veckor, begäran om avstämningsmöte skickad, uppdaterad plan med daterade delmål, ny medicinsk bedömning bokad, och Jonas ringer själv sin chef i morgon med ditt stöd.',
               ok: true, princip: 'plan', tid: 3,
               fx: { tydlighet: 16, agens: 12 },
               utfall: 'Arbetsträning startar sex veckor senare, två timmar två dagar i veckan.',
@@ -7483,6 +8218,253 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
               fx: { tydlighet: -16, agens: -12 },
               utfall: 'Vid månad tolv får Jonas avslag på sjukpenningen. Ingen plan finns.',
               varfor: 'Elva månader blev tolv utan att något ändrades. Det är så ett sjukfall slutar med både ohälsa och utan försörjning.' }
+          ] }
+      ]
+    },
+
+    /* ================================================================
+       MIRIAM – bokad hit på triagens 'delvis'-val i ssk-miriam.
+       Inte sjukskriven, inget sjukfall, ingenting att koordinera.
+       Fallet som lär ut var rehabkoordinatorns uppdrag börjar och
+       slutar – och att ett nej ändå måste innehålla något.
+       Låses upp när kampanjen är klar. Endast övningsläge.
+       ================================================================ */
+    {
+      id: 'rko-miriam',
+      roll: 'rehabkoordinator',
+      titel: 'Bokat besök, tisdag 14.30',
+      patient: 'miriam',
+      lage: 'rum',
+      minuter: 28,
+      svarighet: 3,
+      laser: 'oplanerat',
+      endastDrill: true,
+      principer: ['ansvar', 'forvantan', 'dorr', 'samtycke', 'evidens', 'agens', 'uppfoljning', 'bedda-b', 'sjukdomskrav'],
+      journal: [
+        ['Ärende', 'Triagerad av sjuksköterska i chatt i fredags. Bokad hit med texten "stöd i dialogen med arbetsgivaren".'],
+        ['Noterat i triagen', 'Ny chef sedan januari. Fråntagen sina arbetsuppgifter, kallas inte till enhetens möten. Sover, äter och tränar som vanligt. Nekar tankar på att inte vilja leva. Utför de uppgifter hon får.'],
+        ['Sjukskrivning', 'Ingen. Inget pågående sjukfall. Ingen sjukanmälan hos arbetsgivaren.'],
+        ['Tidigare', 'Inga kontakter för psykisk ohälsa. Senaste besök 2022, öroninflammation. Inga läkemedel.'],
+        ['Arbete', 'Teamledare, kommunal förvaltning. Samma enhet i nitton år.'],
+        ['Samtycke', 'Ej taget. Ingen kontakt med tredje part har förekommit.']
+      ],
+      intro: [
+        'Tisdag 14.30. Tiden är en av dem du håller för uppföljning av sjukskrivna. I kallelsen står det "stöd i dialogen med arbetsgivaren".',
+        'Miriam Sjödin kommer in med en pärm under armen och lägger den på bordet innan hon sätter sig.'
+      ],
+
+      beats: [
+
+        { typ: 'replik', humor: 'spand',
+          text: 'Sköterskan sa att sjukskrivning inte gick, men att du hjälper folk med arbetsgivaren. Jag har skrivit ner allt sedan i februari. Varje möte jag inte blivit kallad till, varje uppgift som flyttats. Kan du ta det med honom?' },
+
+        { typ: 'val',
+          fraga: 'Hur ramar du in besöket?',
+          tips: 'Hon kom hit med en förväntan som någon annan skapade. Den behöver justeras innan ni börjar – annars justeras den av sig själv, senare, och då som en besvikelse.',
+          val: [
+            { text: 'Innan vi börjar måste jag vara ärlig om vad jag är. Jag samordnar vård och arbetsliv för den som är sjukskriven, och jag ringer inte chefer åt patienter – det är din relation och den ska du ha kvar. Sköterskans bedömning tänker jag varken göra om eller överpröva. Men du sitter här nu, och jag tänker att vi använder tiden till att reda ut vem som faktiskt äger det du beskriver, och vad du kan göra med det. Går det?',
+              tid: 4, ok: true, princip: 'forvantan',
+              humor: 'neutral', reaktion: 'Miriam drar handen från pärmen. "Så vad kan du då?"',
+              svar: 'Okej. Så vad kan du göra, då?',
+              fx: { tydlighet: 18, agens: 8, allians: 4 },
+              varfor: 'Tre saker på trettio sekunder: vad du är, vad du inte gör, och vad tiden ska användas till. En förväntan som inte justeras i början kostar dubbelt i slutet – då står ditt eget uteblivna löfte i vägen för det besked hon ska få. Att du samtidigt säger att du inte omprövar sköterskans bedömning stänger den vanligaste flykten: att patienten söker en ny bedömare tills någon säger ja.' },
+
+            { text: 'Berätta från början, i din takt. Jag har tjugoåtta minuter och jag lyssnar.',
+              tid: 5, ok: 'delvis', princip: 'bedda-e',
+              humor: 'oppen', reaktion: 'Miriam öppnar pärmen på första fliken.',
+              svar: 'Tack. Då börjar jag i februari. Det första var att jag inte fick vara med på planeringsdagen...',
+              fx: { allians: 12, tydlighet: -10 },
+              varfor: 'Ett gott bemötande som ändå kostar. Du har inte sagt vad besöket kan mynna ut i, så hon fyller själv i svaret – och du har öppnat pärmen, alltså utredningen av konflikten. Om tjugo minuter är materialet stort, förväntan hög och tiden slut. Att lyssna är rätt; att lyssna innan ramen är satt gör att lyssnandet blir ett löfte.' },
+
+            { text: 'Låt mig läsa igenom pärmen, så ringer jag honom i veckan. Det här ska inte få fortsätta.',
+              tid: 3, ok: false, princip: 'ansvar',
+              humor: 'lattad', reaktion: 'Miriam ser lättad ut och skjuter fram pärmen.',
+              svar: 'Tack. Äntligen någon som gör något.',
+              fx: { allians: 14, agens: -18, sakerhet: -14, tydlighet: -12 },
+              varfor: 'Rummets varmaste ögonblick och tre fel på en gång. Du tar över en relation hon ska ha kvar när du är borta. Du gör vården till part i en arbetsrättslig fråga där du hört ena sidan. Och du planerar en kontakt med tredje part utan att samtycket ens kommit på tal – där sekretessen bryts av hennes samtycke, aldrig av att du tycker att saken är angelägen. Fråga dig dessutom vad du skulle säga i luren: du har ingen sjukdom att beskriva och ingen funktionsnedsättning att beskriva. Det enda du kan förmedla är hennes berättelse, och den kan hon förmedla själv, med större tyngd.' },
+
+            { text: 'Jag arbetar bara med sjukskrivna patienter. Du är felbokad hit och får ta det här med din arbetsgivare.',
+              tid: 1, ok: false, princip: 'dorr',
+              humor: 'sluten', reaktion: 'Miriam lägger handen på pärmen och reser sig halvvägs.',
+              svar: 'Ni skickade hit mig.',
+              fx: { allians: -16, agens: -10, tydlighet: -4 },
+              varfor: 'Uppdragsbedömningen är i sak riktig och slutsatsen är ändå fel. Felbokningen är vår, inte hennes, och den går inte att lämna tillbaka till patienten. "Ta det med din arbetsgivare" är dessutom ingen dörr när det är arbetsgivaren som är problemet. Hon sitter redan i rummet – tiden är förbrukad oavsett vad du gör med den.' }
+          ] },
+
+        { typ: 'kontroll',
+          banner: 'MANDATET',
+          fraga: 'Miriam är inte sjukskriven och har inget pågående sjukfall. Vad säger ditt uppdrag om att hon sitter här?',
+          tidFel: 2,
+          princip: 'ansvar',
+          val: [
+            { text: 'Lagen om koordineringsinsatser gäller sjukskrivna patienter, så det här är inte en koordineringsinsats. Om du får ta emot henne alls avgörs av vårdcentralens eget uppdrag – och även om du får finns det inget sjukfall att koordinera.',
+              ratt: true },
+            { text: 'Lagen förbjuder mig att träffa henne. Besöket ska avbrytas.',
+              ratt: false,
+              varfor: 'Lagen ålägger regionen en skyldighet mot sjukskrivna patienter. Den säger ingenting om att andra inte får tas emot. I remissarbetet ville flera myndigheter och organisationer att skyldigheten skulle gälla även förebyggande, och regeringen valde att inte införa den – det är ett nej till ett skallkrav, inte ett förbud. Skillnaden är hela poängen: det som avgör om du får sitta här är din vårdgivares uppdrag, inte lagens ordalydelse.' },
+            { text: 'Hon riskerar att bli sjukskriven, alltså är hon min patient.',
+              ratt: false,
+              varfor: 'Förebyggande koordinering finns på riktigt – flera regioner har uttryckligen med den som riskerar sjukskrivning i uppdraget, och där kan det vara helt rätt. Men den vilar på ett lokalt beslut, inte på lagen, och den förutsätter att risken går att påverka med vårdens medel. Här har sköterskan redan konstaterat att det inte finns något sjukdomstillstånd. Risken ligger i arbetsmiljön, och den förebyggs av arbetsgivaren.' },
+            { text: 'Sjuksköterskan har bokat hit henne, alltså är hon triagerad rätt och mitt uppdrag följer av bokningen.',
+              ratt: false,
+              varfor: 'En bokning är inte ett mandat. Den som tar emot ett ärende måste själv kunna säga vad hen gör med det, annars vandrar ärendet vidare i huset tills det tar slut hos någon som inte heller kan säga det. Att en kollega tvekade är ett skäl att titta noga, inte ett skäl att sluta titta.' }
+          ],
+          forklaring: 'Lagen om koordineringsinsatser för sjukskrivna patienter (2019:1297) ger regionen en skyldighet att erbjuda insatser till sjukskrivna patienter, när det behövs för att främja återgång till eller inträde i arbetslivet. Miriam är inte sjukskriven, så skyldigheten är inte utlöst – och lagen förbjuder inte att hon tas emot ändå. Frågan avgörs av ditt lokala uppdrag, och den skiljer sig mellan regioner och mellan vårdcentraler. Två saker till, som gör svaret skarpare än en formalitet. Det första: även om du får ta emot henne finns här inget att koordinera. Ingen sjukskrivning, ingen rehabplan att skriva, ingen behandling att samordna med och ingen funktionsbeskrivning att ta med till en arbetsgivare. Det andra: tiden du lägger här är tid som tillhör de sjukskrivna patienter du faktiskt har en skyldighet mot. Det var invändningen mot hela lagen från flera remissinstanser – undanträngning – och den blir konkret först i ett rum som det här. Det betyder inte att du ska köra ut henne. Det betyder att besöket ska vara kort, avgränsat och sluta i något hon kan använda, inte i ett ärende hos dig.' },
+
+        { typ: 'replik', humor: 'spand',
+          text: 'Nitton år har jag varit där. Nitton. Och nu sitter jag i ett rum på vårdcentralen och får höra att det inte hör hit heller.' },
+
+        { typ: 'flera',
+          banner: 'DET DU FAKTISKT BEHÖVER VETA',
+          fraga: 'Du hinner tre frågor innan ni landar besöket. Välj tre.',
+          antal: 3,
+          tidPer: 2,
+          tips: 'Du ska inte utreda konflikten. Du ska veta om bilden rört sig sedan i fredags, vad hon redan gjort, och vem som finns på hennes sida.',
+          val: [
+            { text: 'Har något ändrat sig sedan du chattade med oss i fredags – sömnen, orken, hur söndagskvällarna känns?',
+              ratt: true, princip: 'bedda-b', fx: { underlag: 12, sakerhet: 10 },
+              varfor: 'Fyra dagar är kort, och det är precis därför frågan är billig. Du misstror inte sköterskans bedömning, du sätter ett datum på den. En reaktion på en pågående kränkning kan över tid utvecklas till ett sjukdomstillstånd, och det sker sällan med ett larm – det börjar med att sömnen viker och att söndagskvällen blir outhärdlig. Frågan tar tjugo sekunder och den är det enda som gör "hör av dig om det ändras" till något annat än en artighet.' },
+            { text: 'Vad har du redan gjort åt det här, och vad hände då?',
+              ratt: true, princip: 'agens', fx: { agens: 12, underlag: 10 },
+              varfor: 'Hon har en pärm. Antingen har hon redan tagit steg som ingen följt upp, eller så har hon samlat i tysthet i sju månader – och de två lägena kräver helt olika råd. Det är dessutom den enda frågan i listan som utgår från att hon är någon som kan handla, och det är den utgångspunkten hennes chef har ägnat sju månader åt att ta ifrån henne.' },
+            { text: 'Vet du vem som är skyddsombud hos er, och har er förvaltning företagshälsovård?',
+              ratt: true, princip: 'ansvar', fx: { tydlighet: 14, agens: 8 },
+              varfor: 'Frågan som avgör vad ditt avslut kan innehålla. Finns ett skyddsombud finns redan en person med rätt att skriftligt begära åtgärder av arbetsgivaren, få besked, och gå vidare till Arbetsmiljöverket om svaret uteblir – det är den enda part i det här som kan tvinga fram ett svar. Företagshälsovården är arbetsgivarens resurs och byggd för just det här. Lägg märke till att frågan gäller vem skyddsombudet är, inte om hon är fackligt ansluten. Facklig tillhörighet är en särskilt skyddad personuppgift och har inget i en journal att göra – och du behöver inte veta det för att kunna säga att facket finns.' },
+            { text: 'Vad sa chefen exakt på mötet i mars?',
+              ratt: false, princip: 'ansvar', fx: { underlag: -6, sakerhet: -6 },
+              varfor: 'Nu utreder du konflikten. Du hör ena sidan, du har ingen befogenhet att pröva den andra, och allt du skriver ner blir en partsinlaga om en namngiven chef i en journal som ska följa Miriam i decennier. I chatten kostade den frågan lite. Här kostar den mer: pärmen ligger på bordet och hon vill inget hellre än att gå igenom den med dig.' },
+            { text: 'Skulle du vilja att jag följer med på ett möte med din chef?',
+              ratt: false, princip: 'ansvar', fx: { agens: -12, tydlighet: -10 },
+              varfor: 'Ett erbjudande förklätt till en fråga, och ett du inte kan hålla. Det finns inget sjukfall, inget samtycke och ingenting från vården att säga på mötet. Har du väl frågat är löftet givet, och att ta tillbaka det kostar mer förtroende än att aldrig ha erbjudit det.' },
+            { text: 'Hur mycket skulle du behöva vara borta för att orka?',
+              ratt: false, princip: 'dorr', fx: { tydlighet: -12 },
+              varfor: 'Förutsätter en sjukskrivning som ingen bedömt och som du dessutom inte beslutar om. Efter den frågan är längden förhandlad och varje annat besked låter som ett svek.' },
+            { text: 'Har du funderat på att söka något annat? Nitton år är länge.',
+              ratt: false, princip: 'agens', fx: { agens: -10, allians: -6 },
+              varfor: 'Ett råd förklätt till en fråga, och det billigaste sättet att lägga problemet tillbaka på den som drabbats av det. Det kan mycket väl bli hennes slutsats – men det är hennes att komma fram till, och den dag hon gör det ska det vara ett val och inte en reträtt.' }
+          ] },
+
+        { typ: 'replik', humor: 'spand',
+          text: 'Nej, det är sig likt. Jag sover, jag springer på tisdagar och torsdagar. Jag är inte ledsen, jag är arg. Och jo – jag mejlade HR i maj. De svarade att jag skulle prata med min närmaste chef. Det var hela svaret. Skyddsombud har vi, Lasse på andra våningen tror jag. Företagshälsovård finns, men dit ska man gå via chefen.' },
+
+        { typ: 'val',
+          humor: 'spand',
+          text: 'Kan du inte i alla fall skriva något? Ett papper där det står att jag mår dåligt av det här. Då kanske de tar det på allvar.',
+          fraga: 'Vad svarar du?',
+          tips: 'Fråga dig vad ett papper från vården faktiskt skulle innehålla – och vad det skulle göra med frågan om vems problemet är.',
+          val: [
+            { text: 'Nej, och jag ska säga varför. Allt jag kunde skriva är det du berättat för mig, och det står redan bättre i din egen pärm. Ett papper från vården skulle dessutom göra det här till en fråga om din hälsa i stället för om deras arbetsmiljö, och det är precis den flytten du inte vill ha. Det som väger hos er är en skriftlig begäran från skyddsombudet – den måste arbetsgivaren svara på.',
+              tid: 4, ok: true, princip: 'ansvar',
+              humor: 'neutral', reaktion: 'Miriam blir tyst. Sedan: "Måste de svara?"',
+              svar: 'Måste de svara? Det visste jag inte.',
+              fx: { tydlighet: 16, agens: 16, sakerhet: 8 },
+              varfor: 'Nejet har ett skäl som handlar om henne och inte om regler, och det byts direkt mot ett verktyg som biter hårdare än det hon bad om. Mekanismen är värd att se: ett intyg om att någon mår dåligt av sin arbetsplats flyttar frågan från arbetsmiljö till hälsa, och därmed från arbetsgivarens bord till hennes. Skyddsombudets framställan gör tvärtom – den tvingar fram ett skriftligt besked från den som faktiskt äger frågan, och uteblir beskedet finns Arbetsmiljöverket.' },
+
+            { text: 'Jag skriver en anteckning om det du berättat, så kan du begära ut din journal själv och visa den var du vill.',
+              tid: 3, ok: 'delvis', princip: 'samtycke',
+              humor: 'lattad', reaktion: 'Miriam nickar. "Bra. Då står det svart på vitt."',
+              svar: 'Bra. Då står det i alla fall svart på vitt någonstans.',
+              fx: { allians: 8, sakerhet: -8, underlag: -6 },
+              varfor: 'Juridiskt renare än det ser ut – hon bär själv ut uppgiften, ingen sekretessprövning behövs och ingen tredje part kontaktas. Problemet är innehållet. Ena partens anklagelser mot en namngiven chef, nedskrivna av vården, får vårdens auktoritet utan vårdens underlag, och de blir kvar i journalen i decennier. Skilj på två saker: att besöket, beslutet och den information du gett ska journalföras är självklart, och det ska det. Att journalföra konflikten är något annat. Värt att diskutera i gruppen: hur skriver ni om en arbetsplatskonflikt som ni samtidigt bedömt inte är ett vårdärende?' },
+
+            { text: 'Jag kan ringa HR och berätta hur det här påverkar dig. Ibland lyssnar de mer på oss.',
+              tid: 3, ok: false, princip: 'samtycke',
+              humor: 'lattad', reaktion: 'Miriam ler för första gången.',
+              svar: 'Skulle du? Tack.',
+              fx: { allians: 12, sakerhet: -18, agens: -14 },
+              varfor: 'Meningen "ibland lyssnar de mer på oss" är sann, och det är just därför den är farlig. Du planerar att lämna uppgifter om en patient till tredje part utan dokumenterat samtycke, och ett samtycke hade gjort det tillåtet men inte klokt: vad ska du säga? Du har ingen sjukdom att beskriva, ingen funktion att beskriva och ingen plan att förankra. Kvar blir att vården gått in som part i hennes anställning, att din auktoritet lånats ut till ena sidan i en konflikt du inte utrett – och att hon nästa gång kan det ännu lite mindre själv.' },
+
+            { text: 'Jag kan inte skriva något, men jag bokar in dig hos vår läkare så att du åtminstone får en bedömning.',
+              tid: 2, ok: false, princip: 'sjukdomskrav',
+              humor: 'lattad', reaktion: 'Miriam: "Okej. När då?"',
+              svar: 'Okej. När kan jag komma?',
+              fx: { allians: 8, tydlighet: -14, underlag: -10 },
+              varfor: 'Det respektablaste sättet att göra det här till hennes sjukdom. Bedömningen är redan gjord och svaren ligger framför dig: hon sover, äter, tränar och utför det hon får utföra. Läkartiden skulle användas till att säga samma sak en gång till, tio dagar senare, till någon som under tiden hunnit sjukanmäla sig. Att skicka vidare när man känner obehag är inte försiktighet – det är obehaget som fattar beslutet.' }
+          ] },
+
+        { typ: 'kontroll',
+          banner: 'OM DET ÄNDÅ BLIR EN ARBETSGIVARKONTAKT',
+          fraga: 'Miriam frågar: "Och om jag blir sjukskriven längre fram – då kan du väl vara med på ett möte?" Vad krävs för att du ska få tala med hennes arbetsgivare den dagen?',
+          tidFel: 2,
+          princip: 'samtycke',
+          val: [
+            { text: 'Ett dokumenterat och avgränsat samtycke – vem du får tala med, om vad, och hur länge det gäller – och något från vården att faktiskt säga: en beskrivning av funktion och behov, inte hennes berättelse om chefen.',
+              ratt: true },
+            { text: 'Att hon är sjukskriven. Sjukskrivningen ger dig rätt att kontakta arbetsgivaren.',
+              ratt: false,
+              varfor: 'Sjukskrivningen utlöser regionens skyldighet att erbjuda dig som stöd. Den ger ingen rätt att lämna ut uppgifter. Sekretessen bryts av hennes samtycke, aldrig av ditt uppdrag och aldrig av mottagarens behov.' },
+            { text: 'Ett generellt samtycke till kontakt med berörda aktörer, taget vid första besöket.',
+              ratt: false,
+              varfor: 'Vanligt, bekvämt och för brett. Ett samtycke som inte säger vem, om vad och hur länge kan hon varken överblicka eller i praktiken ta tillbaka – och du vet inte var gränsen går den dag någon ställer en fråga du inte tänkt på. Ett samtycke ska gå att läsa upp för den det gäller utan att någon blir förvånad.' },
+            { text: 'Arbetsgivarens rehabiliteringsansvar. Chefen är skyldig att agera och måste därför få veta vad som gäller.',
+              ratt: false,
+              varfor: 'Ansvaret är verkligt och det ger ingen rätt till uppgifter från vården. Arbetsgivaren ska få veta vad som behövs för att anpassa arbetet – vilka moment som inte fungerar och vad som skulle hjälpa – och det kan Miriam förmedla själv eller du med hennes samtycke. Diagnosen ska aldrig dit.' }
+          ],
+          forklaring: 'Rätt svar har två halvor och den andra glöms nästan alltid. Formen: samtycket ska vara dokumenterat och avgränsat i vem, vad och hur länge, och ett samtycke som är taget i förväg för allt är i praktiken inget samtycke. Innehållet: du måste ha något att säga. Ett möte där vården beskriver funktion och behov är användbart. Ett möte där vården återger patientens beskrivning av sin chef är ett partsmöte med en extra part. Lägg också märke till vad frågan gjorde med rummet. Hon frågade om ett scenario där hon är sjukskriven, och om du svarar utan att säga att det är hypotetiskt har du just bekräftat att sjukskrivningen är på väg. Svara på frågan – och säg samtidigt att den beskriver ett annat läge än det ni är i.' },
+
+        { typ: 'val',
+          humor: 'orolig',
+          text: 'Och om det inte blir bättre? Om jag går så här ända till jul?',
+          fraga: 'Vad svarar du?',
+          tips: 'Ett nej som öppnar en dörr måste säga när dörren gäller. "Hör av dig om det blir värre" är inte ett kriterium – det är ett ord var och en tolkar själv.',
+          val: [
+            { text: 'Då vill jag att du hör av dig, och jag ska vara konkret om vad jag menar. Inte "om det blir värre" – utan: om du börjar sova dåligt, om du slutar springa, om söndagskvällarna blir outhärdliga, eller om du märker att du inte kommer igång ens när du varit ledig en vecka. Då är det något annat än en dålig arbetsplats och då är det vår fråga. Och skulle det någon gång kännas som att du inte orkar leva ringer du samma dag.',
+              tid: 4, ok: true, princip: 'dorr',
+              humor: 'neutral', reaktion: 'Miriam skriver ner det på baksidan av pärmen.',
+              svar: 'Sömnen, löpningen, söndagarna. Okej. Det kan jag hålla koll på.',
+              fx: { tydlighet: 18, agens: 12, sakerhet: 12, allians: 8 },
+              varfor: 'Fyra namngivna tecken hon själv kan avläsa, plus ett som inte tål väntan. Det är skillnaden mellan att avvakta och att missa något: du avvaktar med ett kriterium, inte med en förhoppning. Kriterierna är dessutom valda så att de fångar just det som skulle förändra bedömningen – att besvären följer med hem och överlever ledigheten. Och lägg märke till att hon skriver ner dem. Det är hon som blir sin egen uppföljning, vilket är den enda uppföljning som finns när det inte finns något ärende.' },
+
+            { text: 'Jag ringer dig om en månad och hör hur det gått.',
+              tid: 2, ok: 'delvis', princip: 'uppfoljning',
+              humor: 'lattad', reaktion: 'Miriam ser lättad ut. "Skönt att någon hör av sig."',
+              svar: 'Skönt. Då vet jag att någon hör av sig i alla fall.',
+              fx: { allians: 12, tydlighet: 4, agens: -8 },
+              varfor: 'Genuint försvarbart, och det är därför det är svårt. Utfrysning och kränkande särbehandling är kända riskfaktorer, och ett samtal om en månad fångar upp den som annars aldrig hör av sig – de som fastnar är nästan alltid de som inte hörde av sig. Priset är två saker: du gör henne till ett ärende hos dig utan sjukfall, och du flyttar initiativet från henne till dig i just det ögonblick hela poängen är att hon ska agera. Värt att diskutera i gruppen: ringer ni uppföljande samtal till patienter som inte har ett sjukfall, och vems tid är det?' },
+
+            { text: 'Håller det i sig till jul får vi nog titta på en sjukskrivning ändå. Ingen orkar hur länge som helst.',
+              tid: 2, ok: false, princip: 'sjukdomskrav',
+              humor: 'lattad', reaktion: 'Miriam slappnar av i axlarna för första gången.',
+              svar: 'Okej. Då vet jag att det finns en gräns i alla fall.',
+              fx: { allians: 14, agens: -18, tydlighet: -16, underlag: -10 },
+              varfor: 'Rummets snällaste mening och besökets dyraste. Du har gjort sjukskrivning till belöningen för att ingenting händer, i ett ärende där det saknas sjukdom och där du inte ens är den som beslutar. Från och med nu har Miriam ett datum att härda ut till och ett skäl att inte ringa skyddsombudet – för blir det värre går det ju att lösa här. Och den dag hon kommer tillbaka i december är det någon annan som ska säga nej till ett löfte du gav.' },
+
+            { text: 'Det vet vi inte idag. Vi får ta det när det händer.',
+              tid: 1, ok: false, princip: 'forvantan',
+              humor: 'sluten', reaktion: 'Miriam stänger pärmen.',
+              svar: 'Mm.',
+              fx: { tydlighet: -12, allians: -8, agens: -6 },
+              varfor: 'Sant och oanvändbart. Hon frågade efter en gräns och fick veta att det inte finns någon. Det som återstår för henne är att gissa var gränsen går, och de flesta gissar för sent.' }
+          ] },
+
+        { typ: 'beslut',
+          banner: 'AVSLUT',
+          fraga: 'Hur avslutar du?',
+          tips: 'Alla besök ska inte bli ett ärende. Men inget besök får sluta tomt.',
+          val: [
+            { text: 'Avsluta kontakten idag: sammanfatta vad du är och inte är, ge Lasse som adressat, ett första steg som är hennes, och kriterierna för när det blir vårdens fråga. Journalför besöket, beslutet och given information – inte konflikten.',
+              ok: true, princip: 'ansvar', tid: 3,
+              fx: { tydlighet: 16, agens: 14, sakerhet: 10 },
+              utfall: 'Miriam pratar med Lasse på fredagen. Tre veckor senare ligger en skriftlig begäran om åtgärder hos förvaltningen. I journalen står vad hon sökt för, vilket besked hon fått och när hon ska höra av sig – ingenting om chefen.',
+              varfor: 'Det här är fallet där rehabkoordinatorn gör mest nytta genom att inte öppna ett ärende. Miriam går härifrån med tre saker hon inte hade när hon kom: besked om varför det hon beskriver inte är något vården kan sjukskriva för, namnet på den som är skyldig att svara henne, och fyra tecken att bevaka. Att avsluta är ett beslut och ska dokumenteras som ett – vad hon sökte för, vad du beslutat och varför, och vad hon fått för information. Att det tog tjugo minuter i stället för ett halvårs ärende är inte snålhet; det är att tiden fortsätter tillhöra dem du har en skyldighet mot.' },
+
+            { text: 'Avsluta med besked och hänvisning, och boka samtidigt ett kort uppföljande telefonsamtal om en månad.',
+              ok: 'delvis', princip: 'uppfoljning', tid: 3,
+              fx: { tydlighet: 8, allians: 8, agens: -6 },
+              utfall: 'Miriam väntar in ditt samtal innan hon gör något. Skyddsombudet kontaktas först i november.',
+              varfor: 'Omtänksamt, försvarbart och priset syns först i utfallet: så länge vården håller i tråden är det vården hon väntar på. Gör ni det ändå – och det finns goda skäl – säg då uttryckligen att samtalet inte ersätter hennes egna steg, och inled samtalet med vad hon gjort, inte med hur hon mår. Värt att diskutera i gruppen: vem betalar den tiden, och vilken sjukskriven patient fick vänta för den?' },
+
+            { text: 'Öppna ett koordineringsärende: samtyckesblankett, rehabplan och kallelse till avstämningsmöte med arbetsgivaren.',
+              ok: false, princip: 'plan', tid: 4,
+              fx: { tydlighet: -12, sakerhet: -16, agens: -10 },
+              utfall: 'Arbetsgivaren svarar inte. Vid tredje besöket säger Miriam att hon nog måste bli sjukskriven för att någon ska ta det på allvar.',
+              varfor: 'Varje enskilt verktyg är rätt verktyg – i ett sjukfall. Här finns inget sjukfall, ingen plan att skriva och ingen sjukskrivning att koordinera mot, och till ett avstämningsmöte kallar Försäkringskassan i ett pågående ärende; det är inget forum för en arbetsplatskonflikt. Det du byggt är en vårdapparat runt en arbetsmiljöfråga, och den lär Miriam en sak med stor precision: vägen till att bli tagen på allvar går genom att bli sjukare.' },
+
+            { text: 'Skicka tillbaka ärendet till triagen med noteringen att patienten är felbokad.',
+              ok: false, princip: 'dorr', tid: 1,
+              fx: { allians: -14, tydlighet: -10 },
+              utfall: 'Miriam får ett meddelande i vårdappen tre dagar senare om att ärendet avslutats. Hon söker på nytt i oktober, och i januari.',
+              varfor: 'Mandatbedömningen är riktig och den kommer för sent för att vara till någon nytta. Hon satt redan i rummet, felet var vårdens och det går inte att lämna tillbaka till henne. Att vara den som säger nej utan att vara den som säger något annat är den dyraste rollen i huset: nästa gång kommer hon tillbaka med mer symtom, för det är det språk hon lärt sig att vi lyssnar på.' }
           ] }
       ]
     }

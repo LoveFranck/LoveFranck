@@ -490,7 +490,7 @@
           banner: 'STÄMMER DIAGNOSEN MED BILDEN?',
           fraga: 'Journalen säger tumbasartros. Carina säger tummar OCH handleder, båda sidor. Vad frågar du innan du sorterar ärendet?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Om hon är stel på morgonen och i så fall hur länge, om lederna är svullna, och om fler leder är med.', ratt: true },
             { text: 'Ingenting – diagnosen är redan ställd av läkare.', ratt: false,
@@ -999,7 +999,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['rodflagga', 'bedda-b', 'dorr'],
+      principer: ['rodflagga', 'bedda-b', 'dorr', 'skriftgrans', 'overlamning'],
       journal: [
         ['Kontaktorsak', 'Ryggskott efter lyft, begär sjukskrivning 2 veckor'],
         ['Yrke', 'Byggnadsarbetare'],
@@ -1054,7 +1054,7 @@
           banner: 'DET SOM REDAN STÅR I ÄRENDET',
           fraga: 'I gårkvällens formulär står ett samlat "Nej" på frågeblocket om blås- och tarmpåverkan, domning i grenen, feber och kraftnedsättning. Vad är det svaret värt?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'skriftgrans',
           val: [
             { text: 'Det är ett svar på ett block, avgivet i går. Jag ställer frågan om blås- och tarmfunktion ensam, konkret, och om läget idag.', ratt: true },
             { text: 'Det är journalfört och besvarat. Jag går vidare till bedömningen.', ratt: false,
@@ -1131,7 +1131,7 @@
           banner: 'BESLUT OM VÅRDNIVÅ',
           fraga: 'Vad gör du nu?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'overlamning',
           fx: { sakerhet: 15 },
           val: [
             { text: 'Detta talar för cauda equina-misstanke. Jag ringer upp honom omgående och ärendet ska till akutmottagning för bedömning idag.', ratt: true },
@@ -1301,7 +1301,7 @@
           banner: 'GÅR DET ATT SJUKSKRIVA?',
           fraga: 'Miriam sover, äter och tränar som vanligt, och utför det hon får utföra. Vad är det som saknas för att sjukskrivning ska vara möjlig?',
           tidFel: 2,
-          princip: 'evidens',
+          princip: 'sjukdomskrav',
           val: [
             { text: 'En arbetsförmåga som är nedsatt av sjukdom. Miriams arbetsförmåga är inte nedsatt – det är arbetsplatsen som är outhärdlig.', ratt: true },
             { text: 'Ingenting. Hon far uppenbart illa, och det räcker som skäl.', ratt: false,
@@ -1398,7 +1398,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['rodflagga', 'dorr', 'samtycke', 'bedda-a'],
+      principer: ['rodflagga', 'dorr', 'samtycke', 'bedda-a', 'overlamning'],
       journal: [
         ['Kontaktorsak', 'Sömnsvårigheter, frågar om sjukskrivning'],
         ['Yrke', 'Lagerarbetare, deltid'],
@@ -1513,7 +1513,7 @@
           banner: 'BESLUT OM VÅRDNIVÅ',
           fraga: 'Vad gör du?',
           tidFel: 2,
-          princip: 'rodflagga',
+          princip: 'overlamning',
           fx: { sakerhet: 12 },
           val: [
             { text: 'Läkarbedömning idag. Jag släpper inte kontakten förrän tid och tidpunkt är bestämda och han har sagt att han kommer.', ratt: true },
@@ -1597,7 +1597,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['bedda-b', 'rodflagga', 'triage-akt', 'dorr'],
+      principer: ['bedda-b', 'rodflagga', 'triage-akt', 'dorr', 'hypotes'],
       journal: [
         ['Kontaktorsak', 'Artros i händerna, önskar hjälpmedel och skenor'],
         ['Yrke', 'Förskolechef'],
@@ -1688,7 +1688,7 @@
           banner: 'VEM STÄLLDE DIAGNOSEN?',
           fraga: 'Ärendet heter "artros i händerna". Vad står det egentligen i journalen?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Ingen diagnos är ställd. Artros är Yvonnes egen förklaring – och den har blivit ärendets rubrik.', ratt: true },
             { text: 'Artros är rimligt i hennes ålder, så det duger som arbetshypotes.', ratt: false,

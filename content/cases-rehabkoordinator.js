@@ -250,9 +250,9 @@
             { text: 'Ny medicinsk bedömning och ställningstagande till återupptagen behandling', ratt: true, princip: 'plan',
               fx: { underlag: 12 },
               varfor: 'Fem månader utan behandling i ett pågående sjukfall är i sig ett skäl till omprövning.' },
-            { text: 'Avstämningsmöte med arbetsgivaren, efter samtycke, med Jonas närvarande', ratt: true, princip: 'ansvar',
+            { text: 'Trepartsmöte med Jonas och arbetsgivaren, efter dokumenterat samtycke – och en begäran till Försäkringskassan om avstämningsmöte', ratt: true, princip: 'ansvar',
               fx: { tydlighet: 12, agens: 8 },
-              varfor: 'Kontakten har legat nere i fyra månader. Ett avstämningsmöte är verktyget när planen står still – och Jonas ska vara med, inte omtalad.' },
+              varfor: 'Kontakten har legat nere i fyra månader. Håll isär de två mötena: trepartsmötet med patient och arbetsgivare kallar du till själv, avstämningsmötet kallar Försäkringskassan till i ett pågående ärende och det du kan göra är att begära det. Att veta vilket möte som är vems är skillnaden mellan att få till ett möte och att vänta på ett. Jonas ska vara med, inte omtalad.' },
             { text: 'Uppdaterad rehabplan med arbetsträning i små steg, ansvarig och datum', ratt: true, princip: 'plan',
               fx: { tydlighet: 14 },
               varfor: 'Efter elva månader krävs konkreta, små och daterade steg. Det första steget ska vara så litet att det är svårt att misslyckas med.' },
@@ -271,7 +271,7 @@
           banner: 'AVSLUT',
           fraga: 'Vad blir nästa steg?',
           val: [
-            { text: 'Avstämningsmöte inom två veckor, uppdaterad plan med daterade delmål, ny medicinsk bedömning bokad, och Jonas ringer själv sin chef i morgon med ditt stöd.',
+            { text: 'Trepartsmöte inom två veckor, begäran om avstämningsmöte skickad, uppdaterad plan med daterade delmål, ny medicinsk bedömning bokad, och Jonas ringer själv sin chef i morgon med ditt stöd.',
               ok: true, princip: 'plan', tid: 3,
               fx: { tydlighet: 16, agens: 12 },
               utfall: 'Arbetsträning startar sex veckor senare, två timmar två dagar i veckan.',
@@ -307,7 +307,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['ansvar', 'forvantan', 'dorr', 'samtycke', 'evidens', 'agens', 'uppfoljning', 'bedda-b'],
+      principer: ['ansvar', 'forvantan', 'dorr', 'samtycke', 'evidens', 'agens', 'uppfoljning', 'bedda-b', 'sjukdomskrav'],
       journal: [
         ['Ärende', 'Triagerad av sjuksköterska i chatt i fredags. Bokad hit med texten "stöd i dialogen med arbetsgivaren".'],
         ['Noterat i triagen', 'Ny chef sedan januari. Fråntagen sina arbetsuppgifter, kallas inte till enhetens möten. Sover, äter och tränar som vanligt. Nekar tankar på att inte vilja leva. Utför de uppgifter hon får.'],
@@ -443,7 +443,7 @@
               varfor: 'Meningen "ibland lyssnar de mer på oss" är sann, och det är just därför den är farlig. Du planerar att lämna uppgifter om en patient till tredje part utan dokumenterat samtycke, och ett samtycke hade gjort det tillåtet men inte klokt: vad ska du säga? Du har ingen sjukdom att beskriva, ingen funktion att beskriva och ingen plan att förankra. Kvar blir att vården gått in som part i hennes anställning, att din auktoritet lånats ut till ena sidan i en konflikt du inte utrett – och att hon nästa gång kan det ännu lite mindre själv.' },
 
             { text: 'Jag kan inte skriva något, men jag bokar in dig hos vår läkare så att du åtminstone får en bedömning.',
-              tid: 2, ok: false, princip: 'evidens',
+              tid: 2, ok: false, princip: 'sjukdomskrav',
               humor: 'lattad', reaktion: 'Miriam: "Okej. När då?"',
               svar: 'Okej. När kan jag komma?',
               fx: { allians: 8, tydlighet: -14, underlag: -10 },
@@ -491,7 +491,7 @@
               varfor: 'Genuint försvarbart, och det är därför det är svårt. Utfrysning och kränkande särbehandling är kända riskfaktorer, och ett samtal om en månad fångar upp den som annars aldrig hör av sig – de som fastnar är nästan alltid de som inte hörde av sig. Priset är två saker: du gör henne till ett ärende hos dig utan sjukfall, och du flyttar initiativet från henne till dig i just det ögonblick hela poängen är att hon ska agera. Värt att diskutera i gruppen: ringer ni uppföljande samtal till patienter som inte har ett sjukfall, och vems tid är det?' },
 
             { text: 'Håller det i sig till jul får vi nog titta på en sjukskrivning ändå. Ingen orkar hur länge som helst.',
-              tid: 2, ok: false, princip: 'evidens',
+              tid: 2, ok: false, princip: 'sjukdomskrav',
               humor: 'lattad', reaktion: 'Miriam slappnar av i axlarna för första gången.',
               svar: 'Okej. Då vet jag att det finns en gräns i alla fall.',
               fx: { allians: 14, agens: -18, tydlighet: -16, underlag: -10 },

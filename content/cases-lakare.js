@@ -482,7 +482,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['rodflagga', 'bedda-e', 'plan', 'samtycke', 'ansvar', 'evidens', 'grad'],
+      principer: ['rodflagga', 'bedda-e', 'plan', 'samtycke', 'ansvar', 'evidens', 'grad', 'avbryt'],
       journal: [
         ['Ärende', 'Ronny Holmqvist, 24 år, lagerarbetare 75 procent. Inbokad akut på dagens jourtid efter telefonkontakt med sjuksköterska i morse.'],
         ['Bakgrund till kontakten', 'Chattärende inkommet i natt 01.52, 02.40 och 03.14. Sista meddelandet: "Jag orkar inte det här. Glöm det. Förlåt att jag skrev." Läst 08.05, uppringd på förmiddagen.'],
@@ -516,7 +516,7 @@
               varfor: 'Två saker på en gång. Du normaliserar att frågan ställs igen – annars läser han om-frågandet som misstro och stänger. Och du gör klart att bedömningen är din och att den bygger på det här samtalet. Att en patient tar tillbaka det han sa på natten är regel, inte undantag, och det är inte lögn: risken svänger över dygnet och den svänger tillbaka. Din uppgift är inte att avgöra vilken version som är den sanna, utan att planera för att båda är det.' },
 
             { text: 'Ta emot det. Han verkar samlad, han säger själv att det inte var så farligt, och suicidfrågan är redan ställd och besvarad i morse. Gå vidare till sjukskrivningen.',
-              tid: 2, ok: false, princip: 'rodflagga',
+              tid: 2, ok: false, princip: 'avbryt',
               humor: 'lattad', reaktion: 'Han slappnar av direkt. Samtalet blir lätt.',
               svar: 'Skönt. Ja, det är väl mest att jag behöver sova och komma tillbaka till jobbet.',
               fx: { allians: 14, sakerhet: -22, underlag: -12 },
@@ -570,7 +570,7 @@
               varfor: 'Precis rätt reflex i fel ögonblick. Den somatiska frågan måste tilldelas någon och i ett stressärende är den din – och han dricker dagligen, så levervärden är dessutom rimliga. Poängen är tidpunkten. Prover som besvaras i övermorgon köper ingen säkerhet ikväll, och att vänta in dem är att skjuta upp ett beslut som inte går att skjuta upp. Beställ dem på vägen ut, inte i stället för bedömningen.' },
 
             { text: 'Vilka arbetsuppgifter på lagret han inte klarar, så att aktivitetsbegränsningen blir rätt beskriven i intyget.',
-              ratt: false, princip: 'dfa-aktivitet', fx: { underlag: -8, sakerhet: -10 },
+              ratt: false, princip: 'avbryt', fx: { underlag: -8, sakerhet: -10 },
               varfor: 'DFA-kedjan gjord enligt konstens alla regler, på fel dag. Aktivitetsbegränsningen går att komplettera nästa vecka. Kvällen går inte att komplettera. Ett formellt oklanderligt intyg på en patient vars risk ingen graderat är den sortens handling som ser bra ut i en efterhandsgranskning och inte hjälpte någon.' }
           ] },
 
@@ -763,7 +763,7 @@
               varfor: 'Ibland är det det enda rätta, och då ska det göras utan att tveka. Men hellre en gång för mycket är en princip som fungerar för den som skickar och sällan för den som skickas. Han samtycker inte på riktigt, du kan inte tvinga, och en frivillig transport patienten inte vill göra är ingen säkerhetsåtgärd – bara en överlämning som ser ut som en. Det som faktiskt skyddar honom går att göra här: färre tabletter i huset, någon som vet, en nykter kväll och en tid imorgon med ett namn på. Värt att diskutera i gruppen: var går er gräns, och vem hos er bestämmer den klockan tre på eftermiddagen?' },
 
             { text: 'Intyg fjorton dagar, psykologtiden ligger kvar, och han hör av sig om det blir värre.',
-              ok: false, princip: 'plan', tid: 1,
+              ok: false, princip: 'avbryt', tid: 1,
               fx: { allians: 10, sakerhet: -26, tydlighet: -16 },
               utfall: 'Han går klockan 14.55 med ett intyg och en tid längre fram. Mormor får aldrig veta något. På söndagen svarar han inte i telefon.',
               varfor: 'Flödet korrekt tillämpat på en patient flödet inte är byggt för. Varje steg är rimligt för sig: triagerat, uppringt, bokat till rätt profession, intyg utfärdat. Det som saknas är att någon tog ställning till om tempot höll – och det var den enda frågan i det här besöket som bara du kunde svara på. "Hör av dig om det blir värre" flyttar dessutom bedömningen till den som är sämst rustad att göra den, ensam klockan tre på natten, efter några öl.' },

@@ -309,7 +309,7 @@
       svarighet: 3,
       laser: 'oplanerat',
       endastDrill: true,
-      principer: ['bedda-b', 'rodflagga', 'somatik', 'dorr', 'hjalpmedel', 'ansvar', 'bedda-a'],
+      principer: ['bedda-b', 'rodflagga', 'somatik', 'dorr', 'hjalpmedel', 'ansvar', 'bedda-a', 'hypotes'],
       journal: [
         ['Remiss', 'Triagerad till arbetsterapeut. Frågeställning: ortos och greppanpassning vid handartros.'],
         ['Diagnos', 'Ingen. "Artros" är patientens egen benämning. Ingen läkarbedömning och ingen undersökning av händerna finns dokumenterad.'],
@@ -353,7 +353,7 @@
               fx: { underlag: 10, sakerhet: 8, allians: -8 },
               varfor: 'Du såg rätt sak, och det är besökets viktigaste iakttagelse. Men du började i det hon inte kommit för utan att först ta emot det hon kom för. Rätt innehåll, fel tidpunkt – och du betalar i förtroende som du kommer att behöva om en stund, när du säger nej till skenan.' },
             { text: 'Artros i släkten är en stark ärftlighet, så det stämmer säkert. Vi går igenom vad du har svårt för på jobbet.',
-              tid: 2, ok: false, princip: 'bedda-b',
+              tid: 2, ok: false, princip: 'hypotes',
               humor: 'lattad', reaktion: 'Yvonne nickar ivrigt och börjar räkna upp.',
               svar: 'Precis. Det är pärmarna, och att skriva på tavlan, och att bära kaffebrickan.',
               fx: { allians: 10, underlag: -12, sakerhet: -12 },
@@ -405,7 +405,7 @@
           banner: 'STÄMMER DIAGNOSEN MED BILDEN?',
           fraga: 'Yvonne får manschettknappen på fjärde försöket och tittar på handen medan hon gör det. Gemet får hon inte upp från bordet. Tumbasen är varken öm eller förstorad, och muskeln mellan tumme och pekfinger är plattare än du väntat dig – på båda händerna. Hon har hållit i ledstången sedan i somras. Vad är det som inte går ihop med artros?',
           tidFel: 2,
-          princip: 'bedda-b',
+          princip: 'hypotes',
           val: [
             { text: 'Att det inte gör ont, att lederna saknar fynd, att kraften försvunnit ur muskler som magrat – och att besvären finns i benen också.', ratt: true },
             { text: 'Att hon har nedsatt greppstyrka.', ratt: false,
