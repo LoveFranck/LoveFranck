@@ -477,7 +477,7 @@
   /* Porträtt av en kollega, härlett ur rollens overworld-figur. Används i
      personalrummet, där de som talar är professionerna och inte en patient. */
   LESS.rollPortratt = function (id) {
-    var r = LESS.roller && LESS.roller[id];
+    var r = (id === 'ove') ? LESS.handledare : (LESS.roller && LESS.roller[id]);
     if (!r || !r.sprite) return { skin: SKIN.ljus, hair: HAIR.brun, klader: '#7088b8' };
     var sp = r.sprite;
     return { skin: sp.skin, hair: sp.hair, hairStyle: sp.hairStyle,

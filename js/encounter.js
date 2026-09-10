@@ -156,8 +156,8 @@
 
   function visaJournal() {
     var p = person(), html = '';
-    html += '<h3>' + LESS.esc(p.namn) + ', ' + p.alder + ' år</h3>';
-    html += '<p>' + LESS.esc(p.yrke || '') + '</p>';
+    html += '<h3>' + LESS.esc(p.namn) + (p.alder ? ', ' + p.alder + ' år' : '') + '</h3>';
+    if (p.yrke) html += '<p>' + LESS.esc(p.yrke) + '</p>';
     (E.fall.journal || []).forEach(function (rad) {
       html += '<div class="kv"><b>' + LESS.esc(rad[0]) + '</b><span>' + LESS.esc(rad[1]) + '</span></div>';
     });
@@ -194,6 +194,7 @@
      '<rollid>', och namnet i textrutan följer med automatiskt. */
   function motesTalare(b) {
     if (b.vem) E.vem = b.vem;
+    if (E.vem === 'ove') return { name: LESS.handledare.namn, kind: 'you' };
     var r = LESS.roller[E.vem];
     return { name: (r ? r.namn : 'TEAMET'), kind: 'you' };
   }
@@ -241,7 +242,7 @@
       if (o.extra) E.ko.unshift(o.extra);
       next();
     }
-    if (o.svar) ui.say(o.svar, patientTalare(), fortsatt);
+    if (o.svar) ui.say(o.svar, E.lage === 'mote' ? motesTalare(o) : patientTalare(), fortsatt);
     else fortsatt();
   }
 
@@ -590,9 +591,13 @@
     (fall.introExtra || []).forEach(function (x) {
       if (LESS.state.hamtaBeslut(x.nyckel) === x.varde) rader = rader.concat(x.text);
     });
-    var r = LESS.roller[fall.roll];
-    rader.push('DU ÄR ' + (r ? r.namn : fall.roll) + '.  ' +
-               'Besökstid: ' + fall.minuter + ' minuter.  J = journal, H = handbok.');
+    if (E.lage === 'mote') {
+      rader.push('J = dagordning, H = handbok. Tiden räknas ner men ingen jagar dig.');
+    } else {
+      var r = LESS.roller[fall.roll];
+      rader.push('DU ÄR ' + (r ? r.namn : fall.roll) + '.  ' +
+                 'Besökstid: ' + fall.minuter + ' minuter.  J = journal, H = handbok.');
+    }
 
     ui.sayAll(rader.map(function (t) { return { text: t, speaker: null }; }), nastaBeat);
   }

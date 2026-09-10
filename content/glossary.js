@@ -278,6 +278,7 @@
     'hypotes':       'Pröva den förklaring du fått med dig',
     'avbryt':        'Avbryt uppdraget när fynden byter fråga',
     'sjukdomskrav':  'Nedsatt arbetsförmåga av sjukdom, inte av situation',
+    'individuell':   'Individuell bedömning – ingen regel ersätter den',
     'skriftgrans':   'Skriften bär inte allt – byt verktyg',
     'overlamning':   'Säkra kontakten, inte bara bokningen',
     'triage-f':      'F-diagnos i botten → psykolog',
