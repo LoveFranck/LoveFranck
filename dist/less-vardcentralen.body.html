@@ -2657,7 +2657,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
         ['Situationen', 'Patienten ber om en sjukskrivning du inte bedömer som indicerad. Rummet blir tyst, eller inte alls tyst.'],
         ['Din reaktion', 'Tanke: "det här blir en jobbig kvart", eller "hon har det så tungt redan". Kroppsligt: tryck över bröstet, värme i ansiktet, brådska. Impuls: skriva intyget.'],
         ['Kortsiktig konsekvens', 'Lättnad, inom sekunder. Patienten blir nöjd, samtalet tar slut, du kommer i tid till nästa.'],
-        ['Långsiktig konsekvens', 'Undvikandet får stöd, aktivitetsnivån sjunker, återgången blir svårare. Och nästa gång sitter beslutet ännu hårdare, för nu finns ett prejudikat.']
+        ['Långsiktig konsekvens', 'Det du gjorde för att slippa obehaget blev aldrig prövat mot patientens faktiska behov – och nästa gång sitter beslutet hårdare, för nu finns ett prejudikat. Vad frånvaron i sig gör vet vi mindre om än vi låter som; det är just därför den enskilda bedömningen är det enda som finns kvar.']
       ],
       punkter: [
         'Analysen är densamma som den du gör på patienten. Ditt "ja" kan vara negativt förstärkt på exakt samma sätt som hennes undvikande: det tar bort ett obehag omedelbart, och därför upprepas det.',
@@ -3181,6 +3181,22 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
         skattning: 20,
         sakerhet: 'medel',
         motivering: 'Två saker som fallen just nu låter smälta ihop. Att ge beskedet muntligt i rummet – grad, längd, vad som gäller och när det omprövas – är fullt realistiskt och görs ofta. Att intyget är formulerat, signerat och skickat innan patienten reser sig är något annat: intyget skrivs i regel efteråt, i en lucka som inte finns, ofta samma kväll och ibland tre dagar senare. Delfrågan som avgör: hur många osignerade intyg står i Webcert vid dagens slut? Blir siffran låg ska fallen skilja tydligare på beskedet, som ges i rummet, och handlingen, som blir klar sedan – annars lär de ut en tidsbudget som inte finns.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'lak-langre-besok-arbetsformaga',
+        fraga: 'Går det att boka om till ett längre besök när en arbetsförmågebedömning dyker upp oplanerat?',
+        bakgrund: 'Ett delvis-alternativ i mote-harbargering bygger på att läkaren kan boka en längre tid medan patienten sitter kvar.',
+        berorFall: ['mote-harbargering'],
+        skattning: 25, sakerhet: 'medel',
+        motivering: 'Förutsätter luft i schemat och egen kontroll över tidboken. Vanligare med fast läkare än med hyrläkare, och det är hyrläkaren scenen skildrar.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'lak-motivering-journal-nej',
+        fraga: 'Journalförs motiveringen när du avstår från att sjukskriva?',
+        bakgrund: 'Både läkarkedjans slutförklaring och slutvalet i mote-harbargering vilar på att ett nej ska gå att ompröva. Om det sällan görs är det ett fynd i sig.',
+        berorFall: ['mote-harbargering'],
+        skattning: 35, sakerhet: 'medel',
+        motivering: 'Bedömningen ska framgå av journalen, men ett nej dokumenteras ofta som en rad utan skäl. Berör även rehabkoordinatorn, som är den som möter patienten nästa gång.',
         status: 'skattad av rådgivare' },
 
       { id: 'lak-somatisk-utredning-f43',
@@ -8612,6 +8628,13 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
    gör det inte. Ett samtal om egna känslor som får GULD lär ut att det
    finns ett rätt sätt att känna, och det är motsatsen till poängen.
 
+   MEDICINSK GENOMGÅNG (läkarrådgivare, 2026-09-10): säkerhetsspärren och
+   samtliga försäkringsmedicinska utsagor är genomgångna. Grad- och
+   längdangivelser kommer från Socialstyrelsens försäkringsmedicinska
+   beslutsstöd och ska kontrolleras mot gällande lydelse. Påståenden om vad
+   sjukskrivning leder till är medvetet hedgade – underlaget är svagt åt båda
+   hållen. Flaggan ovan står kvar.
+
    NOTERING TILL UTVECKLAREN: fallet ligger under LESS.fall.mote, men bär
    roll: 'psykolog' eftersom motorn behöver ett rollvärde. Om filen kopplas
    in så att LESS.fall.psykolog också når det, se upp med drillurvalet:
@@ -8661,7 +8684,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
         'Fredag 15.40. Personalrummet. Kaffet är från klockan två och smakar därefter.',
         'Ove har satt upp ett papper på whiteboarden med ett enda ord på: HÄRBÄRGERA.',
         'Sex stolar, sex professioner. Ingen patient. Ingen journal som ska bli klar.',
-        'Ove: den här kvarten handlar inte om patienterna. Den handlar om vad som händer i er när ni ska säga nej – och om vad som händer när ni säger ja för att slippa.',
+        'Ove: den här kvarten handlar inte om patienterna. Den handlar om vad som händer i er när ni fattar besluten – när ni säger ja för att slippa, och när ni säger nej för att slippa.',
         'Ingenting av det här betygsätts. Det finns inget guld att hämta i ett samtal om egna känslor.'
       ],
 
@@ -8788,7 +8811,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
             { etikett: 'K – LÅNG SIKT',
               fraga: 'Vad händer på veckors och månaders sikt?',
               val: [
-                { text: 'Patienten får sin sjukskrivning tre dagar senare av en läkare utan underlag – och sjuksköterskan har lärt sig att svåra chattar löser sig om man ger med sig. Nästa gång kommer det snabbare.', ratt: true },
+                { text: 'Läkaren får frågan tre dagar senare utan en rad om funktion och får börja från noll, med en patient som redan fått höra att det är på gång – och sjuksköterskan har lärt sig att svåra chattar löser sig om man ger med sig. Nästa gång kommer det snabbare.', ratt: true },
                 { text: 'Obehaget släpper när ärendet är skickat.',
                   varfor: 'Den kortsiktiga konsekvensen – och just skillnaden i tid är hela poängen.' },
                 { text: 'Trycket över bröstet.',
@@ -8830,7 +8853,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
                        text: 'Och jag är den som får ärendet. Utan en enda rad om funktion, och med en patient som redan har fått höra att det är fixat.' } },
             { text: 'Hållit fast vid nejet och avslutat ärendet.',
               tid: 1, ok: false, princip: 'dorr',
-              varfor: 'Det tar bort ett ja som inte var motiverat och sätter ingenting i stället. Patienten söker igen, oftast senare och oftast sämre. Att stänga en dörr utan att öppna en annan är inte en bedömning – det är bara ett nej.' },
+              varfor: 'Det tar bort ett ja som inte var motiverat och sätter ingenting i stället. Patienten söker igen, och då har ingenting hänt under tiden – utom att hon har lärt sig att det inte går att fråga här. Att stänga en dörr utan att öppna en annan är inte en bedömning, det är bara ett nej.' },
             { text: 'Ringt upp i stället för att skriva.',
               tid: 2, ok: 'delvis', princip: 'skriftgrans',
               varfor: 'Ofta rätt, och skriften bär dåligt i just den här sortens samtal – du hör ingen tvekan och du kan inte ställa en följdfråga snabbare än patienten hinner stänga fönstret. Men det avgör inte frågan. Det som ska sägas måste sägas ändå, och impulsen finns kvar i telefonen. Värt att diskutera i gruppen: hur ofta byter ni faktiskt kanal?' }
@@ -8900,7 +8923,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
                   varfor: 'Tanken.' },
                 { text: 'Lusten att avfärda utskriften.',
                   varfor: 'Beteendeimpulsen.' },
-                { text: 'Fjortonde patienten den dagen, ingen lunch.',
+                { text: 'Tjugotvå bokade den dagen, och hon ligger tjugo minuter efter redan på förmiddagen.',
                   varfor: 'Etablerande omständighet.' },
                 { text: 'Hon säger nej och går vidare i journalen.',
                   varfor: 'Responsen.' }
@@ -8934,7 +8957,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
                 { text: 'Rummet blir hennes igen.',
                   varfor: 'Den kortsiktiga konsekvensen.' }
               ],
-              forklaring: 'Lägg märke till vad som saknas i responsen. Inte nejet – utan bedömningen. Ett nej kan vara helt riktigt i sak och ändå vara fattat på fel grund.' },
+              forklaring: 'Lägg märke till vad som saknas i responsen. Inte nejet – utan bedömningen. Ett nej kan vara helt riktigt i sak och ändå vara fattat på fel grund. Lägg också märke till vad hänvisningen till beslutsstödet gör här. Beslutsstödet säger något om hur länge en viss funktionsnedsättning brukar sätta ned arbetsförmågan. Det säger ingenting om huruvida just den här patienten har en nedsättning. Att använda det som skäl för att slippa ta reda på det är att låta ett vägledande dokument fatta ett beslut som det inte kan fatta.' },
 
             { etikett: 'K – KORT SIKT',
               fraga: 'Vad händer direkt efteråt?',
@@ -8960,12 +8983,40 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
                   varfor: 'Kroppslig förnimmelse.' },
                 { text: 'Utskriften ligger kvar på bordet.',
                   varfor: 'Situationen.' },
-                { text: 'Hon hade fjorton patienter den dagen.',
+                { text: 'Hon låg tjugo minuter efter schemat redan innan hon ropade in patienten.',
                   varfor: 'Etablerande omständighet.' }
               ],
               forklaring: 'Och det obekväma: när ärendet till slut utreddes fanns det en aktivitetsbegränsning. Sjukskrivning kunde mycket väl ha varit rätt vård från början. Nejet var inte fel för att nej är fel. Det var fel för att det inte var en bedömning.' }
           ],
           forklaring: 'Kedjan är identisk med sjuksköterskans. Samma led, samma mekanism, motsatt beteende. Ett nej kan vara negativt förstärkt precis som ett ja: det tar bort ett obehag omedelbart, och därför upprepas det. Det finns en praktisk skillnad, och den är obehaglig – ett ja lämnar spår i ett intyg som någon kan granska, medan ett nej ofta inte lämnar någonting alls. Det är ett av skälen till att motiveringen ska journalföras även när du inte sjukskriver, och till att beslutet ska gå att ompröva.' },
+
+        /* ---------- 6b. Vad som skulle gjorts i stället – nejets version ----------
+           Jaet fick en reparation i beat 4. Utan motsvarande beat för nejet
+           lär scenen ut att ett ja behöver repareras och ett nej inte gör det.
+           Notera att det rätta alternativet inte säger vad utfallet blir.     */
+
+        { typ: 'val',
+          vem: 'psykolog',
+          fraga: 'Samma sak här. Spola tillbaka till sekunden efter att utskriften landat på bordet. Vad skulle hon gjort i stället?',
+          tips: 'Leta efter det alternativ som gör bedömningen. Vad bedömningen sedan landar i är inte givet på förhand – och det är hela skillnaden.',
+          val: [
+            { text: 'Tagit emot utskriften, sagt att hon inte är specialist men att det är hon som ska bedöma arbetsförmågan – och gått igenom vad patienten faktiskt inte klarar i sina arbetsuppgifter, innan hon säger något alls om sjukskrivning.',
+              tid: 3, ok: true, princip: 'beslutsstod',
+              reaktion: 'Läkaren tittar ner i bordet.',
+              varfor: 'Här görs bedömningen, och beslutet faller ut ur den i stället för tvärtom. Lägg märke till att alternativet inte säger vad svaret blir. Det kan mycket väl sluta i en sjukskrivning, och då är det rätt vård. Det kan sluta i ett nej, och då står nejet på funktion och arbetsuppgifter i stället för på hennes käkar. Utskriften kostar en minut att läsa och kan innehålla något hon inte visste.' },
+            { text: 'Sagt nej och hänvisat till att beslutsstödet inte rekommenderar sjukskrivning vid den här diagnosen.',
+              tid: 1, ok: false, princip: 'beslutsstod',
+              varfor: 'Låter försäkringsmedicinskt korrekt och är det inte. Beslutsstödet är vägledning för bedömningen av en enskild patient, inte ett tak och inte ett förbud – och en rekommendation om tid är skriven för att tillämpas på en funktion som någon har tagit reda på. Används den i stället för utredningen finns det efteråt ingen bedömning att ompröva. Det är den sortens nej som inte lämnar några spår alls.',
+              extra: { typ: 'replik', vem: 'rehabkoordinator', humor: 'neutral',
+                       text: 'Och när hon söker igen om tre veckor står det ingenting i journalen om varför det blev nej. Då börjar vi om från början, båda två.' } },
+            { text: 'Skrivit sjukskrivningen. Patienten hade läst på, och diskussionen var inte värd det.',
+              tid: 2, ok: false, princip: 'ansvar',
+              reaktion: 'Ingen säger något på ett par sekunder.',
+              varfor: 'Samma fel spegelvänt, och lika lite en bedömning. Skillnaden är att det här beslutet lämnar ett intyg efter sig med hennes namn på, där hon ska skilja på vad hon själv har iakttagit och vad som är patientens egna uppgifter. Har hon inte tagit reda på något har hon ingenting att skriva på de raderna – och då är det inte bara slarv, det är ett intyg som inte stämmer. Det tunna intyget ger dessutom en kompletteringsbegäran från Försäkringskassan, och den drabbar patientens försörjning, inte mottagningens schema.' },
+            { text: 'Sagt att frågan kräver mer tid än hon har idag, och bokat ett längre besök för arbetsförmågebedömningen innan patienten går ut.',
+              tid: 2, ok: 'delvis', princip: 'individuell',
+              varfor: 'Ofta rimligt och ärligare än att pressa fram ett beslut på fyra minuter – en arbetsförmågebedömning ryms sällan i en kvart som var bokad för något annat. Men det är bara en bedömning om tiden faktiskt bokas medan patienten sitter kvar. Blir det ett "vi tar det nästa gång" utan tid är det samma undvikande i finare kläder. Värt att diskutera i gruppen: hur ofta blir det av?' }
+          ] },
 
         /* ---------- 7. Säkerhetsspärren, strukturell ----------
            Frågan är formulerad så att det felaktiga svaret är just den
@@ -8989,13 +9040,32 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
               ratt: false,
               varfor: 'Det följer – det var precis läkarens kedja.' }
           ],
-          forklaring: 'Rätt. Ingenting av det ni gjort i dag säger något om vad utfallet ska bli i ett enskilt ärende. Analysen säger bara något om vad som styr när ni fattar det.' },
+          forklaring: 'Rätt. Ingenting av det ni gjort i dag säger något om vad utfallet ska bli i ett enskilt ärende. Analysen säger bara något om vad som styr när ni fattar det. Och lägg märke till formen på påståendet: "i regel" är en regel. En restriktiv hållning är precis lika mycket en regel i huvudet som den fysioterapeuten satt med – den ersätter bedömningen i stället för att göra den, och den är obehagsstyrd på samma sätt. Socialstyrelsens beslutsstöd är vägledning för den försäkringsmedicinska bedömningen, inte ett tak och inte ett förbud. För flera F- och M-diagnoser är den rekommenderade tiden dessutom lång.' },
 
         { typ: 'replik', vem: 'lakare', humor: 'neutral',
-          text: 'Jag vill säga det rakt ut, för det är mitt namn som står på besluten. Det finns ingen diagnosgrupp där svaret är givet på förhand. Varje ärende kräver en medicinsk och en försäkringsmedicinsk bedömning av just den patienten: funktion, aktivitetsbegränsning, faktiska arbetsuppgifter.' },
+          text: 'Jag vill säga det rakt ut, för det är mitt namn som står på besluten. Det finns ingen diagnosgrupp där svaret är givet på förhand. Varje ärende kräver en medicinsk och en försäkringsmedicinsk bedömning av just den patienten: rätt diagnos först, sedan funktionsnedsättning, sedan vad den begränsar i de arbetsuppgifter hon faktiskt har.' },
+
+        /* Grad- och längdangivelserna nedan är hämtade ur Socialstyrelsens
+           försäkringsmedicinska beslutsstöd för utmattningssyndrom. Kontrollera
+           lydelsen mot beslutsstödet innan materialet används skarpt –
+           rekommendationerna revideras. */
+        { typ: 'replik', vem: 'lakare', humor: 'oppen',
+          text: 'Och det finns gott om lägen där sjukskrivning är rätt vård, också vid F- och M-diagnoser. Vid utmattningssyndrom i akut fas kan man enligt beslutsstödet sjukskrivas hel eller partiell upp till ett halvår, och vid kvarstående kognitiva svårigheter heltid upp till ett år eller mer. Skriver jag två veckor där har jag gjort ett avsteg nedåt från vägledningen – och det avsteget ska jag kunna motivera med den här patientens funktion, precis lika noga som om jag hade gått uppåt.' },
+
+        { typ: 'replik', vem: 'lakare', humor: 'neutral',
+          text: 'Jag har en från andra hållet också, och den är minst lika obekväm. Kvinna, femtiotvå, utmattningssyndrom. Läser samma stycke fem gånger utan att få i sig det. Hon ville jobba, och jag ville också att hon skulle jobba – det hade varit det bekväma för oss båda. Jag sjukskrev heltid, tidsbegränsat, med en plan och en tid tillbaka till mig. Det var dagens svåraste beslut och det var rätt.' },
+
+        /* Evidensläget, hedgat med flit. Kunskapen om sjukfrånvarons
+           konsekvenser är svag åt båda hållen: SBU:s översikt från 2003 och
+           senare genomgångar i Läkartidningen (2026) pekar på att underlaget i
+           allt väsentligt består av observationsstudier där sjukdomens och
+           sjukskrivningens effekter inte går att skilja åt. Skriv inte in
+           starkare påståenden här utan att kontrollera källan. */
+        { typ: 'replik', vem: 'lakare', humor: 'neutral',
+          text: 'En sak till, eftersom vi suttit här och pratat om långsiktiga konsekvenser i en halvtimme. Vi vet mindre om dem än vi låter som. Det mesta som finns om vad sjukfrånvaro leder till är observationsstudier, där sjukdomen och sjukskrivningen inte går att skilja från varandra. Den som säger att sjukskrivning i sig gör folk sjukare vet inte det. Den som säger att den läker vet det inte heller.' },
 
         { typ: 'replik', vem: 'lakare', humor: 'oppen',
-          text: 'Och det finns gott om lägen där sjukskrivning är rätt vård, också vid F- och M-diagnoser. Vid uttalad utmattning med kognitiv påverkan kan ett uteblivet eller för litet ingripande vara det som gör skada. Det jag inte får göra är att låta min egen tisdagsförmiddag avgöra vilket det blir.' },
+          text: 'Så jag kan inte luta mig mot att en tumregel ska bära åt något håll. Det jag har kvar är den här patienten, den här funktionen, de här arbetsuppgifterna – och en motivering som ska gå att läsa högt för henne. Det jag inte får göra är att låta min egen tisdagsförmiddag avgöra vad det blir.' },
 
         /* ---------- 8. De två som är kvar ---------- */
 
@@ -9003,7 +9073,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           text: 'Min är den svåraste att erkänna. Jag har en kvinna vars situation faktiskt är orimlig. Chefen har tagit ifrån henne arbetsuppgifter och slutat bjuda in henne till möten. Hon sover, äter och tränar som vanligt. Det finns ingen sjukdom att sätta i ett intyg.' },
 
         { typ: 'replik', vem: 'rehabkoordinator', humor: 'neutral',
-          text: 'Impulsen var att fixa det åt henne. Ett intyg hade gett henne fyra veckor och mig känslan av att ha gjort något. På fyra veckor hade jag gjort hennes arbetsmiljöproblem till en diagnos – och den enda som kan lösa det, arbetsgivaren, hade sluppit veta om det.' },
+          text: 'Impulsen var att fixa det åt henne. Jag kan inte utfärda något intyg, men jag kan gå in till doktorn och säga att här behövs fyra veckor, och de hade jag fått. Fyra veckor åt henne, och en känsla av att ha gjort något åt mig. På köpet hade jag gjort hennes arbetsmiljöproblem till en diagnos – och den enda som kan lösa det, arbetsgivaren, hade sluppit veta om det.' },
 
         { typ: 'replik', vem: 'rehabkoordinator', humor: 'oppen',
           text: 'Men en sak till. Hade jag bara sagt nej och skickat hem henne hade jag inte heller gjort någonting. Det som behövdes var hjälp att formulera vad hon skulle säga till sin chef, och att hon fick veta att skyddsombud och fack finns. Det tog tjugo minuter. Och jag frågade henne innan jag rörde arbetsgivaren – hennes samtycke, inte mitt.' },
@@ -9043,7 +9113,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
                        text: 'Då hade jag fått frågan "vad vet du om vad han gör om dagarna". Och jag hade fått svara att jag inte visste.' } },
             { text: 'Vi skriver in i mallen att motiveringen ska dokumenteras även när vi inte sjukskriver, tillsammans med det patienten fick i stället.',
               tid: 2, ok: true, princip: 'dorr',
-              varfor: 'Det gör bedömningen granskningsbar också när den inte lämnar något intyg efter sig, och det tvingar fram raden om vad som gjordes i stället. Att journalföra ställningstagandet är dessutom ett krav på dokumentationen, inte en extra ambition – och det är det som gör beslutet möjligt att ompröva.',
+              varfor: 'Det gör bedömningen granskningsbar också när den inte lämnar något intyg efter sig, och det tvingar fram raden om vad som gjordes i stället. Att aktuellt hälsotillstånd och de medicinska bedömningarna ska framgå av journalen är dessutom ett krav i journalföringsreglerna, inte en extra ambition. Ett nej som inte står någonstans går varken att ompröva eller att bygga vidare på.',
               extra: { typ: 'replik', vem: 'lakare', humor: 'oppen',
                        text: 'Och då slipper nästa kollega börja om från noll när patienten kommer tillbaka.' } },
             { text: 'Vi bestämmer att var och en tar ansvar för att inte låta känslorna styra.',

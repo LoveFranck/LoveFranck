@@ -314,6 +314,22 @@
         motivering: 'Två saker som fallen just nu låter smälta ihop. Att ge beskedet muntligt i rummet – grad, längd, vad som gäller och när det omprövas – är fullt realistiskt och görs ofta. Att intyget är formulerat, signerat och skickat innan patienten reser sig är något annat: intyget skrivs i regel efteråt, i en lucka som inte finns, ofta samma kväll och ibland tre dagar senare. Delfrågan som avgör: hur många osignerade intyg står i Webcert vid dagens slut? Blir siffran låg ska fallen skilja tydligare på beskedet, som ges i rummet, och handlingen, som blir klar sedan – annars lär de ut en tidsbudget som inte finns.',
         status: 'skattad av rådgivare' },
 
+      { id: 'lak-langre-besok-arbetsformaga',
+        fraga: 'Går det att boka om till ett längre besök när en arbetsförmågebedömning dyker upp oplanerat?',
+        bakgrund: 'Ett delvis-alternativ i mote-harbargering bygger på att läkaren kan boka en längre tid medan patienten sitter kvar.',
+        berorFall: ['mote-harbargering'],
+        skattning: 25, sakerhet: 'medel',
+        motivering: 'Förutsätter luft i schemat och egen kontroll över tidboken. Vanligare med fast läkare än med hyrläkare, och det är hyrläkaren scenen skildrar.',
+        status: 'skattad av rådgivare' },
+
+      { id: 'lak-motivering-journal-nej',
+        fraga: 'Journalförs motiveringen när du avstår från att sjukskriva?',
+        bakgrund: 'Både läkarkedjans slutförklaring och slutvalet i mote-harbargering vilar på att ett nej ska gå att ompröva. Om det sällan görs är det ett fynd i sig.',
+        berorFall: ['mote-harbargering'],
+        skattning: 35, sakerhet: 'medel',
+        motivering: 'Bedömningen ska framgå av journalen, men ett nej dokumenteras ofta som en rad utan skäl. Berör även rehabkoordinatorn, som är den som möter patienten nästa gång.',
+        status: 'skattad av rådgivare' },
+
       { id: 'lak-somatisk-utredning-f43',
         fraga: 'Görs somatisk screening innan första sjukskrivningen vid utmattning eller ångest?',
         bakgrund: 'Den lucka LESS-flödet strukturellt riskerar att skapa: när läkaren inte är förstakontakt tilldelas den somatiska frågan ingen. I jourupplägget hamnar den hos läkaren i rummet.',

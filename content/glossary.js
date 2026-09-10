@@ -97,7 +97,7 @@
         ['Situationen', 'Patienten ber om en sjukskrivning du inte bedömer som indicerad. Rummet blir tyst, eller inte alls tyst.'],
         ['Din reaktion', 'Tanke: "det här blir en jobbig kvart", eller "hon har det så tungt redan". Kroppsligt: tryck över bröstet, värme i ansiktet, brådska. Impuls: skriva intyget.'],
         ['Kortsiktig konsekvens', 'Lättnad, inom sekunder. Patienten blir nöjd, samtalet tar slut, du kommer i tid till nästa.'],
-        ['Långsiktig konsekvens', 'Undvikandet får stöd, aktivitetsnivån sjunker, återgången blir svårare. Och nästa gång sitter beslutet ännu hårdare, för nu finns ett prejudikat.']
+        ['Långsiktig konsekvens', 'Det du gjorde för att slippa obehaget blev aldrig prövat mot patientens faktiska behov – och nästa gång sitter beslutet hårdare, för nu finns ett prejudikat. Vad frånvaron i sig gör vet vi mindre om än vi låter som; det är just därför den enskilda bedömningen är det enda som finns kvar.']
       ],
       punkter: [
         'Analysen är densamma som den du gör på patienten. Ditt "ja" kan vara negativt förstärkt på exakt samma sätt som hennes undvikande: det tar bort ett obehag omedelbart, och därför upprepas det.',
