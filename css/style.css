@@ -504,3 +504,9 @@ table.topp td:first-child{ color:#8a9a96; width:14px; }
 table.topp td:last-child{ text-align:right; width:26px; }
 table.topp tr.etta td{ background:rgba(232,160,40,.18); }
 table.topp tr.etta td:nth-child(2){ color:#8a6010; }
+
+/* ---------- Ograderad återkoppling (reflektionsmötet) ---------- */
+
+.d-grade.reflektion{ background:var(--mark); color:var(--paper); }
+.d-grade.reflektion .g{ color:var(--mark-mint); letter-spacing:4px; }
+.d-grade.reflektion .s{ color:var(--paper); opacity:.9; }

@@ -32,16 +32,27 @@
     var h = '', bt = BETYGSTEXT[res.betyg] || BETYGSTEXT.omtag;
     var roll = LESS.roller[res.roll];
 
-    /* ---- betyg ---- */
-    h += '<div class="d-grade ' + res.betyg + '">' +
-         '<span class="g">' + bt[0] + '</span>' +
-         '<span class="s">' + LESS.esc(bt[1]) + '</span>' +
-         '<span class="s">' + res.poang + ' av 100 poäng · ' +
-         (res.tidUt ? 'tiden tog slut' : LESS.mmss(res.kvar) + ' kvar av besöket') + '</span>' +
-         '</div>';
+    if (res.ograderad) {
+      /* Ett samtal om egna känslor får ingen siffra. Rubriken säger vad
+         återkopplingen är i stället: en genomgång, inte ett omdöme. */
+      h += '<div class="d-grade reflektion">' +
+           '<span class="g">EFTERÅT</span>' +
+           '<span class="s">Ingen poäng och inget betyg. Det här var ett samtal, inte ett prov.</span>' +
+           '</div>';
+      h += '<div class="d-note"><b>' + LESS.esc(res.fall.titel || 'MÖTET') + '</b>' +
+           LESS.esc(res.fall.undertitel || '') + '</div>';
+    } else {
+      /* ---- betyg ---- */
+      h += '<div class="d-grade ' + res.betyg + '">' +
+           '<span class="g">' + bt[0] + '</span>' +
+           '<span class="s">' + LESS.esc(bt[1]) + '</span>' +
+           '<span class="s">' + res.poang + ' av 100 poäng · ' +
+           (res.tidUt ? 'tiden tog slut' : LESS.mmss(res.kvar) + ' kvar av besöket') + '</span>' +
+           '</div>';
 
-    h += '<div class="d-note"><b>' + LESS.esc((roll ? roll.namn : res.roll) + ' · ' + res.patient.namn) + '</b>' +
-         LESS.esc(res.fall.titel) + '</div>';
+      h += '<div class="d-note"><b>' + LESS.esc((roll ? roll.namn : res.roll) + ' · ' + res.patient.namn) + '</b>' +
+           LESS.esc(res.fall.titel) + '</div>';
+    }
 
     /* ---- beslutet ---- */
     if (res.beslut) {
@@ -73,24 +84,28 @@
     if (!visade) h += '<p>Inga val registrerade.</p>';
 
     /* ---- de dolda mätarna ---- */
-    h += '<div class="d-h">DET DU INTE SÅG</div>';
-    h += '<p>Under besöket fick du bara patientens reaktion. Så här stod mätarna när du gick ut ur rummet:</p>';
-    LESS.encounter.MATARE.forEach(function (k) {
-      h += matarrad(LESS.MATARNAMN[k], res.matare[k]);
-    });
-    if (res.matare.sakerhet < 35) {
-      h += '<div class="d-note warnbox"><b>PATIENTSÄKERHET</b>' +
-           'Något medicinskt eller juridiskt viktigt gick förlorat. Det sätter betyget till OMTAG oavsett resten.</div>';
+    if (!res.ograderad) {
+      h += '<div class="d-h">DET DU INTE SÅG</div>';
+      h += '<p>Under besöket fick du bara patientens reaktion. Så här stod mätarna när du gick ut ur rummet:</p>';
+      LESS.encounter.MATARE.forEach(function (k) {
+        h += matarrad(LESS.MATARNAMN[k], res.matare[k]);
+      });
+      if (res.matare.sakerhet < 35) {
+        h += '<div class="d-note warnbox"><b>PATIENTSÄKERHET</b>' +
+             'Något medicinskt eller juridiskt viktigt gick förlorat. Det sätter betyget till OMTAG oavsett resten.</div>';
+      }
     }
-    if (res.tidUt) {
+    if (!res.ograderad && res.tidUt) {
       h += '<div class="d-note warnbox"><b>TIDEN TOG SLUT</b>' +
            'Beslutet fattades under tvång. Det är inte ett misslyckande i sig – men lägg märke till vilka val som åt upp minuterna. ' +
            'Dåligt bemötande kostar nästan alltid mer tid än det sparar.</div>';
     }
 
-    /* ---- principer ---- */
+    /* ---- principer ----
+       Ograderade fall köas inte, så rubriken om repetition ska inte lova
+       något som inte händer. */
     var missade = [], sittande = [];
-    Object.keys(res.principer || {}).forEach(function (p) {
+    Object.keys(res.ograderad ? {} : (res.principer || {})).forEach(function (p) {
       var namn = LESS.principer[p] || p;
       if (res.principer[p]) sittande.push(namn); else missade.push(namn);
     });
@@ -105,7 +120,7 @@
       h += '</ul>';
     }
 
-    var ko = LESS.state.ko();
+    var ko = res.ograderad ? [] : LESS.state.ko();
     if (ko.length) {
       h += '<div class="d-note"><b>REPETITIONSKÖ (' + ko.length + ')</b>' +
            'Fall som tränar dessa principer prioriteras i övningsläget tills du klarat dem två gånger i rad.</div>';
@@ -119,7 +134,7 @@
     /* Visa först, nollställ sedan – annars ärver rutan förra mötets scroll. */
     LESS.show($('debrief'), true);
     $('debrief-box').scrollTop = 0;
-    LESS.sfx(res.betyg === 'omtag' ? 'fail' : 'done');
+    LESS.sfx((!res.ograderad && res.betyg === 'omtag') ? 'fail' : 'done');
 
     var body = $('debrief-box');
     var fot = $('debrief-foot');

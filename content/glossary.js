@@ -86,6 +86,29 @@
     },
 
     {
+      id: 'harbargering',
+      titel: 'Härbärgering – att stå ut med sin egen reaktion',
+      text: [
+        'Att härbärgera är att rymma en känsla utan att omedelbart göra sig av med den. Att låta den vara kvar i kroppen tillräckligt länge för att kunna fatta ett beslut som bygger på bedömningen och inte på obehaget.',
+        'Ordet kommer från psykodynamisk teori, där det beskriver att ta emot något outhärdligt hos en annan människa och ge tillbaka det i en form som går att bära. I vardagen på en vårdcentral är det enklare än så och svårare att göra: att sitta kvar i en jobbig kvart utan att lösa den åt sig själv.',
+        'Det som ska härbärgeras är sällan patientens lidande. Det är obehaget av att göra någon besviken, av att bli ifrågasatt, av att inte räcka till – och ibland av att tycka mycket om någon som ber om något man inte kan ge.'
+      ],
+      lista: [
+        ['Situationen', 'Patienten ber om en sjukskrivning du inte bedömer som indicerad. Rummet blir tyst, eller inte alls tyst.'],
+        ['Din reaktion', 'Tanke: "det här blir en jobbig kvart", eller "hon har det så tungt redan". Kroppsligt: tryck över bröstet, värme i ansiktet, brådska. Impuls: skriva intyget.'],
+        ['Kortsiktig konsekvens', 'Lättnad, inom sekunder. Patienten blir nöjd, samtalet tar slut, du kommer i tid till nästa.'],
+        ['Långsiktig konsekvens', 'Undvikandet får stöd, aktivitetsnivån sjunker, återgången blir svårare. Och nästa gång sitter beslutet ännu hårdare, för nu finns ett prejudikat.']
+      ],
+      punkter: [
+        'Analysen är densamma som den du gör på patienten. Ditt "ja" kan vara negativt förstärkt på exakt samma sätt som hennes undvikande: det tar bort ett obehag omedelbart, och därför upprepas det.',
+        'Det gäller åt båda hållen. Ett nej som utfärdas för att slippa känna sig lurad, eller för att skydda den egna bilden av sig själv som stringent, är också ett beslut fattat av obehag och inte av bedömning.',
+        'Härbärgering är inte att bita ihop. Att stå ut ensam vecka efter vecka är inte hållbart – det är därför reflektionen hör hemma i teamet och inte i huvudet på var och en.',
+        'Att märka känslan är inte samma sak som att lyda den. Att kunna säga "jag vill verkligen skriva det här intyget just nu" är början på en bedömning, inte slutet på en.'
+      ],
+      varning: 'Ingenting av detta gör det rätt att neka sjukskrivning som regel. Varje ärende kräver en medicinsk och försäkringsmedicinsk bedömning av den enskilda patienten. Det som beskrivs här är hur du märker när det inte är bedömningen som styr.'
+    },
+
+    {
       id: 'salutogen',
       titel: 'Salutogen kommunikation',
       text: [

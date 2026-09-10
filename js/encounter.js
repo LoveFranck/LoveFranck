@@ -25,6 +25,7 @@
 
   function person() {
     if (!E) return { namn: 'PATIENT', portratt: {}, alder: '' };
+    if (E.lage === 'mote') return { namn: 'PERSONALRUMMET', portratt: {}, alder: '' };
     return LESS.personer[E.fall.patient] || { namn: 'PATIENT', portratt: {} };
   }
   function patientTalare() { return { name: person().namn.toUpperCase(), kind: 'pat' }; }
@@ -127,6 +128,10 @@
       } else if (E.lage === 'granskning') {
         LESS.drawGranskningBg(c, t);
         LESS.drawPortrait(c, p.portratt, E.humor, 114, 10);
+      } else if (E.lage === 'mote') {
+        /* Personalrummet: den som har ordet syns, inte en patient. */
+        LESS.drawMotesrumBg(c, t);
+        LESS.drawPortrait(c, LESS.rollPortratt(E.vem || 'psykolog'), E.humor, 108, 10);
       } else {
         LESS.drawRoomBg(c);
         LESS.drawPortrait(c, p.portratt, E.humor, 100, 8);
@@ -185,8 +190,17 @@
 
   /* ---------------- beat-typer ---------------- */
 
+  /* I personalrummet är talaren en kollega. Beats får peka ut vem med vem:
+     '<rollid>', och namnet i textrutan följer med automatiskt. */
+  function motesTalare(b) {
+    if (b.vem) E.vem = b.vem;
+    var r = LESS.roller[E.vem];
+    return { name: (r ? r.namn : 'TEAMET'), kind: 'you' };
+  }
+
   function korReplik(b, next) {
     if (b.humor) E.humor = b.humor;
+    if (E.lage === 'mote') { ui.say(b.text, b.talare || motesTalare(b), next); return; }
     ui.say(b.text, b.talare || patientTalare(), next);
   }
 
@@ -204,8 +218,10 @@
       });
     }
     if (b.text) {
-      ui.say(b.text, b.talare || patientTalare(), meny);
+      var tal = E.lage === 'mote' ? (b.talare || motesTalare(b)) : (b.talare || patientTalare());
+      ui.say(b.text, tal, meny);
     } else {
+      if (b.vem) motesTalare(b);
       meny();
     }
   }
@@ -507,12 +523,18 @@
 
     var b = raknaBetyg();
     var principer = principResultat();
+    var ograderad = !!E.fall.ograderad;
 
-    LESS.state.registrera(E.fall.id, E.roll, b.betyg, principer, E.kvar);
-    if (E.opts.drill) LESS.state.drillSpelad(E.fall.id);
+    /* Ett samtal om egna känslor betygsätts inte. Att sätta GULD på hur
+       ärligt någon svarat vore att lära ut fel sak om hela övningen. */
+    if (!ograderad) {
+      LESS.state.registrera(E.fall.id, E.roll, b.betyg, principer, E.kvar);
+      if (E.opts.drill) LESS.state.drillSpelad(E.fall.id);
+    }
 
     var resultat = {
       fall: E.fall,
+      ograderad: ograderad,
       roll: E.roll,
       patient: person(),
       betyg: b.betyg,
@@ -545,6 +567,7 @@
       kvar: fall.minuter,
       matare: { allians: 50, agens: 50, tydlighet: 50, underlag: 50, sakerhet: 50 },
       humor: 'neutral',
+      vem: fall.vem || null,
       flaggor: {},
       logg: [],
       ko: fall.beats.slice(),

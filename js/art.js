@@ -474,6 +474,17 @@
   LESS.MOODS = Object.keys(MOOD);
 
   /* Ritar ett porträtt i en 44x44-ruta med övre vänstra hörnet i (ox,oy). */
+  /* Porträtt av en kollega, härlett ur rollens overworld-figur. Används i
+     personalrummet, där de som talar är professionerna och inte en patient. */
+  LESS.rollPortratt = function (id) {
+    var r = LESS.roller && LESS.roller[id];
+    if (!r || !r.sprite) return { skin: SKIN.ljus, hair: HAIR.brun, klader: '#7088b8' };
+    var sp = r.sprite;
+    return { skin: sp.skin, hair: sp.hair, hairStyle: sp.hairStyle,
+             klader: sp.uni, glasogon: !!sp.glasogon, skagg: !!sp.skagg,
+             ogon: '#3a3a30' };
+  };
+
   LESS.drawPortrait = function (c, def, mood, ox, oy) {
     var m = MOOD[mood] || MOOD.neutral;
     var skin = def.skin || SKIN.ljus,
@@ -686,6 +697,66 @@
 
 
   /* Granskningsvy: läkarens skrivbord med utredningen uppe */
+  /* Personalrummet: fredag eftermiddag, sex stolar runt ett bord.
+     Bakgrunden till det avslutande mötet – det enda i spelet där ingen
+     patient sitter i rummet och det som ska hanteras är personalens egna
+     reaktioner. */
+  LESS.drawMotesrumBg = function (c, t) {
+    var i;
+    R(c, 0, 0, 160, 144, P.floorD);
+    /* vägg med fönster mot gården */
+    R(c, 0, 0, 160, 62, P.wall);
+    R(c, 0, 56, 160, 3, P.wallSh);
+    R(c, 0, 59, 160, 3, P.wallD);
+    R(c, 3, 10, 36, 30, P.ink);
+    R(c, 5, 12, 32, 26, P.glass);
+    R(c, 5, 12, 32, 10, P.glassD);
+    R(c, 20, 12, 2, 26, P.ink);
+    R(c, 5, 24, 32, 2, P.ink);
+    /* Whiteboard mellan fönstret och den som har ordet. Någon har skrivit dit
+       ett enda ord, och det är hela dagordningen. */
+    R(c, 43, 8, 62, 42, '#8a8a80');
+    R(c, 45, 10, 58, 38, '#f8f8f0');
+    if (LESS.pixelText) {
+      var ord = 'HÄRBÄRGERING';
+      LESS.pixelText(c, ord, Math.round(74 - LESS.pixelBredd(ord) / 2), 16, P.markDark);
+      R(c, 50, 24, 48, 1, '#c8c8c0');
+      LESS.pixelText(c, 'KORT SIKT', 52, 29, '#8a9a96');
+      LESS.pixelText(c, 'LÅNG SIKT', 52, 39, '#c04838');
+    } else {
+      R(c, 50, 16, 48, 3, P.markDark);
+      R(c, 50, 29, 34, 2, '#8a9a96');
+      R(c, 50, 39, 38, 2, '#c04838');
+    }
+    R(c, 96, 45, 6, 2, '#4870b0');
+    /* kaffebord i mitten, sett snett uppifrån */
+    R(c, 24, 78, 112, 34, P.woodD);
+    R(c, 26, 76, 108, 32, P.wood);
+    R(c, 26, 76, 108, 4, P.woodL);
+    R(c, 30, 112, 5, 22, P.woodD);
+    R(c, 125, 112, 5, 22, P.woodD);
+    /* muggar – en per profession, och en som ingen rört */
+    var muggar = [[36, 84, '#f8f8f0'], [56, 82, '#c8d8d0'], [76, 85, '#f0e0c8'],
+                  [96, 82, '#f8f8f0'], [114, 85, '#d8c8d8'], [66, 94, '#e8e8e0']];
+    muggar.forEach(function (m) {
+      R(c, m[0], m[1], 9, 7, '#6a6258');
+      R(c, m[0] + 1, m[1] + 1, 7, 5, m[2]);
+      R(c, m[0] + 2, m[1] + 2, 5, 2, '#6a4a2c');
+      R(c, m[0] + 9, m[1] + 2, 2, 3, m[2]);
+    });
+    /* fikafat */
+    R(c, 84, 94, 18, 9, P.white);
+    R(c, 86, 96, 14, 5, '#c8a870');
+    /* stolsryggar runt bordet */
+    for (i = 0; i < 4; i++) R(c, 34 + i * 26, 66, 18, 8, P.steelD);
+    for (i = 0; i < 4; i++) R(c, 34 + i * 26, 66, 18, 3, P.steel);
+    /* golvlist och en växt i hörnet */
+    R(c, 0, 130, 160, 14, P.floor);
+    R(c, 146, 96, 12, 16, P.woodD);
+    R(c, 143, 84, 18, 14, P.greenD);
+    R(c, 146, 80, 12, 10, P.green);
+  };
+
   LESS.drawGranskningBg = function (c, t) {
     R(c, 0, 0, 160, 144, '#243038');
     /* vägg och hylla */

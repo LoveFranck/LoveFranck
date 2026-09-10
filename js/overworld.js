@@ -1041,7 +1041,11 @@
           ui.sayAll(LESS.kampanj.final.map(function (t) { return { text: t, speaker: { name: 'LESS', kind: 'you' } }; }), function () {
             LESS.state.data.lage = 'drill';
             LESS.state.spara();
-            ui.say('Övningsläget är upplåst. Välj vilket rum du vill gå in i.', null, ater);
+            /* Sista scenen: personalrummet. Ärendena är avslutade och det som
+               återstår är det ingen journal rymmer. */
+            reflektionsmotet(function () {
+              ui.say('Övningsläget är upplåst. Välj vilket rum du vill gå in i.', null, ater);
+            });
           });
         } else {
           mellanspel();
@@ -1062,6 +1066,25 @@
     });
   }
 
+  /* Reflektionsmötet: spelets avslutning, och därefter valbart i receptionen.
+     Det är ograderat med flit – ett samtal om egna känslor ska inte få ett
+     betyg. */
+  function reflektionsmotet(klar) {
+    var fall = LESS.hittaFall('mote-harbargering');
+    if (!fall) { if (klar) klar(); return; }
+    var d = LESS.state.data, forraRollen = d.spelare.roll;
+    paus();
+    LESS.sfx('door');
+    LESS.swirl(function () {
+      LESS.encounter.start(fall, { mote: true }, function () {
+        d.spelare.roll = forraRollen;
+        d.moteVisat = true;
+        LESS.state.spara();
+        if (klar) klar(); else ui.transition(ater);
+      });
+    });
+  }
+
   /* ---------------- reception & utgång ---------------- */
 
   function receptionsMeny() {
@@ -1073,6 +1096,10 @@
         hint: d.lage === 'kampanj'
           ? 'Öva en roll i taget, obegränsat antal fall.'
           : 'Följ tre patienter hela vägen genom LESS-flödet.' },
+      { text: 'Reflektionsmötet', hint: LESS.state.kampanjKlarad()
+          ? 'Personalrummet. Om att härbärgera sina egna reaktioner.'
+          : 'Låst tills kampanjens tre ärenden är klara.',
+        disabled: !LESS.state.kampanjKlarad() },
       { text: 'Anslagstavlan (progression)' },
       { text: 'Handboken' },
       { text: 'Kontroller' },
@@ -1082,19 +1109,24 @@
       { text: 'Börja om från början', hint: 'Raderar all progression.' },
       { text: 'Tillbaka' }
     ];
-    ui.menu(items, { cancel: true }, function (i) {
-      if (i === 0) {
+    /* Matcha på texten och inte på indexet: menyn har växt flera gånger, och
+       varje ny post mitt i listan flyttade alla val efter den. */
+    ui.menu(items, { cancel: true }, function (i, item) {
+      var txt = item ? item.text : '';
+      if (txt.indexOf('Byt till') === 0) {
         d.lage = d.lage === 'kampanj' ? 'drill' : 'kampanj';
         LESS.state.spara();
         ui.say(d.lage === 'kampanj'
           ? 'Kampanjläge. Följ ärendet dit det pekar.'
           : 'Övningsläge. Gå in i vilket rum du vill.', null, ater);
-      } else if (i === 1) { ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); }
-      else if (i === 2) { ui.panel('HANDBOKEN', handbokHtml(), ater); }
-      else if (i === 3) { ui.panel('KONTROLLER', kontrollHtml(), ater); }
-      else if (i === 4) { LESS.audio.toggle(); d.installningar.ljud = LESS.audio.enabled; LESS.state.spara(); receptionsMeny(); }
-      else if (i === 5) { d.installningar.tips = !d.installningar.tips; LESS.state.spara(); receptionsMeny(); }
-      else if (i === 6) {
+      }
+      else if (txt === 'Reflektionsmötet') { reflektionsmotet(null); }
+      else if (txt.indexOf('Anslagstavlan') === 0) { ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); }
+      else if (txt === 'Handboken') { ui.panel('HANDBOKEN', handbokHtml(), ater); }
+      else if (txt === 'Kontroller') { ui.panel('KONTROLLER', kontrollHtml(), ater); }
+      else if (txt.indexOf('Ljud:') === 0) { LESS.audio.toggle(); d.installningar.ljud = LESS.audio.enabled; LESS.state.spara(); receptionsMeny(); }
+      else if (txt.indexOf('Handledartips:') === 0) { d.installningar.tips = !d.installningar.tips; LESS.state.spara(); receptionsMeny(); }
+      else if (txt.indexOf('Börja om') === 0) {
         ui.say('Vill du radera all progression och börja om?', null, function () {
           ui.menu([{ text: 'Nej, avbryt' }, { text: 'Ja, radera allt' }], {}, function (j) {
             if (j === 1) { LESS.state.nollstall(); location.reload(); }
