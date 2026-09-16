@@ -730,9 +730,42 @@
 
   /* ---------------- stationer ---------------- */
 
+  /* Anslagstavlan visar även sammanräknad statistik. Den hämtas i bakgrunden
+     och rutan ritas om när svaret kommit. */
+  function oppnaTavlan() {
+    paus();
+    ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater);
+    if (LESS.statistik && !LESS.statistik.avstangd()) {
+      LESS.statistik.hamta().then(function (res) {
+        if (res && !LESS.$('panel').classList.contains('hidden')) {
+          LESS.$('panel-body').innerHTML = tavlaHtml();
+        }
+      });
+    }
+  }
+
+  function statistikMeny() {
+    paus();
+    LESS.sfx('ok');
+    ui.panel('ANONYM STATISTIK', LESS.statistik.vadSomSamlas(), function () {
+      ui.menu([
+        { text: LESS.statistik.avstangd() ? 'Slå på' : 'Stäng av' },
+        { text: 'Låt vara' }
+      ], { cancel: true }, function (i) {
+        if (i === 0) {
+          var av = !LESS.statistik.avstangd();
+          LESS.statistik.stangAv(av);
+          if (!av) LESS.statistik.rapportera(true);
+          ui.say(av ? 'Avstängt. Inget skickas härifrån.'
+                    : 'Påslaget. Tack – det är så vi ser om spelet används.', null, ater);
+        } else ater();
+      });
+    });
+  }
+
   function station(s) {
     if (s.kind === 'handbok') { paus(); LESS.sfx('ok'); ui.panel('HANDBOKEN', handbokHtml(), ater); return; }
-    if (s.kind === 'tavla')   { paus(); LESS.sfx('ok'); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); return; }
+    if (s.kind === 'tavla')   { LESS.sfx('ok'); oppnaTavlan(); return; }
     if (s.kind === 'plansch') {
       paus(); LESS.sfx('ok');
       LESS.plansch.visa(s.roll, ater);
@@ -907,6 +940,43 @@
       ko.forEach(function (p) { html += '<li>' + LESS.esc(LESS.principer[p] || p) + '</li>'; });
       html += '</ul>';
       html += '<p>Övningsläget prioriterar fall som tränar dessa.</p>';
+    }
+
+    /* ---- hela mottagningen ----
+       Aggregat, aldrig enskilda. Under statistik.minstaN svarande visas inga
+       siffror alls: med trettio kollegor och en enda arbetsterapeut går de
+       flesta uppdelningar att räkna bakåt till en person. */
+    var st = LESS.statistik && LESS.statistik.cache();
+    html += '<h3>Hela mottagningen</h3>';
+    if (LESS.statistik && LESS.statistik.avstangd()) {
+      html += '<p>Du har tackat nej till anonym statistik. Du ser därför inga ' +
+              'sammanräknade siffror här. Ändra i receptionen om du vill.</p>';
+    } else if (!st) {
+      html += '<p>Hämtar …</p>';
+    } else if (st.ingen) {
+      html += '<p>Den här kopian av spelet har ingen delad lagring, så det finns inga ' +
+              'gemensamma siffror att visa. De finns i den publicerade versionen.</p>';
+    } else if (!st.nog) {
+      html += '<p>' + st.n + ' har kommit igång. Sammanräknade siffror visas när minst ' +
+              LESS.statistik.minstaN + ' svarat – färre än så går att räkna bakåt till en person.</p>';
+    } else {
+      html += '<div class="kv"><b>Kommit igång</b><span>' + st.borjat + ' av ' + st.n + '</span></div>';
+      html += '<div class="kv"><b>Klarat kampanjen</b><span>' + st.klara + '</span></div>';
+      html += '<div class="kv"><b>Sett reflektionsmötet</b><span>' + st.motet + '</span></div>';
+      html += '<div class="kv"><b>Möten totalt</b><span>' + st.moten + '</span></div>';
+      html += '<div class="kv"><b>Median per person</b><span>' + st.medianMoten + ' möten</span></div>';
+      var kvar = st.stannat[0] + st.stannat[1] + st.stannat[2];
+      if (kvar) {
+        html += '<p>Av dem som inte är klara står ' + st.stannat[0] + ' kvar i ärende 1, ' +
+                st.stannat[1] + ' i ärende 2 och ' + st.stannat[2] + ' i ärende 3.</p>';
+      }
+      if (st.principer && st.principer.length) {
+        html += '<p>Ligger kvar i flest repetitionsköer:</p><ul>';
+        st.principer.forEach(function (p) {
+          html += '<li>' + LESS.esc(LESS.principer[p.id] || p.id) + ' · ' + p.n + ' st</li>';
+        });
+        html += '</ul>';
+      }
     }
 
     html += '<h3>Oplanerade besök</h3>';
@@ -1101,6 +1171,9 @@
           : 'Låst tills kampanjens tre ärenden är klara.',
         disabled: !LESS.state.kampanjKlarad() },
       { text: 'Anslagstavlan (progression)' },
+      { text: LESS.statistik && LESS.statistik.avstangd()
+          ? 'Anonym statistik: AV' : 'Anonym statistik: PÅ',
+        hint: 'Vad som skickas, och hur du ändrar dig.' },
       { text: 'Handboken' },
       { text: 'Kontroller' },
       { text: LESS.audio.enabled ? 'Ljud: PÅ' : 'Ljud: AV' },
@@ -1121,7 +1194,8 @@
           : 'Övningsläge. Gå in i vilket rum du vill.', null, ater);
       }
       else if (txt === 'Reflektionsmötet') { reflektionsmotet(null); }
-      else if (txt.indexOf('Anslagstavlan') === 0) { ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); }
+      else if (txt.indexOf('Anslagstavlan') === 0) { oppnaTavlan(); }
+      else if (txt.indexOf('Anonym statistik') === 0) { statistikMeny(); }
       else if (txt === 'Handboken') { ui.panel('HANDBOKEN', handbokHtml(), ater); }
       else if (txt === 'Kontroller') { ui.panel('KONTROLLER', kontrollHtml(), ater); }
       else if (txt.indexOf('Ljud:') === 0) { LESS.audio.toggle(); d.installningar.ljud = LESS.audio.enabled; LESS.state.spara(); receptionsMeny(); }
@@ -1166,7 +1240,7 @@
       else if (k === 'b') { /* reserverad */ }
     });
 
-    LESS.ui.globalKeys.journal = function () { paus(); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); };
+    LESS.ui.globalKeys.journal = function () { oppnaTavlan(); };
     LESS.ui.globalKeys.handbok = function () { paus(); ui.panel('HANDBOKEN', handbokHtml(), ater); };
     LESS.ui.globalKeys.kontroller = function () { paus(); ui.panel('KONTROLLER', kontrollHtml(), ater); };
 

@@ -53,10 +53,29 @@
       LESS.sfx('ok');
       LESS.input.pop(titelHandler); titelHandler = null;
       LESS.show($('title'), false);
-      huvudmeny();
+      /* Första gången: säg vad som samlas in innan något samlas in. */
+      if (LESS.statistik && !LESS.statistik.harFragats()) statistikfraga(huvudmeny);
+      else { if (LESS.statistik) LESS.statistik.rapportera(true); huvudmeny(); }
     });
   }
   LESS.titel = titel;
+
+  /* Samtycket frågas en gång, med innehållet synligt i samma ruta. Ett nej
+     är ett nej tills någon ändrar det i receptionen. */
+  function statistikfraga(klar) {
+    ui.panel('ANONYM STATISTIK', LESS.statistik.vadSomSamlas(), function () {
+      ui.say('Får spelet skicka den raden?', null, function () {
+        ui.menu([
+          { text: 'Ja, det går bra', hint: 'Hjälper verksamheten se om spelet används och var det tar stopp.' },
+          { text: 'Nej tack', hint: 'Inget skickas. Du kan ändra dig i receptionen.' }
+        ], {}, function (i) {
+          LESS.statistik.stangAv(i === 1);
+          if (i === 0) LESS.statistik.rapportera(true);
+          klar();
+        });
+      });
+    });
+  }
 
   function huvudmeny() {
     var d = LESS.state.data;

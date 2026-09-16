@@ -2412,6 +2412,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
     installningar: { tips: true, ljud: true, snabbtext: false },
     skattningar: {},               /* frågeId -> {varde, kommentar, tid} */
     namn: '',                      /* signatur på planschen */
+    statistikForsta: null,         /* första speldatum, för den anonyma raden */
     pingis: { hittat: false, vinster: {}, forluster: {} },
     statistik: { moten: 0, guld: 0, silver: 0, brons: 0, omtag: 0, minuter: 0 }
   };
@@ -2489,6 +2490,8 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       });
 
       state.spara();
+      /* Anonym användningsstatistik, om den inte är avstängd. */
+      if (LESS.statistik) LESS.statistik.rapportera(true);
       return r;
     },
 
@@ -2804,6 +2807,28 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
         'Patienten har rätt att ta del av intyget. Skriv så att det går att läsa högt för patienten.',
         'Att neka sjukskrivning är ett medicinskt ställningstagande som ska förklaras, dokumenteras och gå att ompröva.'
       ]
+    },
+
+    {
+      id: 'statistik',
+      titel: 'Anonym statistik – vad spelet sparar',
+      text: [
+        'Spelet skickar en rad om hur det används, så att verksamheten kan se om det kommer till användning och var det tar stopp. Raden är avsiktligt grovkornig.'
+      ],
+      lista: [
+        ['Ett slumpat id', 'Skapas i din webbläsare. Det säger ingenting om vem du är, och det används inte till något annat.'],
+        ['Datum utan klockslag', 'Första och senaste speldagen. Ett klockslag hade gjort raden spårbar för den som vet vem som satt vid datorn.'],
+        ['Antal möten och betyg', 'Hur många och hur de bedömdes – inte vad du svarade i ett enskilt val.'],
+        ['Hur långt du kommit', 'Kampanjsteg och om reflektionsmötet är spelat.'],
+        ['Repetitionskön', 'Vilka principer som ligger kvar. Det är den enda innehållsliga signalen, och den är användbar i aggregat.']
+      ],
+      punkter: [
+        'Signaturen på frågeplanscherna hör till en annan lagring och ett annat id. Den som signerar en skattning går inte att koppla till sin spelstatistik.',
+        'Siffrorna visas sammanräknade på anslagstavlan, och först när minst fem personer svarat. Färre än så går att räkna bakåt till en enskild person, särskilt i en liten personalgrupp.',
+        'Ingen uppdelning per profession visas. På en vårdcentral finns ofta bara en arbetsterapeut, och då är "arbetsterapeuternas resultat" en persons resultat.',
+        'Du kan tacka nej. Frågan kommer första gången spelet startar, och valet ändras i receptionen.'
+      ],
+      varning: 'Allt som sparas i den delade lagringen kan läsas av alla som öppnar spelet. Det finns ingen privat lagring i den här körmiljön – skriv därför aldrig något i spelet som inte tål att en kollega läser det.'
     },
 
     {
@@ -10124,6 +10149,230 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
 
 })(window);
 
+/* ==== js/statistik.js ==== */
+/* statistik.js – anonym användningsstatistik
+
+   Verksamheten vill veta om spelet faktiskt används: hur många som kommit
+   igång, hur långt de tar sig, var det tar stopp och vilka principer som
+   sitter dåligt. Det går att svara på utan att veta vem någon är, och det
+   är så det är byggt.
+
+   Tre saker är medvetna val och bör inte ändras utan att någon tänker efter:
+
+   1. Egen nyckel. Statistiken använder INTE samma deltagar-id som planschen.
+      Den som signerar en skattning med sitt namn ska inte kunna kopplas till
+      sin spelstatistik. Två id:n som aldrig möts.
+   2. Grovkornigt. Datum utan klockslag, antal utan tidsstämplar, betyg utan
+      ordning. Nog för att se ett mönster, för lite för att följa en person
+      genom en eftermiddag.
+   3. Frivilligt. Första gången spelet startar visas vad som samlas in, och
+      man kan tacka nej. Ett nej gäller tills någon ändrar det.
+
+   Allt som skrivs hit kan läsas av alla som öppnar spelet. Det finns ingen
+   privat lagring i den här körmiljön. Skriv därför aldrig något här som
+   inte tål att en kollega läser det.                                       */
+
+(function (global) {
+  'use strict';
+  var LESS = global.LESS;
+
+  var NYCKEL_ID = 'less-stat-id';
+  var NYCKEL_NEJ = 'less-stat-nej';
+  var NYCKEL_FRAGAD = 'less-stat-fragad';
+  var MINSTA_N = 5;              /* under så många svarande visas inga siffror */
+
+  var senasteSkrivning = 0;
+  var SKRIVPAUS = 20000;         /* ms – skriv inte oftare än så */
+
+  /* ---------------- id och samtycke ---------------- */
+
+  function statId() {
+    try {
+      var id = global.localStorage.getItem(NYCKEL_ID);
+      if (!id) {
+        id = 's' + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6);
+        global.localStorage.setItem(NYCKEL_ID, id);
+      }
+      return id;
+    } catch (e) { return null; }
+  }
+
+  /* Av tills någon sagt ja. Innan frågan är ställd skickas ingenting – att
+     samla in först och fråga sedan vore att fråga för sent. */
+  function avstangd() {
+    try {
+      if (global.localStorage.getItem(NYCKEL_FRAGAD) !== '1') return true;
+      return global.localStorage.getItem(NYCKEL_NEJ) === '1';
+    } catch (e) { return true; }
+  }
+
+  function stangAv(av) {
+    try {
+      global.localStorage.setItem(NYCKEL_NEJ, av ? '1' : '0');
+      global.localStorage.setItem(NYCKEL_FRAGAD, '1');
+    } catch (e) { /* tyst */ }
+  }
+
+  function harFragats() {
+    try { return global.localStorage.getItem(NYCKEL_FRAGAD) === '1'; } catch (e) { return true; }
+  }
+
+  function db() {
+    var d = LESS.delad;
+    return d ? d.aktuell() : null;
+  }
+
+  /* ---------------- vad som skickas ----------------
+     Datum utan klockslag, med flit. Ett klockslag gör en anonym rad
+     spårbar för den som vet vem som satt vid datorn klockan tre. */
+
+  function idag() { return new Date().toISOString().slice(0, 10); }
+
+  function underlag() {
+    var d = LESS.state.data;
+    var fall = {};
+    Object.keys(d.resultat || {}).forEach(function (id) {
+      fall[id] = d.resultat[id].basta;
+    });
+    return {
+      forsta: d.statistikForsta || idag(),
+      senast: idag(),
+      moten: d.statistik.moten || 0,
+      guld: d.statistik.guld || 0,
+      silver: d.statistik.silver || 0,
+      brons: d.statistik.brons || 0,
+      omtag: d.statistik.omtag || 0,
+      kampanjArende: d.kampanj.arende || 0,
+      kampanjSteg: d.kampanj.steg || 0,
+      kampanjKlar: !!LESS.state.kampanjKlarad(),
+      moteVisat: !!d.moteVisat,
+      fall: fall,
+      kvarIKo: (LESS.state.ko() || []).slice(0, 12),
+      version: LESS.VERSION
+    };
+  }
+
+  /* ---------------- skriv ---------------- */
+
+  function rapportera(tvinga) {
+    if (avstangd()) return;
+    var id = statId();
+    if (!id) return;
+    var nu = Date.now();
+    if (!tvinga && nu - senasteSkrivning < SKRIVPAUS) return;
+
+    var D = LESS.delad;
+    if (!D) return;
+    D.db().then(function () {
+      if (!db()) return;
+      var d = LESS.state.data;
+      if (!d.statistikForsta) { d.statistikForsta = idag(); LESS.state.spara(); }
+      senasteSkrivning = Date.now();
+      try {
+        db().doc('statistik/' + id).set(underlag()).then(null, function () { /* tyst */ });
+      } catch (e) { /* tyst */ }
+    });
+  }
+
+  /* ---------------- läs och räkna samman ---------------- */
+
+  var cache = null;
+
+  function hamta() {
+    if (!LESS.delad) return Promise.resolve(null);
+    return LESS.delad.db().then(function () {
+      if (!db()) { cache = { ingen: true }; return cache; }
+      return db().collection('statistik').get().then(function (snap) {
+        var rader = [];
+        snap.docs.forEach(function (doc) {
+          var v = doc.data() || {};
+          if (typeof v.moten === 'number') rader.push(v);
+        });
+        cache = sammanstall(rader);
+        return cache;
+      }, function () { return null; });
+    });
+  }
+
+  function median(a) {
+    if (!a.length) return 0;
+    var s = a.slice().sort(function (x, y) { return x - y; });
+    return s.length % 2 ? s[(s.length - 1) / 2]
+                        : Math.round((s[s.length / 2 - 1] + s[s.length / 2]) / 2);
+  }
+
+  function sammanstall(rader) {
+    var n = rader.length;
+    var ut = { n: n, nog: n >= MINSTA_N };
+    if (!ut.nog) return ut;
+
+    ut.moten = rader.reduce(function (s, r) { return s + (r.moten || 0); }, 0);
+    ut.medianMoten = median(rader.map(function (r) { return r.moten || 0; }));
+    ut.borjat = rader.filter(function (r) { return (r.moten || 0) > 0; }).length;
+    ut.klara = rader.filter(function (r) { return r.kampanjKlar; }).length;
+    ut.motet = rader.filter(function (r) { return r.moteVisat; }).length;
+
+    /* Var tar det stopp? Ärendenummer för dem som inte är klara. */
+    ut.stannat = [0, 0, 0];
+    rader.forEach(function (r) {
+      if (r.kampanjKlar) return;
+      var a = LESS.clamp(r.kampanjArende || 0, 0, 2);
+      ut.stannat[a] += 1;
+    });
+
+    /* Vilka principer ligger kvar i kön hos flest? Det är den enda
+       innehållsliga signalen som är värd något i aggregat. */
+    var ko = {};
+    rader.forEach(function (r) {
+      (r.kvarIKo || []).forEach(function (p) { ko[p] = (ko[p] || 0) + 1; });
+    });
+    ut.principer = Object.keys(ko)
+      .map(function (p) { return { id: p, n: ko[p] }; })
+      .sort(function (a, b) { return b.n - a.n; })
+      .slice(0, 6);
+
+    /* Betygsfördelning över alla möten. */
+    ut.betyg = ['guld', 'silver', 'brons', 'omtag'].map(function (b) {
+      return { namn: b, n: rader.reduce(function (s, r) { return s + (r[b] || 0); }, 0) };
+    });
+    return ut;
+  }
+
+  /* ---------------- texter ---------------- */
+
+  function vadSomSamlas() {
+    return '<p>Spelet skickar en rad om hur det används till den delade lagringen. ' +
+           'Raden innehåller:</p>' +
+           '<ul>' +
+           '<li>ett slumpat id som skapas i din webbläsare</li>' +
+           '<li>vilket datum du började och senast spelade – utan klockslag</li>' +
+           '<li>hur många möten du gjort och hur de bedömdes</li>' +
+           '<li>hur långt i kampanjen du kommit</li>' +
+           '<li>vilka principer som ligger kvar i din repetitionskö</li>' +
+           '</ul>' +
+           '<p>Den innehåller <b>inte</b> ditt namn, din roll, vad du svarat i ett enskilt ' +
+           'val, eller när på dygnet du spelat.</p>' +
+           '<p>Signaturen du kan skriva på frågeplanscherna hör till en annan lagring och ' +
+           'ett annat id. De två går inte att koppla ihop.</p>' +
+           '<p>Siffrorna visas sammanräknade på anslagstavlan, och först när minst ' +
+           MINSTA_N + ' personer svarat – annars går de att räkna bakåt till en person.</p>' +
+           '<p>Allt som sparas i den delade lagringen kan läsas av alla som öppnar spelet. ' +
+           'Det finns ingen privat lagring här.</p>';
+  }
+
+  LESS.statistik = {
+    rapportera: rapportera,
+    hamta: hamta,
+    cache: function () { return cache; },
+    avstangd: avstangd,
+    stangAv: stangAv,
+    harFragats: harFragats,
+    vadSomSamlas: vadSomSamlas,
+    minstaN: MINSTA_N
+  };
+
+})(window);
+
 /* ==== js/encounter.js ==== */
 /* encounter.js – mötesmotorn.
 
@@ -11656,9 +11905,42 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
 
   /* ---------------- stationer ---------------- */
 
+  /* Anslagstavlan visar även sammanräknad statistik. Den hämtas i bakgrunden
+     och rutan ritas om när svaret kommit. */
+  function oppnaTavlan() {
+    paus();
+    ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater);
+    if (LESS.statistik && !LESS.statistik.avstangd()) {
+      LESS.statistik.hamta().then(function (res) {
+        if (res && !LESS.$('panel').classList.contains('hidden')) {
+          LESS.$('panel-body').innerHTML = tavlaHtml();
+        }
+      });
+    }
+  }
+
+  function statistikMeny() {
+    paus();
+    LESS.sfx('ok');
+    ui.panel('ANONYM STATISTIK', LESS.statistik.vadSomSamlas(), function () {
+      ui.menu([
+        { text: LESS.statistik.avstangd() ? 'Slå på' : 'Stäng av' },
+        { text: 'Låt vara' }
+      ], { cancel: true }, function (i) {
+        if (i === 0) {
+          var av = !LESS.statistik.avstangd();
+          LESS.statistik.stangAv(av);
+          if (!av) LESS.statistik.rapportera(true);
+          ui.say(av ? 'Avstängt. Inget skickas härifrån.'
+                    : 'Påslaget. Tack – det är så vi ser om spelet används.', null, ater);
+        } else ater();
+      });
+    });
+  }
+
   function station(s) {
     if (s.kind === 'handbok') { paus(); LESS.sfx('ok'); ui.panel('HANDBOKEN', handbokHtml(), ater); return; }
-    if (s.kind === 'tavla')   { paus(); LESS.sfx('ok'); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); return; }
+    if (s.kind === 'tavla')   { LESS.sfx('ok'); oppnaTavlan(); return; }
     if (s.kind === 'plansch') {
       paus(); LESS.sfx('ok');
       LESS.plansch.visa(s.roll, ater);
@@ -11833,6 +12115,43 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       ko.forEach(function (p) { html += '<li>' + LESS.esc(LESS.principer[p] || p) + '</li>'; });
       html += '</ul>';
       html += '<p>Övningsläget prioriterar fall som tränar dessa.</p>';
+    }
+
+    /* ---- hela mottagningen ----
+       Aggregat, aldrig enskilda. Under statistik.minstaN svarande visas inga
+       siffror alls: med trettio kollegor och en enda arbetsterapeut går de
+       flesta uppdelningar att räkna bakåt till en person. */
+    var st = LESS.statistik && LESS.statistik.cache();
+    html += '<h3>Hela mottagningen</h3>';
+    if (LESS.statistik && LESS.statistik.avstangd()) {
+      html += '<p>Du har tackat nej till anonym statistik. Du ser därför inga ' +
+              'sammanräknade siffror här. Ändra i receptionen om du vill.</p>';
+    } else if (!st) {
+      html += '<p>Hämtar …</p>';
+    } else if (st.ingen) {
+      html += '<p>Den här kopian av spelet har ingen delad lagring, så det finns inga ' +
+              'gemensamma siffror att visa. De finns i den publicerade versionen.</p>';
+    } else if (!st.nog) {
+      html += '<p>' + st.n + ' har kommit igång. Sammanräknade siffror visas när minst ' +
+              LESS.statistik.minstaN + ' svarat – färre än så går att räkna bakåt till en person.</p>';
+    } else {
+      html += '<div class="kv"><b>Kommit igång</b><span>' + st.borjat + ' av ' + st.n + '</span></div>';
+      html += '<div class="kv"><b>Klarat kampanjen</b><span>' + st.klara + '</span></div>';
+      html += '<div class="kv"><b>Sett reflektionsmötet</b><span>' + st.motet + '</span></div>';
+      html += '<div class="kv"><b>Möten totalt</b><span>' + st.moten + '</span></div>';
+      html += '<div class="kv"><b>Median per person</b><span>' + st.medianMoten + ' möten</span></div>';
+      var kvar = st.stannat[0] + st.stannat[1] + st.stannat[2];
+      if (kvar) {
+        html += '<p>Av dem som inte är klara står ' + st.stannat[0] + ' kvar i ärende 1, ' +
+                st.stannat[1] + ' i ärende 2 och ' + st.stannat[2] + ' i ärende 3.</p>';
+      }
+      if (st.principer && st.principer.length) {
+        html += '<p>Ligger kvar i flest repetitionsköer:</p><ul>';
+        st.principer.forEach(function (p) {
+          html += '<li>' + LESS.esc(LESS.principer[p.id] || p.id) + ' · ' + p.n + ' st</li>';
+        });
+        html += '</ul>';
+      }
     }
 
     html += '<h3>Oplanerade besök</h3>';
@@ -12027,6 +12346,9 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           : 'Låst tills kampanjens tre ärenden är klara.',
         disabled: !LESS.state.kampanjKlarad() },
       { text: 'Anslagstavlan (progression)' },
+      { text: LESS.statistik && LESS.statistik.avstangd()
+          ? 'Anonym statistik: AV' : 'Anonym statistik: PÅ',
+        hint: 'Vad som skickas, och hur du ändrar dig.' },
       { text: 'Handboken' },
       { text: 'Kontroller' },
       { text: LESS.audio.enabled ? 'Ljud: PÅ' : 'Ljud: AV' },
@@ -12047,7 +12369,8 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
           : 'Övningsläge. Gå in i vilket rum du vill.', null, ater);
       }
       else if (txt === 'Reflektionsmötet') { reflektionsmotet(null); }
-      else if (txt.indexOf('Anslagstavlan') === 0) { ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); }
+      else if (txt.indexOf('Anslagstavlan') === 0) { oppnaTavlan(); }
+      else if (txt.indexOf('Anonym statistik') === 0) { statistikMeny(); }
       else if (txt === 'Handboken') { ui.panel('HANDBOKEN', handbokHtml(), ater); }
       else if (txt === 'Kontroller') { ui.panel('KONTROLLER', kontrollHtml(), ater); }
       else if (txt.indexOf('Ljud:') === 0) { LESS.audio.toggle(); d.installningar.ljud = LESS.audio.enabled; LESS.state.spara(); receptionsMeny(); }
@@ -12092,7 +12415,7 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       else if (k === 'b') { /* reserverad */ }
     });
 
-    LESS.ui.globalKeys.journal = function () { paus(); ui.panel('ANSLAGSTAVLAN', tavlaHtml(), ater); };
+    LESS.ui.globalKeys.journal = function () { oppnaTavlan(); };
     LESS.ui.globalKeys.handbok = function () { paus(); ui.panel('HANDBOKEN', handbokHtml(), ater); };
     LESS.ui.globalKeys.kontroller = function () { paus(); ui.panel('KONTROLLER', kontrollHtml(), ater); };
 
@@ -12182,10 +12505,29 @@ table.topp tr.etta td:nth-child(2){ color:#8a6010; }
       LESS.sfx('ok');
       LESS.input.pop(titelHandler); titelHandler = null;
       LESS.show($('title'), false);
-      huvudmeny();
+      /* Första gången: säg vad som samlas in innan något samlas in. */
+      if (LESS.statistik && !LESS.statistik.harFragats()) statistikfraga(huvudmeny);
+      else { if (LESS.statistik) LESS.statistik.rapportera(true); huvudmeny(); }
     });
   }
   LESS.titel = titel;
+
+  /* Samtycket frågas en gång, med innehållet synligt i samma ruta. Ett nej
+     är ett nej tills någon ändrar det i receptionen. */
+  function statistikfraga(klar) {
+    ui.panel('ANONYM STATISTIK', LESS.statistik.vadSomSamlas(), function () {
+      ui.say('Får spelet skicka den raden?', null, function () {
+        ui.menu([
+          { text: 'Ja, det går bra', hint: 'Hjälper verksamheten se om spelet används och var det tar stopp.' },
+          { text: 'Nej tack', hint: 'Inget skickas. Du kan ändra dig i receptionen.' }
+        ], {}, function (i) {
+          LESS.statistik.stangAv(i === 1);
+          if (i === 0) LESS.statistik.rapportera(true);
+          klar();
+        });
+      });
+    });
+  }
 
   function huvudmeny() {
     var d = LESS.state.data;
