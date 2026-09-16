@@ -53,9 +53,15 @@
       LESS.sfx('ok');
       LESS.input.pop(titelHandler); titelHandler = null;
       LESS.show($('title'), false);
-      /* Första gången: säg vad som samlas in innan något samlas in. */
-      if (LESS.statistik && !LESS.statistik.harFragats()) statistikfraga(huvudmeny);
-      else { if (LESS.statistik) LESS.statistik.rapportera(true); huvudmeny(); }
+      /* Fråga bara där något faktiskt kan skickas. På GitHub Pages och som
+         lokal fil finns ingen delad lagring, och då vore samtyckesfrågan
+         ett löfte om en insamling som inte sker. */
+      if (!LESS.statistik || !LESS.delad) { huvudmeny(); return; }
+      LESS.delad.db().then(function () {
+        if (!LESS.delad.aktuell()) { huvudmeny(); return; }
+        if (!LESS.statistik.harFragats()) statistikfraga(huvudmeny);
+        else { LESS.statistik.rapportera(true); huvudmeny(); }
+      });
     });
   }
   LESS.titel = titel;

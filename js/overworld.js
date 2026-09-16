@@ -1173,7 +1173,9 @@
       { text: 'Anslagstavlan (progression)' },
       { text: LESS.statistik && LESS.statistik.avstangd()
           ? 'Anonym statistik: AV' : 'Anonym statistik: PÅ',
-        hint: 'Vad som skickas, och hur du ändrar dig.' },
+        hint: (LESS.delad && LESS.delad.aktuell())
+          ? 'Vad som skickas, och hur du ändrar dig.'
+          : 'Den här kopian har ingen delad lagring – ingenting skickas.' },
       { text: 'Handboken' },
       { text: 'Kontroller' },
       { text: LESS.audio.enabled ? 'Ljud: PÅ' : 'Ljud: AV' },
