@@ -53,35 +53,10 @@
       LESS.sfx('ok');
       LESS.input.pop(titelHandler); titelHandler = null;
       LESS.show($('title'), false);
-      /* Fråga bara där något faktiskt kan skickas. På GitHub Pages och som
-         lokal fil finns ingen delad lagring, och då vore samtyckesfrågan
-         ett löfte om en insamling som inte sker. */
-      if (!LESS.statistik || !LESS.delad) { huvudmeny(); return; }
-      LESS.delad.db().then(function () {
-        if (!LESS.delad.aktuell()) { huvudmeny(); return; }
-        if (!LESS.statistik.harFragats()) statistikfraga(huvudmeny);
-        else { LESS.statistik.rapportera(true); huvudmeny(); }
-      });
+      huvudmeny();
     });
   }
   LESS.titel = titel;
-
-  /* Samtycket frågas en gång, med innehållet synligt i samma ruta. Ett nej
-     är ett nej tills någon ändrar det i receptionen. */
-  function statistikfraga(klar) {
-    ui.panel('ANONYM STATISTIK', LESS.statistik.vadSomSamlas(), function () {
-      ui.say('Får spelet skicka den raden?', null, function () {
-        ui.menu([
-          { text: 'Ja, det går bra', hint: 'Hjälper verksamheten se om spelet används och var det tar stopp.' },
-          { text: 'Nej tack', hint: 'Inget skickas. Du kan ändra dig i receptionen.' }
-        ], {}, function (i) {
-          LESS.statistik.stangAv(i === 1);
-          if (i === 0) LESS.statistik.rapportera(true);
-          klar();
-        });
-      });
-    });
-  }
 
   function huvudmeny() {
     var d = LESS.state.data;

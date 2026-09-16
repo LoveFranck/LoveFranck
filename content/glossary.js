@@ -243,28 +243,6 @@
     },
 
     {
-      id: 'statistik',
-      titel: 'Anonym statistik – vad spelet sparar',
-      text: [
-        'Spelet skickar en rad om hur det används, så att verksamheten kan se om det kommer till användning och var det tar stopp. Raden är avsiktligt grovkornig.'
-      ],
-      lista: [
-        ['Ett slumpat id', 'Skapas i din webbläsare. Det säger ingenting om vem du är, och det används inte till något annat.'],
-        ['Datum utan klockslag', 'Första och senaste speldagen. Ett klockslag hade gjort raden spårbar för den som vet vem som satt vid datorn.'],
-        ['Antal möten och betyg', 'Hur många och hur de bedömdes – inte vad du svarade i ett enskilt val.'],
-        ['Hur långt du kommit', 'Kampanjsteg och om reflektionsmötet är spelat.'],
-        ['Repetitionskön', 'Vilka principer som ligger kvar. Det är den enda innehållsliga signalen, och den är användbar i aggregat.']
-      ],
-      punkter: [
-        'Signaturen på frågeplanscherna hör till en annan lagring och ett annat id. Den som signerar en skattning går inte att koppla till sin spelstatistik.',
-        'Siffrorna visas sammanräknade på anslagstavlan, och först när minst fem personer svarat. Färre än så går att räkna bakåt till en enskild person, särskilt i en liten personalgrupp.',
-        'Ingen uppdelning per profession visas. På en vårdcentral finns ofta bara en arbetsterapeut, och då är "arbetsterapeuternas resultat" en persons resultat.',
-        'Du kan tacka nej. Frågan kommer första gången spelet startar, och valet ändras i receptionen.'
-      ],
-      varning: 'Allt som sparas i den delade lagringen kan läsas av alla som öppnar spelet. Det finns ingen privat lagring i den här körmiljön – skriv därför aldrig något i spelet som inte tål att en kollega läser det.'
-    },
-
-    {
       id: 'spelet',
       titel: 'Så funkar spelet',
       punkter: [

@@ -253,10 +253,19 @@ sitt namn. Namnet följer med varje skattning – in i den delade databasen, in 
 textrapporten – så att det går att fråga vidare om en siffra. Frivilligt: tomt
 namn är en giltig skattning, och den räknas lika mycket.
 
-**Genomgången.** Varannan dag går en schemalagd Claude-körning igenom vad som
-kommit in, jämför med agenternas gissningar och föreslår vad avvikelserna borde
-leda till i innehållet. Den frågar innan något ändras. Minnet mellan
-genomgångarna ligger i [`docs/SVAR.md`](docs/SVAR.md).
+**Att få in svaren när spelet ligger på GitHub Pages.** Det är den vanliga
+situationen, och då finns ingen delad lagring alls: varje svar stannar i den
+webbläsare det skrevs i. Spelet är tydligt med det på planschen, påminner en
+gång per session när tre eller fler frågor är besvarade, och samlar allt
+personen skattat – på alla planscher, inte bara den hen står vid – till en
+textrapport som kopieras med ett tryck och mejlas in. Mottagarens namn sätts i
+`MOTTAGARE` överst i [`js/plansch.js`](js/plansch.js).
+
+**Genomgången.** En schemalagd Claude-körning kan gå igenom vad som kommit in,
+jämföra med agenternas gissningar och föreslå vad avvikelserna borde leda till i
+innehållet. Den läser artefaktens databas och är därför bara meningsfull om
+spelet sprids som publicerad artefakt. Minnet mellan genomgångarna ligger i
+[`docs/SVAR.md`](docs/SVAR.md).
 
 ### Verklighetsförankring
 

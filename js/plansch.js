@@ -11,6 +11,12 @@
 
   var STEG_GROVT = 5, STEG_FINT = 1;
 
+  /* Vem svaren ska skickas till när det inte finns någon delad lagring.
+     Byt namnet här om någon annan samlar in dem. */
+  var MOTTAGARE = 'Love';
+
+  var paminnelseVisad = false;   /* en påminnelse per session räcker */
+
   /* ---------------- delad insamling ----------------
      Publicerad som artefakt får sidan en delad databas, så att kollegor på
      andra datorer kan skatta samma frågor och svaren når utvecklaren. Som
@@ -136,7 +142,9 @@
            'Sätt din egen siffra bredvid. Inget är rätt eller fel – det är din vardag som är facit.</p>';
       h += '<p class="planschintro lagring">' + (db
         ? '● Svaren delas automatiskt. Kollegor på andra datorer kan skatta samma frågor.'
-        : '○ Svaren sparas bara i den här webbläsaren. Välj “Visa mina svar att skicka in” när du är klar.') + '</p>';
+        : '○ Svaren sparas bara i den här webbläsaren och når ingen automatiskt. ' +
+          'Välj “Visa mina svar att skicka in” när du är klar, så får du en text att ' +
+          'mejla till ' + LESS.esc(MOTTAGARE) + '.') + '</p>';
 
       poster.forEach(function (post, i) {
         var vald = i === sel ? ' sel' : '';
@@ -190,6 +198,19 @@
       if (klar) klar();
     }
 
+    /* Utan delad lagring når svaren ingen förrän någon skickar dem. Påminn en
+       gång per session, när det finns något att skicka – inte vid varje
+       återkomst till listan. */
+    function kollaPaminnelse(nasta) {
+      if (db || paminnelseVisad || antalSkattade() < 3) { nasta(); return; }
+      paminnelseVisad = true;
+      LESS.sfx('alert');
+      ui.say('Du har svarat på ' + antalSkattade() + ' frågor. De ligger kvar i den här ' +
+             'webbläsaren och når ingen förrän du skickar dem – välj "Visa mina svar att ' +
+             'skicka in" här nere, så får du en text att klistra in i ett mejl till ' +
+             MOTTAGARE + '.', null, nasta);
+    }
+
     function oppna() {
       rita();
       /* Hämta andras svar i bakgrunden och rita om när de kommit. */
@@ -207,7 +228,10 @@
         else if (k === 'a') {
           LESS.sfx('ok');
           var post = poster[sel];
-          if (post.typ === 'fraga') { LESS.input.pop(handler); skatta(roll, post.f, oppna); }
+          if (post.typ === 'fraga') {
+            LESS.input.pop(handler);
+            skatta(roll, post.f, function () { kollaPaminnelse(oppna); });
+          }
           else if (post.typ === 'signatur') { LESS.input.pop(handler); signera(roll, oppna); }
           else if (post.typ === 'export') { LESS.input.pop(handler); exportera(roll, oppna); }
           else stang();
@@ -308,39 +332,63 @@
 
   /* ---------------- exportvyn ---------------- */
 
-  function rapport(roll) {
-    var fragor = (LESS.fragor && LESS.fragor[roll]) || [];
-    var rader = ['LESS – Vårdcentralen · skattningar', rollNamn(roll),
+  /* Antal skattningar personen gjort, oavsett vilken plansch de sitter på. */
+  function antalSkattade() {
+    var n = 0;
+    Object.keys(LESS.fragor || {}).forEach(function (r) {
+      (LESS.fragor[r] || []).forEach(function (f) {
+        if (LESS.state.minSkattning(f.id)) n++;
+      });
+    });
+    return n;
+  }
+
+  /* Rapporten tar med allt personen skattat, på alla planscher. Den som gått
+     runt i huset och svarat på fyra ställen ska inte behöva exportera fyra
+     gånger – då blir tre av dem aldrig skickade. */
+  function rapport() {
+    var rader = ['LESS – Vårdcentralen · skattningar',
                  new Date().toISOString().slice(0, 10),
                  'signatur: ' + (mittNamn() || '– ej ifylld –'), ''];
     var n = 0;
-    fragor.forEach(function (f) {
-      var min = LESS.state.minSkattning(f.id);
-      if (!min) return;
-      n++;
-      rader.push(f.id);
-      rader.push('  ' + f.fraga);
-      rader.push('  rådgivaren: ' + (f.skattning == null ? '–' : f.skattning) +
-                 '   du: ' + min.varde + '   (' + ankartext(min.varde) + ')');
-      rader.push('');
+    Object.keys(LESS.fragor || {}).forEach(function (r) {
+      var forRollen = (LESS.fragor[r] || []).filter(function (f) {
+        return !!LESS.state.minSkattning(f.id);
+      });
+      if (!forRollen.length) return;
+      rader.push('--- ' + rollNamn(r) + ' ---');
+      forRollen.forEach(function (f) {
+        var min = LESS.state.minSkattning(f.id);
+        n++;
+        rader.push(f.id);
+        rader.push('  ' + f.fraga);
+        rader.push('  rådgivaren: ' + (f.skattning == null ? '–' : f.skattning) +
+                   '   du: ' + min.varde + '   (' + ankartext(min.varde) + ')');
+        rader.push('');
+      });
     });
     if (!n) rader.push('Inga skattningar gjorda ännu.');
     return rader.join('\n');
   }
 
   function exportera(roll, klar) {
-    var text = rapport(roll);
+    var text = rapport();
     var handler = null;
     var kopierat = false;
 
     function rita() {
       var h = '<p class="planschintro">' + (db
                 ? 'Dina svar är redan delade. Den här texten är en kopia du kan spara eller skicka vidare.'
-                : 'Markera texten och kopiera den, eller tryck A för att kopiera automatiskt. ' +
-                  'Skicka den till den som bygger spelet.') + '</p>' +
+                : 'Den här versionen av spelet sparar bara i din egen webbläsare. ' +
+                  'Svaren når alltså ingen förrän du skickar dem.') + '</p>' +
+              (db ? '' :
+                '<p class="planschintro"><b>Tryck A</b> så kopieras texten. Klistra in den ' +
+                'i ett mejl eller ett chattmeddelande till ' + LESS.esc(MOTTAGARE) + '. ' +
+                'Går det inte att kopiera automatiskt: markera texten nedan för hand.</p>') +
               '<pre class="rapport">' + LESS.esc(text) + '</pre>' +
-              (kopierat ? '<p class="planschank"><b>Kopierat till urklipp.</b></p>' : '');
-      ui.visaPanel('DINA SVAR · ' + rollNamn(roll), h, 'A = kopiera  ·  B = tillbaka');
+              (kopierat ? '<p class="planschank"><b>Kopierat till urklipp. Klistra in det i ett ' +
+                          'mejl till ' + LESS.esc(MOTTAGARE) + '.</b></p>' : '');
+      ui.visaPanel('DINA SVAR', h, 'A = kopiera  ·  B = tillbaka');
     }
 
     rita();
