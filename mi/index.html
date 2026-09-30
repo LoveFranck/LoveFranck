@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MI-träning</title>
+<meta name="description" content="Öva motiverande samtal med en AI-klient – i tal eller skrift – och få feedback direkt.">
+<style>
+  :root {
+    --bg: #f6f7f4;
+    --card: #ffffff;
+    --ink: #1d2320;
+    --muted: #66706a;
+    --line: #dde2dc;
+    --accent: #3b9b5c;
+    --accent-ink: #ffffff;
+    --accent-soft: #e3f3e8;
+    --client: #eef1ee;
+    --me: #3b9b5c;
+    --me-ink: #ffffff;
+    --warn: #b76a14;
+    --gold: #e0a100;
+    --danger: #c0392b;
+    --radius: 16px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #131714; --card: #1c211e; --ink: #e8ece9; --muted: #9aa49e;
+      --line: #2c332e; --accent: #58c07b; --accent-ink: #0d1a11; --accent-soft: #1f3326;
+      --client: #252b27; --me: #3f9e60; --me-ink: #ffffff; --warn: #e3a04c; --gold: #f2c230;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #131714; --card: #1c211e; --ink: #e8ece9; --muted: #9aa49e;
+    --line: #2c332e; --accent: #58c07b; --accent-ink: #0d1a11; --accent-soft: #1f3326;
+    --client: #252b27; --me: #3f9e60; --me-ink: #ffffff; --warn: #e3a04c; --gold: #f2c230;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  header h1 { font-size: 20px; margin: 0; flex: 1; }
+  .stat { font-weight: 700; font-size: 15px; white-space: nowrap; }
+  .icon-btn { background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+  button { font: inherit; }
+  .btn {
+    display: inline-block; border: 0; border-radius: 12px; padding: 12px 18px; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); font-weight: 700;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 60%, black);
+  }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 60%, black); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--line); box-shadow: none; }
+  .btn.wide { width: 100%; }
+  .hidden { display: none !important; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  /* Startsida */
+  .mode { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 20px; }
+  .mode button {
+    border: 2px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 12px; padding: 12px; cursor: pointer; font-weight: 600;
+  }
+  .mode button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .cards { display: grid; gap: 10px; }
+  .card {
+    display: flex; gap: 14px; align-items: center; text-align: left; width: 100%;
+    background: var(--card); color: var(--ink); border: 2px solid var(--line); border-radius: var(--radius);
+    padding: 14px; cursor: pointer;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .emoji { font-size: 32px; line-height: 1; }
+  .card .body { flex: 1; min-width: 0; }
+  .card .title { font-weight: 700; }
+  .card .sub { color: var(--muted); font-size: 14px; }
+  .card .stars { color: var(--gold); letter-spacing: 2px; white-space: nowrap; }
+  .level { font-size: 12px; font-weight: 700; border-radius: 99px; padding: 1px 8px; margin-left: 6px; background: var(--accent-soft); color: var(--accent); }
+  .level.l2 { color: var(--warn); background: color-mix(in srgb, var(--warn) 15%, transparent); }
+  .level.l3 { color: var(--danger); background: color-mix(in srgb, var(--danger) 15%, transparent); }
+  h2 { font-size: 16px; margin: 0 0 6px; }
+
+  /* Samtal */
+  .brief { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; font-size: 14px; margin-bottom: 12px; }
+  .chat { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-bottom: 12px; }
+  .msg { max-width: 85%; padding: 10px 14px; border-radius: 18px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .msg.client { background: var(--client); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .msg.me { background: var(--me); color: var(--me-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .msg.hint { background: var(--accent-soft); align-self: stretch; max-width: none; font-size: 14px; border-radius: 12px; }
+  .msg .who { display: block; font-size: 12px; font-weight: 700; opacity: .7; margin-bottom: 2px; }
+  .typing::after { content: "…"; animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: .2; } }
+  .composer {
+    position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 4px;
+    border-top: 1px solid var(--line); display: grid; gap: 8px;
+  }
+  .row { display: flex; gap: 8px; align-items: flex-end; }
+  textarea {
+    flex: 1; resize: none; font: inherit; color: var(--ink); background: var(--card);
+    border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; min-height: 48px; max-height: 160px;
+  }
+  textarea:focus, input:focus { outline: none; border-color: var(--accent); }
+  .mic {
+    width: 76px; height: 76px; border-radius: 50%; border: 0; cursor: pointer; font-size: 32px;
+    background: var(--accent); color: var(--accent-ink); margin: 0 auto; display: block;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--accent) 60%, black);
+  }
+  .mic.on { background: var(--danger); animation: pulse 1.2s infinite; box-shadow: none; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+  .live { min-height: 24px; text-align: center; color: var(--muted); font-size: 14px; }
+  .tools { display: flex; gap: 8px; justify-content: space-between; }
+  .tools .btn { padding: 8px 14px; font-size: 14px; }
+  .progress { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 12px; }
+  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+
+  /* Feedback */
+  .result { text-align: center; padding: 8px 0 16px; }
+  .result .big-stars { font-size: 44px; color: var(--gold); letter-spacing: 6px; }
+  .result .xp { font-weight: 800; color: var(--accent); font-size: 18px; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 12px 0; }
+  .metric { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+  .metric b { display: block; font-size: 22px; }
+  .metric span { font-size: 13px; color: var(--muted); }
+  .metric .ok { color: var(--accent); } .metric .meh { color: var(--warn); }
+  .fb { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+  .fb ul { margin: 6px 0 0; padding-left: 20px; }
+  .fb li { margin-bottom: 8px; }
+  .fb q { font-style: italic; }
+  .actions { display: grid; gap: 8px; margin-top: 8px; }
+
+  dialog { border: 0; border-radius: var(--radius); padding: 20px; background: var(--card); color: var(--ink); width: min(440px, calc(100vw - 32px)); }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  dialog input { width: 100%; font: inherit; padding: 10px 12px; border-radius: 10px; border: 2px solid var(--line); background: var(--bg); color: var(--ink); margin: 8px 0 12px; }
+  .error { color: var(--danger); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <button class="icon-btn hidden" id="backBtn" title="Tillbaka" aria-label="Tillbaka">←</button>
+    <h1>MI-träning</h1>
+    <span class="stat" title="Dagar i rad">🔥 <span id="streak">0</span></span>
+    <span class="stat" title="Poäng">⭐ <span id="xp">0</span></span>
+    <button class="icon-btn" id="settingsBtn" title="Inställningar" aria-label="Inställningar">⚙︎</button>
+  </header>
+
+  <!-- 1. Välj scenario -->
+  <main id="home">
+    <h2>Hur vill du öva?</h2>
+    <div class="mode">
+      <button id="modeText" aria-pressed="true">💬 Skriva</button>
+      <button id="modeVoice" aria-pressed="false">🎤 Prata</button>
+    </div>
+    <p id="voiceNote" class="small muted hidden"></p>
+    <h2>Välj en klient</h2>
+    <div class="cards" id="cards"></div>
+  </main>
+
+  <!-- 2. Samtalet -->
+  <main id="talk" class="hidden" style="flex:1; display:flex; flex-direction:column;">
+    <div class="progress"><div id="bar"></div></div>
+    <div class="brief" id="brief"></div>
+    <div class="chat" id="chat" aria-live="polite"></div>
+    <div class="composer">
+      <div id="textInput" class="row">
+        <textarea id="input" rows="1" placeholder="Skriv ditt svar…"></textarea>
+        <button class="btn" id="sendBtn">Skicka</button>
+      </div>
+      <div id="voiceInput" class="hidden">
+        <button class="mic" id="micBtn" aria-label="Tryck och prata">🎤</button>
+        <div class="live" id="live">Tryck för att prata, tryck igen när du är klar</div>
+      </div>
+      <div class="tools">
+        <button class="btn ghost" id="hintBtn">💡 Ledtråd</button>
+        <button class="btn" id="doneBtn">Klar – ge feedback</button>
+      </div>
+      <p class="error hidden" id="talkError"></p>
+    </div>
+  </main>
+
+  <!-- 3. Feedback -->
+  <main id="feedback" class="hidden">
+    <div id="fbBody"></div>
+    <div class="actions">
+      <button class="btn wide" id="againBtn">Öva igen</button>
+      <button class="btn ghost wide" id="homeBtn">Välj ny klient</button>
+    </div>
+  </main>
+</div>
+
+<dialog id="keyDialog">
+  <h2>Din Claude-nyckel</h2>
+  <p class="small muted">Appen pratar direkt med Claude från din webbläsare. Nyckeln sparas bara här, på den här enheten.
+    Skapa en på <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+  <form method="dialog" id="keyForm">
+    <input id="keyInput" type="password" placeholder="sk-ant-…" autocomplete="off" required>
+    <div class="row">
+      <button class="btn ghost" value="cancel" formnovalidate>Avbryt</button>
+      <button class="btn" value="ok" style="flex:1">Spara</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module">
+import Anthropic from "https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.129.0/+esm";
+
+const MODEL = "claude-opus-5-5";
+const MAX_TURNS = 12;
+
+// ---------------------------------------------------------------- Scenarier
+// Varje klient har en bakgrund bara AI:n ser, och en kort brief som du ser.
+const SCENARIOS = [
+  {
+    id: "alkohol", emoji: "🍷", name: "Jonas, 46", topic: "Alkohol", level: 1,
+    brief: "Jonas har sökt för högt blodtryck. Levervärdena var förhöjda och han har berättat att han dricker en del vin på kvällarna.",
+    opening: "Ja… doktorn sa att jag skulle prata med dig om mina levervärden. Men jag dricker ju inte mer än andra, typ.",
+    background: `Jonas, 46, säljare, gift, två tonåringar. Dricker ca en flaska vin per kväll, mer på helger, sedan några år (stress på jobbet).
+Ambivalent: vinet är hans sätt att koppla av, men han sover dåligt, frun har kommenterat och han var rädd när han såg levervärdena. Vill inte bli sedd som "alkis".
+Viktigt för honom: att vara en närvarande pappa, att orka med jobbet.`
+  },
+  {
+    id: "rokning", emoji: "🚬", name: "Sara, 29", topic: "Rökning", level: 1,
+    brief: "Sara är på hälsosamtal. Hon röker ungefär tio cigaretter om dagen.",
+    opening: "Jag vet vad du ska säga. Att jag borde sluta röka. Alla säger det.",
+    background: `Sara, 29, undersköterska, sambo. Röker ca 10 cig/dag sedan 16 års ålder. Har försökt sluta två gånger, höll några veckor.
+Ambivalent: röken är hennes paus på jobbet och med kollegorna. Men hon och sambon pratar om barn, pengarna går åt, och hon blir andfådd i trappor.
+Rädd att misslyckas igen och att gå upp i vikt.`
+  },
+  {
+    id: "rorelse", emoji: "🚶", name: "Ahmed, 58", topic: "Fysisk aktivitet", level: 1,
+    brief: "Ahmed har typ 2-diabetes. Läkaren vill att han rör sig mer.",
+    opening: "Doktorn tjatar om att jag ska promenera. Men mitt knä, alltså… och när ska jag hinna?",
+    background: `Ahmed, 58, taxichaufför, gift, fyra vuxna barn och två barnbarn. Diabetes typ 2 sedan 3 år, HbA1c stiger. Sitter hela dagarna.
+Ambivalent: tycker det är jobbigt och har ont i knät ibland, men vill orka leka med barnbarnen och är rädd för insulin (hans bror fick amputera en tå).
+Gillade att spela fotboll när han var ung.`
+  },
+  {
+    id: "atergang", emoji: "💼", name: "Maria, 41", topic: "Återgång i arbete", level: 2,
+    brief: "Maria har varit sjukskriven för utmattning i fyra månader. Det är dags att prata om gradvis återgång.",
+    opening: "Jag vet inte om jag klarar att gå tillbaka. Bara tanken på mejlkorgen gör att jag får hjärtklappning.",
+    background: `Maria, 41, projektledare på ett kommunalt bolag, separerad, en son 12 år. Sjukskriven 100 % i fyra månader för utmattningssyndrom. Mår bättre, sover bättre.
+Ambivalent: saknar kollegorna och känslan av att vara duktig, oroar sig för ekonomin. Men är rädd för att krascha igen och har svårt att lita på chefen.
+Tar lätt på sig skulden. Blir defensiv om hon känner sig pressad.`
+  },
+  {
+    id: "medicin", emoji: "💊", name: "Birgitta, 67", topic: "Mediciner", level: 2,
+    brief: "Birgitta har slutat ta sin blodtrycksmedicin utan att säga något. Det kom fram vid en kontroll.",
+    opening: "Jag slutade med de där tabletterna. Jag mådde inte bra av dem, och jag vill inte stoppa i mig en massa kemikalier.",
+    background: `Birgitta, 67, pensionerad lärare, änka, aktiv i kyrkokören. Slutade med blodtryckstabletten för två månader sedan: kände sig yr och trött, läste på nätet om biverkningar.
+Ambivalent: vill klara sig själv och vara naturlig, men hennes mamma dog i stroke och hon vill se barnbarnen växa upp.
+Är skeptisk mot vården efter att ha känt sig överkörd. Mjuknar när hon blir lyssnad på.`
+  },
+  {
+    id: "cannabis", emoji: "🌿", name: "Elias, 19", topic: "Cannabis", level: 3,
+    brief: "Elias har kommit för att mamma tvingat honom. Han röker cannabis flera kvällar i veckan.",
+    opening: "Jag är bara här för att morsan tjatade. Jag har inget problem, okej?",
+    background: `Elias, 19, har hoppat av gymnasiet, jobbar extra på lager, bor hemma. Röker cannabis 4–5 kvällar/vecka med kompisar, för att slappna av och somna.
+Starkt motstånd i början: känner sig kontrollerad av mamma, tycker att gräs är ofarligt. Mjuknar först om han känner sig respekterad och får bestämma själv.
+Under ytan: har svårt att komma igång på morgnarna, riskerar att förlora jobbet, har tänkt på att läsa in gymnasiet och vill flytta hemifrån.`
+  },
+];
+
+// ---------------------------------------------------------------- Tillstånd
+const $ = (id) => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("mi." + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("mi." + k, JSON.stringify(v)); } catch {} },
+};
+
+let mode = store.get("mode", "text");
+let scenario = null;
+let history = [];      // {role: "client"|"me", text}
+let busy = false;
+
+// ---------------------------------------------------------------- Claude
+let client = null;
+function getClient() {
+  const key = store.get("apiKey", "");
+  if (!key) return null;
+  if (!client || client.apiKey !== key) {
+    client = new Anthropic({ apiKey: key, dangerouslyAllowBrowser: true });
+  }
+  return client;
+}
+
+function askKey() {
+  return new Promise((resolve) => {
+    $("keyInput").value = store.get("apiKey", "");
+    $("keyDialog").showModal();
+    $("keyDialog").onclose = () => {
+      if ($("keyDialog").returnValue === "ok" && $("keyInput").value.trim()) {
+        store.set("apiKey", $("keyInput").value.trim());
+      }
+      resolve(!!store.get("apiKey", ""));
+    };
+  });
+}
+
+// Samtalet skickas som en text i ett enda meddelande. Det gör att klient,
+// ledtråd och feedback kan dela samma transkript utan rollbyten.
+function transcript() {
+  return history.map((m) => (m.role === "me" ? "Behandlare: " : "Klient: ") + m.text).join("\n");
+}
+
+function clientSystem(s) {
+  return `Du spelar en klient i ett övningssamtal där en vårdpersonal tränar på motiverande samtal (MI). Svara alltid på svenska, i talspråk, som klienten.
+
+Klienten:
+${s.background}
+
+Så här spelar du:
+- Stanna i rollen. Bryt aldrig illusionen, ge aldrig råd om MI och kommentera inte samtalet.
+- Svara kort: 1–3 meningar, som en riktig människa i ett samtal. Inga scenanvisningar, inga asterisker, inga emojis – repliken kan läsas upp.
+- Var realistiskt ambivalent. Både förändringsprat och bevarandeprat finns hos dig.
+- Reagera på hur behandlaren beter sig:
+  - Reflektioner, öppna frågor, bekräftelse och respekt för din självbestämmande gör dig mer öppen och får dig att säga mer om varför du skulle vilja förändras.
+  - Rättningsreflex, pekpinnar, oombedda råd, skrämselargument, många slutna frågor eller att bli pressad gör dig mer defensiv; då försvarar du ditt nuvarande beteende.
+- Avslöja inte allt direkt. Detaljer om bakgrunden kommer fram när behandlaren visar intresse.
+- Svara bara med klientens nästa replik.
+Latency-sensitive; begin your visible answer immediately.`;
+}
+
+async function callClaude({ system, prompt, effort = "low", maxTokens = 2000, schema = null }) {
+  const c = getClient();
+  if (!c) throw new Error("NO_KEY");
+  const params = {
+    model: MODEL,
+    max_tokens: maxTokens,
+    system,
+    output_config: { effort },
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    messages: [{ role: "user", content: prompt }],
+  };
+  if (schema) params.output_config.format = { type: "json_schema", schema };
+  const res = await c.beta.messages.create(params);
+  if (res.stop_reason === "refusal") throw new Error("REFUSAL");
+  return res.content.filter((b) => b.type === "text").map((b) => b.text).join("").trim();
+}
+
+function friendlyError(err) {
+  if (err.message === "NO_KEY") return "Lägg in din Claude-nyckel under ⚙︎ först.";
+  if (err.message === "REFUSAL") return "Claude ville inte svara på det. Försök formulera om.";
+  if (err instanceof Anthropic.AuthenticationError) return "Nyckeln fungerar inte. Kontrollera den under ⚙︎.";
+  if (err instanceof Anthropic.RateLimitError) return "För många anrop just nu. Vänta en stund och försök igen.";
+  if (err instanceof Anthropic.APIConnectionError) return "Kunde inte nå Claude. Är du uppkopplad?";
+  if (err instanceof Anthropic.APIError) return "Något gick fel hos Claude (" + err.status + "). Försök igen.";
+  return "Något gick fel: " + err.message;
+}
+
+// ---------------------------------------------------------------- Streak & XP
+function today() { return new Date().toISOString().slice(0, 10); }
+function renderStats() {
+  const last = store.get("lastDay", null);
+  const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const streak = last === today() || last === y ? store.get("streak", 0) : 0;
+  $("streak").textContent = streak;
+  $("xp").textContent = store.get("xp", 0);
+}
+function addProgress(xp, stars) {
+  const last = store.get("lastDay", null);
+  const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  if (last !== today()) store.set("streak", last === y ? store.get("streak", 0) + 1 : 1);
+  store.set("lastDay", today());
+  store.set("xp", store.get("xp", 0) + xp);
+  const best = store.get("stars", {});
+  best[scenario.id] = Math.max(best[scenario.id] || 0, stars);
+  store.set("stars", best);
+  renderStats();
+}
+
+// ---------------------------------------------------------------- Tal
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const canVoice = !!Recognition && "speechSynthesis" in window;
+let rec = null, listening = false, heard = "";
+
+function svVoice() {
+  const voices = speechSynthesis.getVoices();
+  return voices.find((v) => v.lang === "sv-SE") || voices.find((v) => v.lang.startsWith("sv")) || null;
+}
+function speak(text) {
+  if (mode !== "voice" || !canVoice) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "sv-SE";
+  const v = svVoice();
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+function startListening() {
+  speechSynthesis.cancel();
+  heard = "";
+  rec = new Recognition();
+  rec.lang = "sv-SE";
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.onresult = (e) => {
+    let final = "", interim = "";
+    for (const r of e.results) (r.isFinal ? (final += r[0].transcript) : (interim += r[0].transcript));
+    heard = (final + " " + interim).trim();
+    $("live").textContent = heard || "Jag lyssnar…";
+  };
+  rec.onerror = (e) => {
+    if (e.error === "not-allowed") showError("Webbläsaren fick inte använda mikrofonen.");
+  };
+  rec.onend = () => {
+    if (!listening) return;
+    listening = false;
+    $("micBtn").classList.remove("on");
+    const text = heard.trim();
+    $("live").textContent = "Tryck för att prata, tryck igen när du är klar";
+    if (text) send(text);
+  };
+  rec.start();
+  listening = true;
+  $("micBtn").classList.add("on");
+  $("live").textContent = "Jag lyssnar…";
+}
+function stopListening() { if (rec) rec.stop(); }
+
+// ---------------------------------------------------------------- Vyer
+function show(view) {
+  for (const v of ["home", "talk", "feedback"]) $(v).classList.toggle("hidden", v !== view);
+  $("backBtn").classList.toggle("hidden", view === "home");
+  window.scrollTo(0, 0);
+}
+
+function renderHome() {
+  $("modeText").setAttribute("aria-pressed", mode === "text");
+  $("modeVoice").setAttribute("aria-pressed", mode === "voice");
+  $("voiceNote").classList.toggle("hidden", mode !== "voice");
+  $("voiceNote").textContent = canVoice
+    ? "Klienten läser upp sina svar. Tryck på mikrofonen, prata och tryck igen när du är klar."
+    : "Din webbläsare stöder inte taligenkänning. Prova Chrome, Edge eller Safari – eller öva i skrift.";
+  const best = store.get("stars", {});
+  $("cards").innerHTML = "";
+  for (const s of SCENARIOS) {
+    const b = document.createElement("button");
+    b.className = "card";
+    const lvl = ["", "Lätt", "Medel", "Svår"][s.level];
+    const st = best[s.id] || 0;
+    b.innerHTML = `<span class="emoji">${s.emoji}</span>
+      <span class="body"><span class="title">${s.name} · ${s.topic}</span><span class="level l${s.level}">${lvl}</span>
+      <span class="sub" style="display:block">${s.brief}</span></span>
+      <span class="stars" aria-label="${st} av 3 stjärnor">${"★".repeat(st)}${"☆".repeat(3 - st)}</span>`;
+    b.onclick = () => start(s);
+    $("cards").appendChild(b);
+  }
+}
+
+function addMsg(role, text) {
+  const d = document.createElement("div");
+  d.className = "msg " + role;
+  if (role === "client") d.innerHTML = `<span class="who">${scenario.name.split(",")[0]}</span>`;
+  if (role === "hint") d.innerHTML = `<span class="who">💡 Ledtråd</span>`;
+  d.appendChild(document.createTextNode(text));
+  $("chat").appendChild(d);
+  d.scrollIntoView({ behavior: "smooth", block: "end" });
+  return d;
+}
+
+function setBusy(b) {
+  busy = b;
+  for (const id of ["sendBtn", "micBtn", "hintBtn", "doneBtn"]) $(id).disabled = b;
+}
+function showError(msg) { $("talkError").textContent = msg; $("talkError").classList.toggle("hidden", !msg); }
+function updateBar() {
+  const turns = history.filter((m) => m.role === "me").length;
+  $("bar").style.width = Math.min(100, (turns / MAX_TURNS) * 100) + "%";
+}
+
+async function start(s) {
+  if (mode === "voice" && !canVoice) return;
+  if (!getClient() && !(await askKey())) return;
+  scenario = s;
+  history = [{ role: "client", text: s.opening }];
+  $("chat").innerHTML = "";
+  $("brief").innerHTML = `<b>${s.emoji} ${s.name} – ${s.topic}.</b> ${s.brief}<br><span class="muted">Du är behandlaren. Använd öppna frågor, reflektioner och bekräftelse.</span>`;
+  $("textInput").classList.toggle("hidden", mode !== "text");
+  $("voiceInput").classList.toggle("hidden", mode !== "voice");
+  showError("");
+  setBusy(false);
+  updateBar();
+  show("talk");
+  addMsg("client", s.opening);
+  speak(s.opening);
+  if (mode === "text") $("input").focus();
+}
+
+async function send(text) {
+  if (busy || !text.trim()) return;
+  showError("");
+  history.push({ role: "me", text: text.trim() });
+  addMsg("me", text.trim());
+  updateBar();
+  setBusy(true);
+  const typing = addMsg("client", "");
+  typing.classList.add("typing");
+  try {
+    const reply = await callClaude({
+      system: clientSystem(scenario),
+      prompt: `Samtalet hittills:\n${transcript()}\n\nSkriv klientens nästa replik.`,
+    });
+    const clean = reply.replace(/^Klient:\s*/i, "");
+    typing.remove();
+    history.push({ role: "client", text: clean });
+    addMsg("client", clean);
+    speak(clean);
+    if (history.filter((m) => m.role === "me").length >= MAX_TURNS) {
+      addMsg("hint", "Bra jobbat! Du har fört ett helt samtal. Tryck på ”Klar – ge feedback” när du vill.");
+    }
+  } catch (err) {
+    typing.remove();
+    history.pop();
+    $("chat").lastElementChild?.remove();
+    if (mode === "text") $("input").value = text;
+    showError(friendlyError(err));
+  } finally {
+    setBusy(false);
+    updateBar();
+  }
+}
+
+async function hint() {
+  if (busy) return;
+  setBusy(true);
+  showError("");
+  const box = addMsg("hint", "");
+  box.classList.add("typing");
+  try {
+    const tip = await callClaude({
+      system: "Du är en erfaren MI-handledare. Svara på svenska, kort och konkret.",
+      prompt: `En behandlare övar motiverande samtal. Samtalet hittills:\n${transcript()}\n\nGe EN kort ledtråd (max två meningar) om vad behandlaren kan göra härnäst, t.ex. en reflektion eller öppen fråga hen kan prova, gärna med ett exempel på formulering. Skriv bara ledtråden.`,
+    });
+    box.classList.remove("typing");
+    box.lastChild.textContent = tip;
+  } catch (err) {
+    box.remove();
+    showError(friendlyError(err));
+  } finally {
+    setBusy(false);
+  }
+}
+
+// ---------------------------------------------------------------- Feedback
+const FEEDBACK_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["stars", "summary", "counts", "strengths", "improvements", "next_tip"],
+  properties: {
+    stars: { type: "integer", description: "1 = mest MI-inkongruent, 2 = på god väg, 3 = tydligt MI-konsistent" },
+    summary: { type: "string" },
+    counts: {
+      type: "object",
+      additionalProperties: false,
+      required: ["open_questions", "closed_questions", "simple_reflections", "complex_reflections", "affirmations", "summaries", "mi_inconsistent"],
+      properties: {
+        open_questions: { type: "integer" },
+        closed_questions: { type: "integer" },
+        simple_reflections: { type: "integer" },
+        complex_reflections: { type: "integer" },
+        affirmations: { type: "integer" },
+        summaries: { type: "integer" },
+        mi_inconsistent: { type: "integer", description: "Oombedda råd, konfrontation, pekpinnar, rättningsreflex" },
+      },
+    },
+    strengths: {
+      type: "array",
+      items: { type: "object", additionalProperties: false, required: ["quote", "why"], properties: { quote: { type: "string" }, why: { type: "string" } } },
+    },
+    improvements: {
+      type: "array",
+      items: { type: "object", additionalProperties: false, required: ["quote", "try_instead"], properties: { quote: { type: "string" }, try_instead: { type: "string" } } },
+    },
+    next_tip: { type: "string" },
+  },
+};
+
+async function finish() {
+  if (busy) return;
+  if (listening) { listening = false; stopListening(); }
+  speechSynthesis?.cancel();
+  if (!history.some((m) => m.role === "me")) { showError("Säg något till klienten först."); return; }
+  setBusy(true);
+  showError("");
+  $("fbBody").innerHTML = `<div class="result"><p class="typing">Handledaren läser ditt samtal</p></div>`;
+  show("feedback");
+  $("againBtn").disabled = $("homeBtn").disabled = true;
+  try {
+    const raw = await callClaude({
+      system: `Du är en erfaren MI-handledare som kodar samtal ungefär enligt MITI 4. Du ger varm, konkret och ärlig feedback på svenska, riktad direkt till behandlaren (du-form).`,
+      prompt: `Klientens bakgrund (för ditt sammanhang): ${scenario.background}
+
+Transkript:
+${transcript()}
+
+Koda ENBART behandlarens repliker. Räkna öppna och slutna frågor, enkla och komplexa reflektioner, bekräftelser, sammanfattningar och MI-inkonsistenta beteenden.
+Ge sedan:
+- summary: 1–2 meningar om helheten, inklusive hur klientens förändringsprat utvecklades.
+- strengths: 1–3 saker behandlaren gjorde bra, med ett ordagrant citat från behandlaren.
+- improvements: 1–3 ställen där det fanns ett bättre alternativ, med citat och en konkret formulering att prova i stället.
+- next_tip: ett enda fokus att träna på nästa gång.
+- stars: 1–3.
+Var snäll men sann. Om samtalet är mycket kort, säg det.`,
+      effort: "medium",
+      maxTokens: 8000,
+      schema: FEEDBACK_SCHEMA,
+    });
+    renderFeedback(JSON.parse(raw));
+  } catch (err) {
+    $("fbBody").innerHTML = `<div class="fb"><p class="error"></p><button class="btn" id="retryFb">Försök igen</button></div>`;
+    $("fbBody").querySelector(".error").textContent = friendlyError(err);
+    $("retryFb").onclick = () => { setBusy(false); finish(); };
+  } finally {
+    setBusy(false);
+    $("againBtn").disabled = $("homeBtn").disabled = false;
+  }
+}
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+function renderFeedback(f) {
+  const c = f.counts;
+  const questions = c.open_questions + c.closed_questions;
+  const reflections = c.simple_reflections + c.complex_reflections;
+  const rq = questions ? reflections / questions : reflections;
+  const openPct = questions ? Math.round((c.open_questions / questions) * 100) : 0;
+  const complexPct = reflections ? Math.round((c.complex_reflections / reflections) * 100) : 0;
+  const stars = Math.max(1, Math.min(3, f.stars));
+  const xp = 10 + stars * 10;
+  addProgress(xp, stars);
+
+  // Riktvärden ungefär enligt MITI 4 ("fair"/"good").
+  const metric = (value, label, ok) =>
+    `<div class="metric"><b class="${ok ? "ok" : "meh"}">${value}</b><span>${label}</span></div>`;
+
+  $("fbBody").innerHTML = `
+    <div class="result">
+      <div class="big-stars">${"★".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+      <div class="xp">+${xp} poäng</div>
+      <p>${esc(f.summary)}</p>
+    </div>
+    <div class="metrics">
+      ${metric(rq.toFixed(1), "Reflektioner per fråga<br>(mål ≥ 1, gärna 2)", rq >= 1)}
+      ${metric(openPct + " %", "Öppna frågor<br>(mål ≥ 50 %)", openPct >= 50)}
+      ${metric(complexPct + " %", "Komplexa reflektioner<br>(mål ≥ 40 %)", complexPct >= 40)}
+      ${metric(c.affirmations, "Bekräftelser", c.affirmations > 0)}
+      ${metric(c.summaries, "Sammanfattningar", c.summaries > 0)}
+      ${metric(c.mi_inconsistent, "Råd/pekpinnar utan lov<br>(mål 0)", c.mi_inconsistent === 0)}
+    </div>
+    ${f.strengths.length ? `<div class="fb"><h2>👍 Det här gjorde du bra</h2><ul>${f.strengths.map((s) => `<li><q>${esc(s.quote)}</q><br>${esc(s.why)}</li>`).join("")}</ul></div>` : ""}
+    ${f.improvements.length ? `<div class="fb"><h2>🔁 Prova i stället</h2><ul>${f.improvements.map((s) => `<li><q>${esc(s.quote)}</q><br>→ ${esc(s.try_instead)}</li>`).join("")}</ul></div>` : ""}
+    <div class="fb"><h2>🎯 Fokus nästa gång</h2>${esc(f.next_tip)}</div>`;
+}
+
+// ---------------------------------------------------------------- Kopplingar
+$("modeText").onclick = () => { mode = "text"; store.set("mode", mode); renderHome(); };
+$("modeVoice").onclick = () => { mode = "voice"; store.set("mode", mode); renderHome(); };
+$("settingsBtn").onclick = () => askKey();
+$("backBtn").onclick = () => {
+  if (listening) { listening = false; stopListening(); }
+  if (canVoice) speechSynthesis.cancel();
+  renderHome(); show("home");
+};
+$("sendBtn").onclick = () => { const t = $("input").value; $("input").value = ""; send(t); };
+$("input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("sendBtn").click(); }
+});
+$("input").addEventListener("input", (e) => { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; });
+$("micBtn").onclick = () => (listening ? stopListening() : startListening());
+$("hintBtn").onclick = hint;
+$("doneBtn").onclick = finish;
+$("againBtn").onclick = () => start(scenario);
+$("homeBtn").onclick = () => { renderHome(); show("home"); };
+if (canVoice) speechSynthesis.getVoices(); // laddar röster i förväg i Chrome
+
+renderStats();
+renderHome();
+</script>
+</body>
+</html>

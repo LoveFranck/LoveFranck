@@ -32,6 +32,12 @@ branch och `/ (root)`. Inget mer behövs.
 spelet – all kod, all grafik, allt innehåll. Den fungerar offline och utan
 server. Bygg om den efter ändringar med `node tools/build-single.js`.
 
+## MI-träning
+
+I mappen [`mi/`](mi/) finns en fristående övning i motiverande samtal: en
+AI-klient att prata eller skriva med, och feedback efteråt. Se
+[`mi/README.md`](mi/README.md).
+
 ## Kontroller
 
 | Tangent | Funktion |
