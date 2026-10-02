@@ -206,7 +206,12 @@
 </dialog>
 
 <script type="module">
-import Anthropic from "https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.129.0/+esm";
+// Två sätt att nå Claude:
+// 1. Öppnad på claude.ai: sidans inbyggda Claude (på tittarens konto, ingen nyckel).
+// 2. Öppnad någon annanstans: egen API-nyckel och Anthropics SDK, som laddas först när den behövs.
+let Anthropic = null;
+const samplePromise = window.claude?.use ? window.claude.use("sample").catch(() => null) : Promise.resolve(null);
+let sample = null;
 
 const MODEL = "claude-opus-5-5";
 const MAX_TURNS = 12;
@@ -278,9 +283,10 @@ let busy = false;
 
 // ---------------------------------------------------------------- Claude
 let client = null;
-function getClient() {
+async function getClient() {
   const key = store.get("apiKey", "");
   if (!key) return null;
+  if (!Anthropic) Anthropic = (await import("https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.129.0/+esm")).default;
   if (!client || client.apiKey !== key) {
     client = new Anthropic({ apiKey: key, dangerouslyAllowBrowser: true });
   }
@@ -325,7 +331,20 @@ Latency-sensitive; begin your visible answer immediately.`;
 }
 
 async function callClaude({ system, prompt, effort = "low", maxTokens = 2000, schema = null }) {
-  const c = getClient();
+  if (sample) {
+    const input = system + "\n\n" + prompt;
+    const opts = { modelTier: effort === "low" ? "quick" : "default", cache: false };
+    try {
+      if (schema) {
+        const data = await sample.json(input + "\n\nSvara med ENBART ett JSON-objekt enligt detta JSON-schema:\n" + JSON.stringify(schema), opts);
+        return JSON.stringify(data);
+      }
+      return (await sample(input, opts)).text.trim();
+    } catch (e) {
+      throw Object.assign(new Error("SAMPLE"), { code: e?.code });
+    }
+  }
+  const c = await getClient();
   if (!c) throw new Error("NO_KEY");
   const params = {
     model: MODEL,
@@ -343,8 +362,19 @@ async function callClaude({ system, prompt, effort = "low", maxTokens = 2000, sc
 }
 
 function friendlyError(err) {
+  if (err.message === "SAMPLE") {
+    return {
+      not_granted: "Sidan fick inte använda Claude. Ladda om sidan och tillåt det när frågan kommer.",
+      sampling_disabled: "Claude är inte tillgänglig för ditt konto här.",
+      rate_limited: "Du har använt Claude mycket just nu. Vänta en stund och försök igen.",
+      session_expired: "Du behöver logga in på claude.ai igen.",
+      refused: "Claude ville inte svara på det. Försök formulera om.",
+      invalid_json: "Feedbacken blev fel. Tryck på Försök igen.",
+    }[err.code] || "Något gick fel hos Claude. Försök igen.";
+  }
   if (err.message === "NO_KEY") return "Lägg in din Claude-nyckel under ⚙︎ först.";
   if (err.message === "REFUSAL") return "Claude ville inte svara på det. Försök formulera om.";
+  if (!Anthropic) return "Kunde inte ladda Claude. Är du uppkopplad?";
   if (err instanceof Anthropic.AuthenticationError) return "Nyckeln fungerar inte. Kontrollera den under ⚙︎.";
   if (err instanceof Anthropic.RateLimitError) return "För många anrop just nu. Vänta en stund och försök igen.";
   if (err instanceof Anthropic.APIConnectionError) return "Kunde inte nå Claude. Är du uppkopplad?";
@@ -375,7 +405,8 @@ function addProgress(xp, stars) {
 
 // ---------------------------------------------------------------- Tal
 const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const canVoice = !!Recognition && "speechSynthesis" in window;
+const canSpeak = "speechSynthesis" in window;
+let canListen = !!Recognition;   // sätts till false på claude.ai, där mikrofonen är spärrad
 let rec = null, listening = false, heard = "";
 
 function svVoice() {
@@ -383,7 +414,7 @@ function svVoice() {
   return voices.find((v) => v.lang === "sv-SE") || voices.find((v) => v.lang.startsWith("sv")) || null;
 }
 function speak(text) {
-  if (mode !== "voice" || !canVoice) return;
+  if (mode !== "voice" || !canSpeak) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "sv-SE";
@@ -406,7 +437,13 @@ function startListening() {
     $("live").textContent = heard || "Jag lyssnar…";
   };
   rec.onerror = (e) => {
-    if (e.error === "not-allowed") showError("Webbläsaren fick inte använda mikrofonen.");
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+      listening = false;
+      canListen = false;
+      $("micBtn").classList.remove("on");
+      showInputs();
+      showError("Mikrofonen gick inte att använda här. Prata in ditt svar med mikrofonen på tangentbordet i stället.");
+    }
   };
   rec.onend = () => {
     if (!listening) return;
@@ -434,9 +471,9 @@ function renderHome() {
   $("modeText").setAttribute("aria-pressed", mode === "text");
   $("modeVoice").setAttribute("aria-pressed", mode === "voice");
   $("voiceNote").classList.toggle("hidden", mode !== "voice");
-  $("voiceNote").textContent = canVoice
+  $("voiceNote").textContent = canListen
     ? "Klienten läser upp sina svar. Tryck på mikrofonen, prata och tryck igen när du är klar."
-    : "Din webbläsare stöder inte taligenkänning. Prova Chrome, Edge eller Safari – eller öva i skrift.";
+    : "Klienten läser upp sina svar. Svara genom att trycka på mikrofonen på mobilens tangentbord och prata.";
   const best = store.get("stars", {});
   $("cards").innerHTML = "";
   for (const s of SCENARIOS) {
@@ -464,6 +501,13 @@ function addMsg(role, text) {
   return d;
 }
 
+function showInputs() {
+  const mic = mode === "voice" && canListen;
+  $("textInput").classList.toggle("hidden", mic);
+  $("voiceInput").classList.toggle("hidden", !mic);
+  $("input").placeholder = mode === "voice" ? "Tryck på 🎤 på tangentbordet och prata…" : "Skriv ditt svar…";
+}
+
 function setBusy(b) {
   busy = b;
   for (const id of ["sendBtn", "micBtn", "hintBtn", "doneBtn"]) $(id).disabled = b;
@@ -475,21 +519,21 @@ function updateBar() {
 }
 
 async function start(s) {
-  if (mode === "voice" && !canVoice) return;
-  if (!getClient() && !(await askKey())) return;
+  sample = await samplePromise;
+  if (sample) canListen = false;
+  if (!sample && !store.get("apiKey", "") && !(await askKey())) return;
   scenario = s;
   history = [{ role: "client", text: s.opening }];
   $("chat").innerHTML = "";
   $("brief").innerHTML = `<b>${s.emoji} ${s.name} – ${s.topic}.</b> ${s.brief}<br><span class="muted">Du är behandlaren. Använd öppna frågor, reflektioner och bekräftelse.</span>`;
-  $("textInput").classList.toggle("hidden", mode !== "text");
-  $("voiceInput").classList.toggle("hidden", mode !== "voice");
+  showInputs();
   showError("");
   setBusy(false);
   updateBar();
   show("talk");
   addMsg("client", s.opening);
   speak(s.opening);
-  if (mode === "text") $("input").focus();
+  if (!$("textInput").classList.contains("hidden")) $("input").focus();
 }
 
 async function send(text) {
@@ -518,7 +562,7 @@ async function send(text) {
     typing.remove();
     history.pop();
     $("chat").lastElementChild?.remove();
-    if (mode === "text") $("input").value = text;
+    $("input").value = text;
     showError(friendlyError(err));
   } finally {
     setBusy(false);
@@ -584,7 +628,7 @@ const FEEDBACK_SCHEMA = {
 async function finish() {
   if (busy) return;
   if (listening) { listening = false; stopListening(); }
-  speechSynthesis?.cancel();
+  if (canSpeak) speechSynthesis.cancel();
   if (!history.some((m) => m.role === "me")) { showError("Säg något till klienten först."); return; }
   setBusy(true);
   showError("");
@@ -664,7 +708,7 @@ $("modeVoice").onclick = () => { mode = "voice"; store.set("mode", mode); render
 $("settingsBtn").onclick = () => askKey();
 $("backBtn").onclick = () => {
   if (listening) { listening = false; stopListening(); }
-  if (canVoice) speechSynthesis.cancel();
+  if (canSpeak) speechSynthesis.cancel();
   renderHome(); show("home");
 };
 $("sendBtn").onclick = () => { const t = $("input").value; $("input").value = ""; send(t); };
@@ -677,10 +721,14 @@ $("hintBtn").onclick = hint;
 $("doneBtn").onclick = finish;
 $("againBtn").onclick = () => start(scenario);
 $("homeBtn").onclick = () => { renderHome(); show("home"); };
-if (canVoice) speechSynthesis.getVoices(); // laddar röster i förväg i Chrome
+if (canSpeak) speechSynthesis.getVoices(); // laddar röster i förväg i Chrome
 
 renderStats();
 renderHome();
+samplePromise.then((s) => {
+  sample = s;
+  if (s) { canListen = false; $("settingsBtn").classList.add("hidden"); renderHome(); }
+});
 </script>
 </body>
 </html>

@@ -6,12 +6,14 @@ få stjärnor, poäng och ett enda fokus till nästa gång.
 
 ## Kom igång
 
-1. Öppna `mi/index.html` via en webbserver (t.ex. GitHub Pages → `/mi/`, eller
-   `npx http-server -p 8080` och gå till `http://localhost:8080/mi/`).
-2. Klistra in din Claude-API-nyckel första gången (skapas på
-   [console.anthropic.com](https://console.anthropic.com/settings/keys)).
-   Nyckeln sparas bara i din webbläsare.
-3. Välj **Skriva** eller **Prata**, välj en klient och börja.
+**Enklast:** öppna länken till verktyget på claude.ai och tryck på en klient.
+Ingen nyckel behövs, eftersom samtalen går på ditt eget Claude-konto. Första
+gången frågar sidan om den får använda Claude: svara ja.
+
+**Utan claude.ai** (t.ex. GitHub Pages → `/mi/`): då ber sidan om en egen
+Claude-API-nyckel från
+[console.anthropic.com](https://console.anthropic.com/settings/keys). Nyckeln
+sparas bara i din webbläsare.
 
 ## Så funkar det
 
@@ -24,8 +26,9 @@ få stjärnor, poäng och ett enda fokus till nästa gång.
   reflektioner per fråga, andel öppna frågor, andel komplexa reflektioner,
   bekräftelser, sammanfattningar och MI-inkonsistenta beteenden – plus citat
   på vad som var bra och vad du kan prova i stället.
-* **Tal** använder webbläsarens inbyggda taligenkänning och uppläsning på
-  svenska (Chrome, Edge och Safari). Tryck på mikrofonen, prata, tryck igen.
+* **Prata:** klienten läser upp sina repliker. Du svarar med mikrofonen på
+  mobilens tangentbord. Utanför claude.ai, i Chrome, Edge och Safari, finns
+  också en egen mikrofonknapp i sidan.
 * **🔥 dagar i rad, ⭐ poäng och stjärnor per klient** sparas lokalt.
 
 ## Lägga till en klient
