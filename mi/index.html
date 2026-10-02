@@ -442,7 +442,7 @@ function startListening() {
       canListen = false;
       $("micBtn").classList.remove("on");
       showInputs();
-      showError("Mikrofonen gick inte att använda här. Prata in ditt svar med mikrofonen på tangentbordet i stället.");
+      showError("Mikrofonen gick inte att använda här. " + dictationHelp().long);
     }
   };
   rec.onend = () => {
@@ -473,7 +473,7 @@ function renderHome() {
   $("voiceNote").classList.toggle("hidden", mode !== "voice");
   $("voiceNote").textContent = canListen
     ? "Klienten läser upp sina svar. Tryck på mikrofonen, prata och tryck igen när du är klar."
-    : "Klienten läser upp sina svar. Svara genom att trycka på mikrofonen på mobilens tangentbord och prata.";
+    : "Klienten läser upp sina svar. " + dictationHelp().long;
   const best = store.get("stars", {});
   $("cards").innerHTML = "";
   for (const s of SCENARIOS) {
@@ -501,11 +501,26 @@ function addMsg(role, text) {
   return d;
 }
 
+// Hur man dikterar beror på enheten: datorer har ingen mikrofontangent.
+function dictationHelp() {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|Android/i.test(ua) || (/Mac/.test(ua) && navigator.maxTouchPoints > 1)) {
+    return { short: "Tryck på mikrofonen på tangentbordet och prata…", long: "Tryck i textrutan. Mikrofonen sitter på tangentbordet, nere vid mellanslaget." };
+  }
+  if (/Mac/.test(ua)) {
+    return { short: "Tryck två gånger på fn (🌐) och prata…", long: "Klicka i textrutan och tryck två gånger på fn-tangenten (🌐, längst ner till vänster). Prata, och tryck på fn igen när du är klar." };
+  }
+  if (/Windows/.test(ua)) {
+    return { short: "Tryck Windows-tangenten + H och prata…", long: "Klicka i textrutan och tryck Windows-tangenten + H. Prata, och tryck igen när du är klar." };
+  }
+  return { short: "Skriv eller diktera ditt svar…", long: "Svara genom att diktera med datorns eller mobilens inbyggda diktering." };
+}
+
 function showInputs() {
   const mic = mode === "voice" && canListen;
   $("textInput").classList.toggle("hidden", mic);
   $("voiceInput").classList.toggle("hidden", !mic);
-  $("input").placeholder = mode === "voice" ? "Tryck på 🎤 på tangentbordet och prata…" : "Skriv ditt svar…";
+  $("input").placeholder = mode === "voice" ? dictationHelp().short : "Skriv ditt svar…";
 }
 
 function setBusy(b) {
